@@ -1,5 +1,9 @@
 #!/bin/bash
 #
+
+# Abbort script on command failure
+set -e
+
 EXAMPLES_BRANCH="master"
 UBOOT_FUS_BRANCH="master"
 LINUX_FUS_BRANCH="master"
@@ -17,9 +21,12 @@ YOCTO_DIR=yocto-fus
 META_FUS_DIR=sources/meta-fus/
 KERNEL_PATH=recipes-kernel/linux/
 UBOOT_PATH=recipes-bsp/u-boot/
+DL_DIR="downloads"
 
-UBOOT_SRC_URI="git://$UBOOT_DIR;branch=$UBOOT_FUS_BRANCH;protocol=file"
-LINUX_SRC_URI="git://$LINUX_DIR;branch=$LINUX_FUS_BRANCH;protocol=file"
+UBOOT_SRC_URI="git://\${DL_DIR}/$UBOOT_DIR;branch=$UBOOT_FUS_BRANCH;protocol=file"
+LINUX_SRC_URI="git://\${DL_DIR}/$LINUX_DIR;branch=$LINUX_FUS_BRANCH;protocol=file"
+
+
 # ----- Helper functions ------------------------------------------------------
 
 # Show usage on error
@@ -126,23 +133,55 @@ do_symlink()
 }
 
 # Write SRC_URI $1 and SRCREV $2 to bbappend at $3
-write_bbappend()
+do_write_bbappend()
 {
 	if [ "$#" -eq 2 ]; then
 		echo "  [CREATING 		] $2"
 		echo "  [FROM 			] $1"
-		cp -f $1 $2
+		$run cp -f $1 $2
 	elif [ "$#" -eq 3 ]; then
 		echo "  [CREATING 		] $3"
 		echo "  [SRC_URI  		] $1"
 		echo "  [SRCREV  		] $2"
 		echo
-		echo "SRC_URI = \"${1}\"" > $3
-		echo "SRCREV = \"${2}\"" >> $3
+		$run echo "SRC_URI = \"${1}\"" > $3
+		$run echo "SRCREV = \"${2}\"" >> $3
 	else
 		echo "write_bbappend failed"
 	fi
 
+}
+
+# Write SRC_URI $1 and SRCREV $2 to bbappend at $3
+do_yocto_download()
+{
+
+    echo "  [DOWNOAD MANIFEST] $YOCTO_MANIFEST"
+    echo "  [FROM            ] $YOCTO_DOWNLOAD_URL"
+	echo "  [BRANCH          ] $YOCTO_BRANCH"
+	echo
+
+	# Create yocto directory if it does not exist yet
+	if [ ! -d "$YOCTO_DIR" ] ; then
+		$run do_mkdir "$YOCTO_DIR"
+	fi
+	$run cd $YOCTO_DIR
+	# Download Yocto
+	# Download the repo tool that handles the download of several GIT repos
+	if [ ! -x ./repo ]
+	then
+		$run echo "Downloading repo tool"
+		$run curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > repo
+		$run chmod a+x repo
+	fi
+
+	# Download the Freescale Release BSP repo description for DIZZY
+	$run echo "Getting download information (repo init)"
+	$run ./repo init -u $YOCTO_DOWNLOAD_URL -b $YOCTO_BRANCH -m $YOCTO_MANIFEST
+
+	# Download the GIT repositories:
+	$run echo "Downloading all Yocto packages (repo sync)"
+	$run ./repo sync
 }
 
 # ----- Parse arguments -------------------------------------------------------
@@ -291,46 +330,24 @@ do_clone_checkout $LINUX_FUS_GIT $LINUX_DIR $LINUX_FUS_BRANCH $LINUX_FUS_COMMIT
 # Download U-Boot
 do_clone_checkout $UBOOT_FUS_GIT $UBOOT_DIR $UBOOT_FUS_BRANCH $UBOOT_FUS_COMMIT
 
-# Create yocto directory if it does not exist yet
-if [ ! -d "$YOCTO_DIR" ] ; then
-    do_mkdir "$YOCTO_DIR"
-fi
-
-cd $YOCTO_DIR
-# Download Yocto
-# Download the repo tool that handles the download of several GIT repos
-if [ ! -x ./repo ]
-then
-    echo "Downloading repo tool"
-    curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > repo
-    chmod a+x repo
-fi
-
-# Download the Freescale Release BSP repo description for DIZZY
-echo "Getting download information (repo init)"
-./repo init -u $YOCTO_DOWNLOAD_URL -b $YOCTO_BRANCH -m $YOCTO_MANIFEST
-
-# Download the GIT repositories:
-
-echo "Downloading all Yocto packages (repo sync)"
-./repo sync
+do_yocto_download
 
 # Download fus-layer 
 do_clone_checkout $META_FUS_GIT $META_FUS_DIR $META_FUS_BRANCH $META_FUS_COMMIT
 
 # Write linux-fus.bbappend
-
-write_bbappend $LINUX_SRC_URI $LINUX_FUS_COMMIT $META_FUS_DIR/$KERNEL_PATH/$LINUX_FUS_BBAPPEND
+do_write_bbappend $LINUX_SRC_URI $LINUX_FUS_COMMIT $META_FUS_DIR/$KERNEL_PATH/$LINUX_FUS_BBAPPEND
 
 # Write uboot-fus.bbappend
-write_bbappend $UBOOT_SRC_URI $UBOOT_FUS_COMMIT $META_FUS_DIR/$UBOOT_PATH/$UBOOT_FUS_BBAPPEND
+do_write_bbappend $UBOOT_SRC_URI $UBOOT_FUS_COMMIT $META_FUS_DIR/$UBOOT_PATH/$UBOOT_FUS_BBAPPEND
 
 # Create downloads directory if it does not exist yet
-if [ ! -d "$./downloads" ] ; then
-		do_mkdir "./downloads"
-	fi
-do_symlink  "$PWD/downloads/$LINUX_DIR" "../../$LINUX_DIR"
-do_symlink  "$PWD/downloads/$UBOOT_DIR" "../../$UBOOT_DIR"
+if [ ! -d $DL_DIR ] ; then
+		do_mkdir $DL_DIR
+fi
+
+do_symlink  "$PWD/$DL_DIR/$LINUX_DIR" "../../$LINUX_DIR"
+do_symlink  "$PWD/$DL_DIR/$UBOOT_DIR" "../../$UBOOT_DIR"
 
 # Remove link to fsl-setup-release.sh as it is called directly in
 # fus-setup-release.sh
@@ -354,10 +371,6 @@ if [ -d "$DL_REL_DIR" ] ; then
     done
 fi
 
-# Create symbolic links; DL_DIR must be referenced as absolute path
-if [ $create_dl_link == 1 ] ; then
-    do_symlink "$TARGET/$DL_DEF_DIR" $(readlink -m "$DL_DIR")
-fi
-
 echo
+
 

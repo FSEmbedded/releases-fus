@@ -1,5 +1,5 @@
 # Release Name
-RELEASE="fsimx8mm-Y5.15-pre"
+RELEASE="fsimx8mp-Y5.15-pre.1"
 
 # IMX Yocto Release
 YOCTO_DOWNLOAD_URL="https://github.com/nxp-imx/imx-manifest.git"
@@ -8,17 +8,15 @@ YOCTO_MANIFEST="imx-5.15.71-2.2.0.xml"
 
 # F&S Linux Kernel
 LINUX_FUS_GIT="https://github.com/FSEmbedded/linux-fus-pre.git"
-LINUX_FUS_COMMIT="38f1bfdeec02a7c23c1a1f76c6f24921b4ecf68f"
+LINUX_FUS_COMMIT="0f68ab6ce90b7b9d2a6cb201b90537e4c49840b8"
 
 # F&S U-boot
 UBOOT_FUS_GIT="https://github.com/FSEmbedded/u-boot-fus-pre.git"
-UBOOT_FUS_COMMIT="223a2bcd5d000730a3327ece20d83144e3f0fa9f"
-UBOOT_FUS_BRANCH="fus-2018.03"
-UBOOT_FUS_BBAPPEND="u-boot-fus-2018.03.bbappend"
+UBOOT_FUS_COMMIT="52d406cb26bcd7c0bb3956ca01a66613c38454e8"
 
 # F&S Yocto Meta layer
 META_FUS_GIT="https://github.com/FSEmbedded/meta-fus-pre.git"
-META_FUS_COMMIT="8889aba602ecef087a87e2a43412edcf77a6590d"
+META_FUS_COMMIT="849554abf42448a0b0bbbe9544cf841686279f0e"
 
 # F&S Board examples
 EXAMPLES_GIT="https://github.com/FSEmbedded/linux-examples-fs.git"
