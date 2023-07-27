@@ -4,12 +4,15 @@
 source Versions
 
 EXAMPLES_DIR=examples-fus
+LINUX_DIR=linux-fus
+UBOOT_DIR=u-boot-fus
 YOCTO_DIR=yocto-fus
 META_FUS_DIR=sources/meta-fus/
 KERNEL_PATH=recipes-kernel/linux/
 UBOOT_PATH=recipes-bsp/u-boot/
 
-
+UBOOT_SRC_URI="git://$UBOOT_DIR;branch=master;protocol=file"
+LINUX_SRC_URI="git://$LINUX_DIR;branch=master;protocol=file"
 # ----- Helper functions ------------------------------------------------------
 
 # Show usage on error
@@ -262,6 +265,12 @@ cd $TARGET
 # Download Examples
 do_clone_checkout $EXAMPLES_GIT $EXAMPLES_DIR $EXAMPLES_COMMIT
 
+# Download Linux Kernel
+do_clone_checkout $LINUX_FUS_GIT $LINUX_DIR $LINUX_FUS_COMMIT
+
+# Download U-Boot
+do_clone_checkout $UBOOT_FUS_GIT $UBOOT_DIR $UBOOT_FUS_COMMIT
+
 # Create yocto directory if it does not exist yet
 if [ ! -d "$YOCTO_DIR" ] ; then
     do_mkdir "$YOCTO_DIR"
@@ -290,10 +299,17 @@ echo "Downloading all Yocto packages (repo sync)"
 do_clone_checkout $META_FUS_GIT $META_FUS_DIR $META_FUS_COMMIT
 
 # Write linux-fus.bbappend
-write_bbappend $LINUX_FUS_GIT $LINUX_FUS_COMMIT $META_FUS_DIR/$KERNEL_PATH/linux-fus.bbappend
+write_bbappend $LINUX_SRC_URI $LINUX_FUS_COMMIT $META_FUS_DIR/$KERNEL_PATH/linux-fus.bbappend
 
 # Write uboot-fus.bbappend
-write_bbappend $UBOOT_FUS_GIT $UBOOT_FUS_COMMIT $META_FUS_DIR/$UBOOT_PATH/u-boot-fus.bbappend
+write_bbappend $UBOOT_SRC_URI $UBOOT_FUS_COMMIT $META_FUS_DIR/$UBOOT_PATH/u-boot-fus.bbappend
+
+# Create downloads directory if it does not exist yet
+if [ ! -d "$./downloads" ] ; then
+		do_mkdir "./downloads"
+	fi
+do_symlink  "$PWD/downloads/$LINUX_DIR" "../../$LINUX_DIR"
+do_symlink  "$PWD/downloads/$UBOOT_DIR" "../../$UBOOT_DIR"
 
 # Remove link to fsl-setup-release.sh as it is called directly in
 # fus-setup-release.sh
