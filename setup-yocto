@@ -1,0 +1,327 @@
+#!/bin/bash
+#
+
+source Versions
+
+EXAMPLES_DIR=examples-fus
+YOCTO_DIR=yocto-fus
+META_FUS_DIR=sources/meta-fus/
+KERNEL_PATH=recipes-kernel/linux/
+UBOOT_PATH=recipes-bsp/u-boot/
+
+
+# ----- Helper functions ------------------------------------------------------
+
+# Show usage on error
+show_usage()
+{
+    echo
+    echo "Usage: $0 [options] <target>"
+    echo
+    echo "Extract the sources (u-boot, linux, yocto, examples) to directory"
+    echo "<target>. If a dl directory is available in the release, also copy"
+    echo "the extra packages in it to the download directory."
+    echo
+    echo "Options:"
+    echo "-r | --release <release>"
+    echo "                Use given <release> directory to locate sources"
+    echo "                (default: directory where this script is located)"
+    echo "-d | --dl <dl>  Use <dl> directory as Yocto download directory"
+    echo "                (default: \$DL_DIR or 'downloads' in Yocto's top dir)"
+    echo "-f | --force    Force installation, overwrite files in directories"
+    echo "                <target> and <dl> if they exist; be careful!"
+    echo "-n | --dry-run  Show what would be done, do not change anything"
+    echo "-h | --help     Show this help"
+    echo
+    exit 1
+}
+
+# If force is on, delete $1 and show type, otherwise just show existing name
+do_delete()
+{
+    if [ $force == 1 ] ; then
+	if [ -L "$1" ] ; then
+	    echo "  [DELETE SYMLINK  ] $1"
+	    $run /bin/rm -f "$1"
+	elif [ -d "$1" ] ; then
+	    echo "  [DELETE DIRECTORY] $1"
+	    $run /bin/rm -rf "$1"
+	else
+	    echo "  [DELETE FILE     ] $1"
+	    $run /bin/rm -f "$1"
+	fi
+    else
+	stop=1
+	if [ -L "$1" ] ; then
+	    echo "Symlink already exists:   $1"
+	elif [ -d "$1" ] ; then
+	    echo "Directory already exists: $1"
+	else
+	    echo "File already exists:      $1"
+	fi
+    fi
+}
+
+# Create directory $1
+do_mkdir()
+{
+    echo "  [CREATE DIRECTORY] $1"
+	echo
+    $run /bin/mkdir -p "$1"
+}
+
+# Extract $1 to directory $2
+do_extract()
+{
+    echo "  [EXTRACT ARCHIVE ] $1"
+    echo "  [TO              ] $2"
+	echo
+    $run /bin/tar xf "$1" -C "$2"
+}
+
+# Clone git from $1 to directory $2
+# Check out $3
+do_clone_checkout()
+{
+    echo "  [CLONING GIT ] $1"
+    echo "  [TO          ] $2"
+    $run git clone "$1" "$2"
+	echo "  [CHECKING OUT] $3"
+	echo
+	$run cd "$2"
+	$run git checkout "$3"
+	$run cd -
+}
+
+# Copy $1 to $2
+do_copy()
+{
+    echo "  [COPY PACKAGE    ] $1"
+    echo "  [TO              ] $2"
+	echo
+    $run /bin/cp -f "$1" "$2"
+}
+
+# Create symlink $1 to point to $2
+do_symlink()
+{
+    echo "  [CREATE SYMLINK  ] $1"
+    echo "  [TO POINT TO     ] $2"
+	echo
+    $run /bin/ln -s "$2" "$1"
+}
+
+# Write SRC_URI $1 and SRCREV $2 to bbappend at $3
+write_bbappend()
+{
+    echo "  [CREATING 		] $3"
+    echo "  [SRC_URI  		] $1"
+    echo "  [SRCREV  		] $2"
+	echo
+	echo "SRC_URI = \"${1}\"" > $3
+	echo "SRCREV = \"${2}\"" >> $3
+}
+
+# ----- Parse arguments -------------------------------------------------------
+
+force=0
+run=
+TARGET=
+
+while [ $# -gt 0 ] ; do
+    case "${1,,}" in
+	-r|--release)
+	    if [ -z "$2" ] ; then
+		echo
+		echo "ERROR: Option '$1' needs a path parameter"
+		show_usage
+	    fi
+	    RELEASE="$2"
+	    shift 2
+	    ;;
+	-d|--dl)
+	    if [ -z "$2" ] ; then
+		echo
+		echo "ERROR: Option '$1' needs a path parameter"
+		show_usage
+	    fi
+	    DL_DIR="$2"
+	    shift 2
+	    ;;
+	-h|--help)
+	    show_usage
+	    ;;
+	-f|--force)
+	    force=1
+	    shift
+	    ;;
+	-n|--dry-run)
+	    run=:
+	    shift
+	    ;;
+	-*)
+	    echo
+	    echo "ERROR: Unknown option '$1'"
+	    show_usage
+	    ;;
+
+	*)
+	    TARGET="$1"
+	    shift
+	    ;;
+    esac
+done
+
+if [ -z $RELEASE ] ; then
+    RELEASE=$(dirname $0)
+fi
+
+echo
+
+if [ -z "$TARGET" ] ; then
+    echo "No target directory given; use . to install to current directory"
+    show_usage
+fi
+
+# OK, let's start. Prepend all delete and installation commands with $run.
+# Then they are automatically skipped in case of --dry-run.
+
+if [ "$run" == ":" ] ; then
+    echo "*** Dry run -- the following actions would be executed ***"
+    echo
+fi
+
+# ----- Remove existing files and directories ---------------------------------
+
+# Check for main target directory
+if [ ! -d "$TARGET" ] ; then
+    if [ -e "$TARGET" ] ; then
+	do_delete "$TARGET"
+    fi
+fi
+
+# Check for target directories, remove if requested
+for dir in "$YOCTO_DIR" "$EXAMPLES_DIR" ; do
+    targetdir="$TARGET/$dir"
+    if [ -e "$targetdir" ] ; then
+	do_delete "$targetdir"
+    fi
+done
+
+# Check dl directory; package names must not contain blanks
+dl_packages=
+install_dl_packages=
+create_dl_link=1
+if [ -z "$DL_DIR" ] ; then
+    DL_DIR="$TARGET/$DL_DEF_DIR"
+    create_dl_link=0
+fi
+if [ -d "$DL_REL_DIR" ] ; then
+    dl_packages=$(cd "$DL_REL_DIR"; echo *)
+fi
+if [ -d "$DL_DIR" ] ; then
+    for package in $dl_packages ; do
+	dlpackage="$DL_DIR/$package"
+	if [ -e "$dlpackage" ] ; then
+	    # Skip if existing package is identical
+	    if cmp -s "$DL_REL_DIR/$package" "$dlpackage" ; then
+		continue
+	    fi
+	    do_delete "$dlpackage"
+	fi
+	# Add this package
+	install_dl_packages="$install_dl_packages $package"
+    done
+else
+    # Add all packages
+    install_dl_packages="$dl_packages"
+fi
+
+# Stop on problems with existing files
+if [ "$stop" == 1 ] ; then
+    echo
+    echo "*** Move away the file(s) or use option --force (-f) to delete. ***"
+    echo
+    exit 1;
+fi
+
+# ----- Unpack archives and set up environment --------------------------------
+
+echo "Setup release $RELEASE"
+echo
+
+WORKDIR=$(pwd)
+
+# Create target directory if it does not exist yet
+if [ ! -d "$TARGET" ] ; then
+    do_mkdir "$TARGET"
+fi
+
+cd $TARGET
+
+# Download Examples
+do_clone_checkout $EXAMPLES_GIT $EXAMPLES_DIR $EXAMPLES_COMMIT
+
+# Create yocto directory if it does not exist yet
+if [ ! -d "$YOCTO_DIR" ] ; then
+    do_mkdir "$YOCTO_DIR"
+fi
+
+cd $YOCTO_DIR
+# Download Yocto
+# Download the repo tool that handles the download of several GIT repos
+if [ ! -x ./repo ]
+then
+    echo "Downloading repo tool"
+    curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > repo
+    chmod a+x repo
+fi
+
+# Download the Freescale Release BSP repo description for DIZZY
+echo "Getting download information (repo init)"
+./repo init -u $YOCTO_DOWNLOAD_URL -b $YOCTO_BRANCH -m $YOCTO_MANIFEST
+
+# Download the GIT repositories:
+
+echo "Downloading all Yocto packages (repo sync)"
+./repo sync
+
+# Download fus-layer 
+do_clone_checkout $META_FUS_GIT $META_FUS_DIR $META_FUS_COMMIT
+
+# Write linux-fus.bbappend
+write_bbappend $LINUX_FUS_GIT $LINUX_FUS_COMMIT $META_FUS_DIR/$KERNEL_PATH/linux-fus.bbappend
+
+# Write uboot-fus.bbappend
+write_bbappend $UBOOT_FUS_GIT $UBOOT_FUS_COMMIT $META_FUS_DIR/$UBOOT_PATH/u-boot-fus.bbappend
+
+# Remove link to fsl-setup-release.sh as it is called directly in
+# fus-setup-release.sh
+rm imx-setup-release.sh
+ln -s ./sources/meta-fus/tools/fus-setup-release.sh ./
+ln -s ./sources/meta-fus/tools/yocto-f+s-utilities ./
+
+# Print user manual from yocto-f+s-utilities
+source ./yocto-f+s-utilities
+print_usage
+
+cd $WORKDIR
+
+# Copy extra packages from dl, if any
+if [ -d "$DL_REL_DIR" ] ; then
+    if [ ! -d "$DL_DIR" ] ; then
+	do_mkdir "$DL_DIR"
+    fi
+    for package in $install_dl_packages ; do
+	do_copy "$DL_REL_DIR/$package" "$DL_DIR/$package"
+    done
+fi
+
+# Create symbolic links; DL_DIR must be referenced as absolute path
+if [ $create_dl_link == 1 ] ; then
+    do_symlink "$TARGET/$DL_DEF_DIR" $(readlink -m "$DL_DIR")
+fi
+
+echo
+
+
