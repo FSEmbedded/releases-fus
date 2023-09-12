@@ -4,15 +4,18 @@
 # Abbort script on command failure
 set -e
 
-EXAMPLES_BRANCH="master"
-UBOOT_FUS_BRANCH="master"
-LINUX_FUS_BRANCH="master"
-META_FUS_BRANCH="master"
+VERSION=1.0
+YOCTO_MANIFEST="fs-release-manifest.xml"
+
+RELEASE=$(grep '<release' "${YOCTO_MANIFEST}"| grep -Po 'version="\K.*?(?=")')
+
+YOCTO_DOWNLOAD_URL="https://github.com/FSEmbedded/releases-fus"
+YOCTO_BRANCH="main"
+
 
 UBOOT_FUS_BBAPPEND="u-boot-fus.bbappend"
 LINUX_FUS_BBAPPEND="linux-fus.bbappend"
-
-source Versions
+WORKDIR=$(pwd)
 
 EXAMPLES_DIR=examples-fus
 LINUX_DIR=linux-fus
@@ -22,6 +25,24 @@ META_FUS_DIR=sources/meta-fus/
 KERNEL_PATH=recipes-kernel/linux/
 UBOOT_PATH=recipes-bsp/u-boot/
 DL_DIR="downloads"
+
+# Parse line with $1 and echo the value of $2 from manifest $3
+parse_xml_value()
+{
+	entry=$1
+	value=$2
+	manifest=$3
+
+	result=$(grep "path=\"${entry}\"" "${manifest}"| grep -Po "${value}=\"\K.*?(?=\")")
+
+	echo $result
+}
+
+LINUX_FUS_COMMIT=$(parse_xml_value "linux-fus" "revision" "${YOCTO_MANIFEST}")
+LINUX_FUS_BRANCH=$(parse_xml_value "linux-fus" "upstream" "${YOCTO_MANIFEST}")
+
+UBOOT_FUS_COMMIT=$(parse_xml_value "u-boot-fus" "revision" "${YOCTO_MANIFEST}")
+UBOOT_FUS_BRANCH=$(parse_xml_value "u-boot-fus" "upstream" "${YOCTO_MANIFEST}")
 
 UBOOT_SRC_URI="git://\${DL_DIR}/$UBOOT_DIR;branch=$UBOOT_FUS_BRANCH;protocol=file"
 LINUX_SRC_URI="git://\${DL_DIR}/$LINUX_DIR;branch=$LINUX_FUS_BRANCH;protocol=file"
@@ -96,6 +117,24 @@ do_extract()
     $run /bin/tar xf "$1" -C "$2"
 }
 
+
+do_set_git_credentials()
+{
+	echo "  [GIT CREDENTIALS]"
+
+    if ! git config --global user.name
+	then
+		$run read -p "Please enter the user name that should be used for git: " username
+		$run git config --global user.name "$username"
+	fi
+
+	if ! git config --global user.email
+	then
+		$run read -p "Please enter the email that should be used for git: " email
+		$run git config --global user.email "$email"
+	fi
+	
+}
 # Clone git from $1 to directory $2
 # Check out branch $3 commit $4
 do_clone_checkout()
@@ -144,8 +183,10 @@ do_write_bbappend()
 		echo "  [SRC_URI  		] $1"
 		echo "  [SRCREV  		] $2"
 		echo
-		$run echo "SRC_URI = \"${1}\"" > $3
-		$run echo "SRCREV = \"${2}\"" >> $3
+		if [ "$run" != ":" ] ; then
+			echo "SRC_URI = \"${1}\"" > $3
+			echo "SRCREV = \"${2}\"" >> $3
+		fi
 	else
 		echo "write_bbappend failed"
 	fi
@@ -158,14 +199,14 @@ do_yocto_download()
 
     echo "  [DOWNOAD MANIFEST] $YOCTO_MANIFEST"
     echo "  [FROM            ] $YOCTO_DOWNLOAD_URL"
-	echo "  [BRANCH          ] $YOCTO_BRANCH"
+	echo "  [TAG          ] $RELEASE"
 	echo
 
 	# Create yocto directory if it does not exist yet
 	if [ ! -d "$YOCTO_DIR" ] ; then
 		$run do_mkdir "$YOCTO_DIR"
 	fi
-	$run cd $YOCTO_DIR
+	#$run cd $YOCTO_DIR
 	# Download Yocto
 	# Download the repo tool that handles the download of several GIT repos
 	if [ ! -x ./repo ]
@@ -175,13 +216,18 @@ do_yocto_download()
 		$run chmod a+x repo
 	fi
 
-	# Download the Freescale Release BSP repo description for DIZZY
+	# Fakeinit repo so we can copy our local manifest
 	$run echo "Getting download information (repo init)"
 	$run ./repo init -u $YOCTO_DOWNLOAD_URL -b $YOCTO_BRANCH -m $YOCTO_MANIFEST
+	$run cp $WORKDIR/$YOCTO_MANIFEST .repo/manifests/
 
 	# Download the GIT repositories:
 	$run echo "Downloading all Yocto packages (repo sync)"
-	$run ./repo sync
+	$run ./repo sync -m $YOCTO_MANIFEST
+
+	# Create local branches so Yocto can find the commits
+	$run ./repo start $LINUX_FUS_BRANCH $LINUX_DIR
+	$run ./repo start $UBOOT_FUS_BRANCH $UBOOT_DIR
 }
 
 # ----- Parse arguments -------------------------------------------------------
@@ -221,6 +267,11 @@ while [ $# -gt 0 ] ; do
 	    run=:
 	    shift
 	    ;;
+	-v|--version)
+	    echo $VERSION
+		exit
+	    shift
+		;;
 	-*)
 	    echo
 	    echo "ERROR: Unknown option '$1'"
@@ -256,19 +307,10 @@ fi
 # ----- Remove existing files and directories ---------------------------------
 
 # Check for main target directory
-if [ ! -d "$TARGET" ] ; then
-    if [ -e "$TARGET" ] ; then
-	do_delete "$TARGET"
-    fi
-fi
 
-# Check for target directories, remove if requested
-for dir in "$YOCTO_DIR" "$EXAMPLES_DIR" ; do
-    targetdir="$TARGET/$dir"
-    if [ -e "$targetdir" ] ; then
-	do_delete "$targetdir"
-    fi
-done
+if [ -e "$TARGET" ] ; then
+	do_delete "$TARGET"
+fi
 
 # Check dl directory; package names must not contain blanks
 dl_packages=
@@ -312,28 +354,18 @@ fi
 echo "Setup release $RELEASE"
 echo
 
-WORKDIR=$(pwd)
-
 # Create target directory if it does not exist yet
 if [ ! -d "$TARGET" ] ; then
     do_mkdir "$TARGET"
 fi
 
-cd $TARGET
+do_set_git_credentials
 
-# Download Examples
-do_clone_checkout $EXAMPLES_GIT $EXAMPLES_DIR $EXAMPLES_BRANCH $EXAMPLES_COMMIT
-
-# Download Linux Kernel
-do_clone_checkout $LINUX_FUS_GIT $LINUX_DIR $LINUX_FUS_BRANCH $LINUX_FUS_COMMIT
-
-# Download U-Boot
-do_clone_checkout $UBOOT_FUS_GIT $UBOOT_DIR $UBOOT_FUS_BRANCH $UBOOT_FUS_COMMIT
+$run cd $TARGET
 
 do_yocto_download
 
-# Download fus-layer 
-do_clone_checkout $META_FUS_GIT $META_FUS_DIR $META_FUS_BRANCH $META_FUS_COMMIT
+$run cd $YOCTO_DIR
 
 # Write linux-fus.bbappend
 do_write_bbappend $LINUX_SRC_URI $LINUX_FUS_COMMIT $META_FUS_DIR/$KERNEL_PATH/$LINUX_FUS_BBAPPEND
@@ -346,20 +378,11 @@ if [ ! -d $DL_DIR ] ; then
 		do_mkdir $DL_DIR
 fi
 
-do_symlink  "$PWD/$DL_DIR/$LINUX_DIR" "../../$LINUX_DIR"
-do_symlink  "$PWD/$DL_DIR/$UBOOT_DIR" "../../$UBOOT_DIR"
-
-# Remove link to fsl-setup-release.sh as it is called directly in
-# fus-setup-release.sh
-rm imx-setup-release.sh
-ln -s ./sources/meta-fus/tools/fus-setup-release.sh ./
-ln -s ./sources/meta-fus/tools/yocto-f+s-utilities ./
-
 # Print user manual from yocto-f+s-utilities
-source ./yocto-f+s-utilities
-print_usage
+$run source ./yocto-f+s-utilities
+$run print_usage
 
-cd $WORKDIR
+$run cd $WORKDIR
 
 # Copy extra packages from dl, if any
 if [ -d "$DL_REL_DIR" ] ; then
@@ -372,5 +395,3 @@ if [ -d "$DL_REL_DIR" ] ; then
 fi
 
 echo
-
-
