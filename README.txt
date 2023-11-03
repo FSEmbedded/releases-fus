@@ -1,17 +1,18 @@
-F&S i.MX8M-Plus Yocto Release 2023.09 (fsimx8mp-Y2023.09)
+F&S i.MX8M-Mini Yocto Release 2023.10 (fsimx8mm-Y2023.10)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX8MP_FirstSteps_eng.pdf
+  doc/FSiMX8MM_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
 This is a major release for all F&S boards and modules based on the
-i.MX8M-Plus CPU (Solo, Dual and Quad), i.e. PicoCoreMX8MP(r2), armStoneMX8MP 
-or efusmx8mp. More boards may be added to this family in the future.
+i.MX8M-Mini CPU (Solo, Dual and Quad), i.e. PicoCoreMX8MM(r2)-LPDDR4, 
+PicoCoreMX8MM-DDR3L
+More boards may be added to this family in the future.
 All these boards can work with software that is created from this release
 package.
 
@@ -32,9 +33,9 @@ doc/                    Hardware and software manuals, schematics
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !                               Attention                                     !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-To use this release, you will have to update to Nboot 2023.09 and 
-U-boot Y2023.09 first. For this we have added an U-Boot update script named 
-"update.scr_disbaled" to the sdcard directory. Remove the "_disabled" and copy 
+To use this release, you will have to update to Nboot 2023.10 and 
+U-boot Y2023.10 first. For this we have added an U-Boot update script named 
+"update-uboot-nboot-sysimg.scr" to the sdcard directory. Rename it to "update.scr" and copy 
 everything to an USB-Stick. Plug the USB-Stick to the board and start it.
 After the bootdelay the update should begin automatically. 
 The board will reset 2 times. It will install Nboot, Uboot and Sysimg.
@@ -49,9 +50,9 @@ Unplug the USB stick or the update will run again on the next reboot.
 
 Here are some highlights of this release.
 
-1. New Linux Kernel 5.15.71
+1. New Linux Kernel 5.15.131
 
- The Linux kernel is now based on 5.15.71
+ The Linux kernel is now based on 5.15.131
  - New optimizations for EXT4.
  - OverlayFS has better performance and copying up more attributes.
  - Many graphics improvements among the DRM/KMS drivers.
@@ -69,7 +70,7 @@ Here are some highlights of this release.
 
   (https://www.phoronix.com/review/linux-515-features)
 
- Of course there are also many changes for other CPU types (like x86)
+ Of course, there are also many changes for other CPU types (like x86)
  and other graphics cores (like AMD, Nvidia, Intel) but these are not
  of interest here.
 
@@ -77,12 +78,12 @@ Here are some highlights of this release.
 
  The U-Boot is now based on 2021.04.
  Additional to the security and feature updates of the mainline U-Boot,
- there has been many updates on the fsimage command and the general layout
+ there have been many updates on the fsimage command and the general layout
  of the bootloaders in the flash memory. Because of this, it is necessary to
  update first the U-Boot, reset and the Nboot.
  You can use the update.scr from the sdcard directory for this.
 
-3. New Yocto version 4.0 Kirstone 
+3. New Yocto version 4.0 Kirkstone 
 
  Updating Yocto to Version 4.0 Kirkstone. This provides many new package
  versions like Qt6.3 or Chroium 101.
@@ -140,10 +141,10 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-u-boot-2021.04-fsimx8mp-Y2023.09 ()
+u-boot-2021.04-fsimx8mm-Y2023.10 ()
 -----------------------------------------------
-Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
-                  efusmx8mp
+Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
+                  PicoCoreMX8MM-DDR3L 
 
 - Update to NXP u-boot-201.04
 - Add mcu_rdc settings to fsimx8mp
@@ -155,15 +156,20 @@ Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
 - Relocate U-Boot and Environment in fsimage save if needed
 - Have new NAND/MMC layouts for fsimx8mm/mn/mp
 - Uboot is now located in the boot partition of eMMC
+- Fix fat_size for files bigger than 2GB
+- Drop board revision from BOARD-CFG names
+- Add option -b to fsimage save to select boot partition
+- Add command fsimage boot to show current boot settings
+- On fsimx8mm, add old device tree names for compatibility
 
 
 
-linux-5.15.71-fsimx8mp-Y2023.09 ()
+linux-5.15.71-fsimx8mm-Y2023.10 ()
 -----------------------------------------------
-Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
-                  efusmx8mp
+Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
+                  PicoCoreMX8MM-DDR3L
 
-- Update to NXP Linux Version lf-5.15.71-2.2.0
+- Update to NXP Linux Version lf-5.15.71-2.2.1
 - Remove fsimx8m support
 - Switch to FSL_ASOC_CARD sound driver for sgtl5000
 - Add F&S Versioning for kernel and device tree
@@ -171,40 +177,42 @@ Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
 - Add leds-pca963x-fus driver and revert the original to 
   the mainline driver
 - Enable power key support for PicoCore boards
-- Add imx8mp basler isp camera support
-- Add ast-adp-edt2 adapter support for efusmx8mp
 - Improve fsimx8m variants uart clock speed
 - Improve SDIO stability for Azurewave wlan chips
 - Add support to disable pin controls nodes in the device tree
 - Fix picocoremx8mp Bluetooth error after suspend-to-mem
+- Apply patches from mainline linux-5.15.131
+- Use new naming convention for PicoCoreMX8MM boards
+- Add DTS version for fsimx8mm
+- Fix Realtek Ethernet Phy Bug in Low Power Mode
+- Don't use nand-on-flash-bad block table for fsimx8mm
 
 
-
-meta-fus-fsimx8mp-Y2023.09 ()
+meta-fus-fsimx8mm-Y2023.10 ()
 -----------------------------------------------
-Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
-                  efusmx8mp
+Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
+                  PicoCoreMX8MM-DDR3L
 
 - Create standalone meta-fus repository
 - Update meta-fus to Kirkstone (Yocto 4.0)
 - Add new packages to fus-image-std:
   fiwared, can-utils, libgpiod-tools, spitools
-- Add asound.state for wm8960 codec
 - Fix out-of-tree kernel module building
 - Add optional nxp-wifi driver support for Azurewave wlan
-- Add image for fsimx8mp basler camera support
 - Add calibration file for TSC2004 touch chip
 - Add layer versions to the final image
 - Set default Linux terminal to vt100
 - Remove U-Boot from sysimg
 - Add update script for updating NBoot, U-Boot and sysimg
+- Remove Kernel Image from the rootfs
+- Add F&S psplash Logo
 
 
 
-atf-5.15.71-fsimx8mp-2023.09 ()
+atf-5.15.71-fsimx8mm-2023.10 ()
 -----------------------------------------
-Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
-                  efusmx8mp
+Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
+                  PicoCoreMX8MM-DDR3L
 
 - Update to NXP version lf-5.15.71-2.2.1
 
@@ -227,8 +235,8 @@ Examples
 Documentation
 -------------
 
-- Update to version 1.5 of FSiMX8MP_FirstSteps_eng.pdf
-- Update to version 0.19 of LinuxOnFSBoards_eng.pdf
+- Update to version 1.8 of FSiMX8MM_FirstSteps_eng.pdf
+- Update to version 0.20 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.

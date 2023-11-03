@@ -25,6 +25,7 @@ META_FUS_DIR=sources/meta-fus/
 KERNEL_PATH=recipes-kernel/linux/
 UBOOT_PATH=recipes-bsp/u-boot/
 DL_DIR="downloads"
+UPDATE="false"
 
 # Parse line with $1 and echo the value of $2 from manifest $3
 parse_xml_value()
@@ -69,6 +70,7 @@ show_usage()
     echo "-f | --force    Force installation, overwrite files in directories"
     echo "                <target> and <dl> if they exist; be careful!"
     echo "-n | --dry-run  Show what would be done, do not change anything"
+    echo "-u | --update   Update all gits to the newest versions in the manifest.xml"
     echo "-h | --help     Show this help"
     echo
     exit 1
@@ -193,7 +195,7 @@ do_write_bbappend()
 
 }
 
-# Write SRC_URI $1 and SRCREV $2 to bbappend at $3
+# Download yocto repostiories
 do_yocto_download()
 {
 
@@ -206,13 +208,13 @@ do_yocto_download()
 	if [ ! -d "$YOCTO_DIR" ] ; then
 		$run do_mkdir "$YOCTO_DIR"
 	fi
-	#$run cd $YOCTO_DIR
+
 	# Download Yocto
 	# Download the repo tool that handles the download of several GIT repos
 	if [ ! -x ./repo ]
 	then
 		$run echo "Downloading repo tool"
-		$run curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > repo
+		$run curl curl https://storage.googleapis.com/git-repo-downloads/repo > repo
 		$run chmod a+x repo
 	fi
 
@@ -228,6 +230,22 @@ do_yocto_download()
 	# Create local branches so Yocto can find the commits
 	$run ./repo start $LINUX_FUS_BRANCH $LINUX_DIR
 	$run ./repo start $UBOOT_FUS_BRANCH $UBOOT_DIR
+}
+
+# Update yocto repostiories
+do_yocto_update()
+{
+
+    echo "  [UPDATE MANIFEST] $YOCTO_MANIFEST"
+    echo "  [FROM            ] $YOCTO_DOWNLOAD_URL"
+	echo "  [TAG          ] $RELEASE"
+	echo
+
+	$run cp $WORKDIR/$YOCTO_MANIFEST .repo/manifests/
+
+	# Download the GIT repositories:
+	$run echo "Updating all Yocto packages (repo sync)"
+	$run ./repo sync -m $YOCTO_MANIFEST
 }
 
 # ----- Parse arguments -------------------------------------------------------
@@ -265,6 +283,10 @@ while [ $# -gt 0 ] ; do
 	    ;;
 	-n|--dry-run)
 	    run=:
+	    shift
+	    ;;
+	-u|--update)
+	    UPDATE="true"
 	    shift
 	    ;;
 	-v|--version)
@@ -308,7 +330,7 @@ fi
 
 # Check for main target directory
 
-if [ -e "$TARGET" ] ; then
+if [ -e "$TARGET" && $UPDATE != "true" ] ; then
 	do_delete "$TARGET"
 fi
 
@@ -363,7 +385,12 @@ do_set_git_credentials
 
 $run cd $TARGET
 
-do_yocto_download
+if [ $UPDATE == "true" ] ; then
+    do_yocto_update
+else
+    do_yocto_download
+fi
+
 
 $run cd $YOCTO_DIR
 
