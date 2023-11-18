@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<manifest>
+
+  <release version="fsimx8mm-B2023.11"/>
+  <default sync-j="2"/>
+
+   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
+
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="e5d2937081e03f19868a6c0c4a967b2944d171eb" upstream="master">
+    <linkfile dest="linux-fsimx8mm" src="."/>
+  </project>
+
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="101454c9c1bff5917d3f1f3f534cab9a06a9abb4" upstream="master">
+    <linkfile dest="u-boot-fsimx8mm" src="."/>
+  </project>
+
+  <project name="buildroot-fus" path="buildroot-fus" remote="fus" revision="eb3fe3d3168955df3f70623dd21467e75c1561a1" upstream="master"/>
+
+  <project name="linux-examples-fus" path="linux-examples-fus" remote="fus" revision="a0b4c436df27bf44fc6d7419035fb797722a3403" upstream="master"/>
+
+</manifest>
