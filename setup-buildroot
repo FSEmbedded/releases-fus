@@ -4,7 +4,7 @@
 # Abbort script on command failure
 set -e
 
-VERSION=1.0
+VERSION=1.1
 BUILDROOT_MANIFEST="fs-release-manifest.xml"
 
 RELEASE=$(grep '<release' "${BUILDROOT_MANIFEST}"| grep -Po 'version="\K.*?(?=")')
@@ -304,7 +304,7 @@ if [ -e "$TARGET" ] && [ "$UPDATE" != "true" ] ; then
 fi
 
 # Check dl directory; package names must not contain blanks
-dl_packages=2222222222
+dl_packages=
 install_dl_packages=
 create_dl_link=1
 if [ -z "$DL_DIR" ] ; then

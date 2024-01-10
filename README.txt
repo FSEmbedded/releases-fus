@@ -1,17 +1,19 @@
-F&S i.MX8M-Mini Buildroot Release 2023.11 (fsimx8mm-B2023.11)
+F&S i.MX6UL Buildroot Release 2023.12 (fsimx6ul-B2023.12)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX8MM_FirstSteps_eng.pdf
+  doc/FSiMX6UL_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
-This is a major release for all F&S boards and modules based on the
-i.MX8M-Mini CPU (Solo, Dual and Quad), i.e. PicoCoreMX8MM(r2)-LPDDR4, 
-PicoCoreMX8MM-DDR3L
+This is a major release for all F&S boards and modules based on 
+the i.MX6-UltraLite and i.MX6ULL CPUs from NXP 
+(or i.MX6UL and i.MX6ULL for short).
+Currently these are the modules efusA7UL, PicoCOM1.2, PicoCoreMX6UL,
+PicoCoreMX6UL100 and PicoCOMA7.
 More boards may be added to this family in the future.
 All these boards can work with software that is created from this release
 package.
@@ -30,25 +32,12 @@ sdcard/                 Precompiled images (names as expected by
 doc/                    Hardware and software manuals, schematics
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!                               Attention                                     !
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-To use this release, you will have to update to Nboot fsimx8mm-2023.10 and 
-U-boot fsimx8mm-2023.11 first. For this we have added an U-Boot update script 
-named  "update-all.scr" to the sdcard directory. Rename it to
-"update.scr" and copy everything to an USB-Stick. Plug the USB-Stick to the 
-board and start it. After the bootdelay the update should begin automatically. 
-The board will reset 2 times. It will install Nboot, Uboot and Sysimg.
-When everything is complete the line 
-"---- update COMPLETE! ----"
-will be printed to the console.
-Unplug the USB stick or the update will run again on the next reboot.
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!                               Attention                                     !
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 Here are some highlights of this release.
+
+1. This Release does not support the Silex WLAN chip on the modules efusA7UL
+
+There is currently no driver avaialble for the Linux Kernel 5.15
+For Silex WLAN chip support, please use the release fsimx6ul-B2019.11.1
 
 1. New Linux Kernel 5.15.131
 
@@ -79,9 +68,7 @@ Here are some highlights of this release.
  The U-Boot is now based on 2021.04.
  Additional to the security and feature updates of the mainline U-Boot,
  there have been many updates on the fsimage command and the general layout
- of the bootloaders in the flash memory. Because of this, it is necessary to
- update first the U-Boot, reset and the Nboot.
- You can use the update.scr from the sdcard directory for this.
+ of the bootloaders in the flash memory.
 
 3. New Buildroot version 2023.02.6 
 
@@ -129,78 +116,59 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-u-boot-2021.04-fsimx8mm-2023.11 ()
+nbootimx6_50.bin (VN50)
+------------------------------------
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+
+[VN49]
+- 0005378: [NBoot] Ad9 support for new boards efusA9Xr2, armStoneA9R3, armStoneA9r4, PicoCoreMX6SXr2
+
+[VN50]
+- 0005541: [NBoot] NAND dump does not work
+- 0005540: [NBoot] Memory errors on armStoneA9
+- 0005542: [NBoot] Board revision is wrong on armStoneA9
+
+
+u-boot-2021.04-fsimx6ul-2023.12
 -----------------------------------------------
-Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
-                  PicoCoreMX8MM-DDR3L 
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7 
 
 - Update to NXP u-boot-201.04
-- Add mcu_rdc settings to fsimx8mp
 - Improve Uboot versioning
 - Fix bootaux command
-- Introduce crc32 checksums for fsimage save command
-- Nboot can now be written to NAND flash with U-Boot
-  (No kobs tool needed anymore)
-- Relocate U-Boot and Environment in fsimage save if needed
-- Have new NAND/MMC layouts for fsimx8mm/mn/mp
-- Uboot is now located in the boot partition of eMMC
 - Fix fat_size for files bigger than 2GB
 - Drop board revision from BOARD-CFG names
-- Add option -b to fsimage save to select boot partition
-- Add command fsimage boot to show current boot settings
-- On fsimx8mm, add old device tree names for compatibility
-- Fix default entry for environment in NAND
 - addfsheader.sh: Check for crc32 and xxd before using them
+- Remove sha256 support
 
-
-linux-5.15.71-fsimx8mm-2023.11 ()
+linux-5.15.71-fsimx6ul-2023.12
 -----------------------------------------------
-Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
-                  PicoCoreMX8MM-DDR3L
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
 
 - Update to NXP Linux Version lf-5.15.71-2.2.1
-- Remove fsimx8m support
 - Switch to FSL_ASOC_CARD sound driver for sgtl5000
 - Add F&S Versioning for kernel and device tree
 - Improve uart dma support
 - Add leds-pca963x-fus driver and revert the original to 
   the mainline driver
 - Enable power key support for PicoCore boards
-- Improve fsimx8m variants uart clock speed
 - Improve SDIO stability for Azurewave wlan chips
 - Add support to disable pin controls nodes in the device tree
-- Fix picocoremx8mp Bluetooth error after suspend-to-mem
 - Apply patches from mainline linux-5.15.131
-- Use new naming convention for PicoCoreMX8MM boards
-- Add DTS version for fsimx8mm
 - Fix Realtek Ethernet Phy Bug in Low Power Mode
-- Don't use nand-on-flash-bad block table for fsimx8mm
+- Fix fsimx6ul 512MHz dc supply warning
 
 
-buildroot-fsimx8mm-2023.11 ()
+
+buildroot-fsimx6ul-2023.12
 -----------------------------------------------
-Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
-                  PicoCoreMX8MM-DDR3L
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+
 - Update to Buildroot 2023.02.6
 - Update IMX specific packages to NXP Yocto version lf-5.15.71-2.2.1
 - Add F&S Kernel and U-Boot versioning
 - Add F&S psplash bootscreen
-
-
-
-atf-5.15.71-fsimx8mm-2023.11 ()
------------------------------------------
-Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
-                  PicoCoreMX8MM-DDR3L
-
-- Update to NXP version lf-5.15.71-2.2.1
-
-
-
-firmware-imx-8.10.1 ddr synopsys ()
--------------------------------------------
-
-(no changes)
+- Add support for weston fbdev-backend.
 
 
 
@@ -209,13 +177,18 @@ Examples
 
 (no changes)
 
+Toolchain
+---------
+fs-toolchain-11.2-armv7ahf.tar.bz2 for Linux
+
+
 
 
 Documentation
 -------------
 
-- Update to version 1.8 of FSiMX8MM_FirstSteps_eng.pdf
-- Update to version 0.21 of LinuxOnFSBoards_eng.pdf
+- Update to version 2.5 of FSiMX6UL_FirstSteps_eng.pdf
+- Update to version 0.23 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.
