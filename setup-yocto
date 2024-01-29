@@ -330,7 +330,7 @@ fi
 
 # Check for main target directory
 
-if [ -e "$TARGET" && $UPDATE != "true" ] ; then
+if [ -e "$TARGET" ] && [ "$UPDATE" != "true" ] ; then
 	do_delete "$TARGET"
 fi
 
