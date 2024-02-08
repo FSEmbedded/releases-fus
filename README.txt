@@ -1,19 +1,19 @@
-F&S i.MX6UL Buildroot Release 2023.12 (fsimx6ul-B2023.12)
+F&S i.MX6SX Buildroot Release 2024.01 (fsimx6sx-B2024.01)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX6UL_FirstSteps_eng.pdf
+  doc/FSiMX6SX_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
 This is a major release for all F&S boards and modules based on 
-the i.MX6-UltraLite and i.MX6ULL CPUs from NXP 
-(or i.MX6UL and i.MX6ULL for short).
-Currently these are the modules efusA7UL, PicoCOM1.2, PicoCoreMX6UL,
-PicoCoreMX6UL100 and PicoCOMA7.
+the i.MX6-SoloX CPUs from NXP. 
+
+Currently these are the modules efusA9X, efusA9Xr2, PicoCOMA9X, PicoCoreMX6SX.
+
 More boards may be added to this family in the future.
 All these boards can work with software that is created from this release
 package.
@@ -34,10 +34,6 @@ doc/                    Hardware and software manuals, schematics
 
 Here are some highlights of this release.
 
-1. This Release does not support the Silex WLAN chip on the modules efusA7UL
-
-There is currently no driver avaialble for the Linux Kernel 5.15
-For Silex WLAN chip support, please use the release fsimx6ul-B2019.11.1
 
 1. New Linux Kernel 5.15.131
 
@@ -108,6 +104,17 @@ For Silex WLAN chip support, please use the release fsimx6ul-B2019.11.1
  The versions of the different gits of a release can be looked up in the 
  fs-release-manifest.xml file in the release tar directory.
 
+
+Knwon Issues:
+
+1. The Slilex Wlan/Bluetooth Chip on the efusmx6sx(r2) is not supported.
+
+   There is currently no driver avaialble for the Linux Kernel 5.15.
+   For Silex WLAN chip support, please use the release fsimx6sx-B2019.11.1.
+   For basic WLAN evaluation, the mainline ath10 driver can be used, but this
+   is highly experimental. Pleas contact F&S if you want to test this.
+
+
 =========================================================================
 
 The following list shows the most noticeable changes in this release in
@@ -116,22 +123,28 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-nbootimx6_50.bin (VN50)
+nbootimx6sx_51.bin (VN51)
 ------------------------------------
-Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+Supported boards: efusA9X, efusA9Xr2, PicoCOMA9X, PicoCoreMX6SX
 
 [VN49]
-- 0005378: [NBoot] Ad9 support for new boards efusA9Xr2, armStoneA9R3, armStoneA9r4, PicoCoreMX6SXr2
+- 0005378: [NBoot] Ad9 support for new boards efusA9Xr2, armStoneA9R3,
+            armStoneA9r4, PicoCoreMX6SXr2
 
 [VN50]
 - 0005541: [NBoot] NAND dump does not work
 - 0005540: [NBoot] Memory errors on armStoneA9
 - 0005542: [NBoot] Board revision is wrong on armStoneA9
 
+[VN51]
+- 0005951: [NBoot] Add new board NetDCUA7
+- 0005950: [NBoot] Add secure boot for UL with MMC
 
-u-boot-2021.04-fsimx6ul-2023.12
+
+
+u-boot-2021.04-fsimx6sx-2024.01
 -----------------------------------------------
-Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7 
+Supported boards: efusA9X, efusA9Xr2, PicoCOMA9X, PicoCoreMX6SX
 
 - Update to NXP u-boot-201.04
 - Improve Uboot versioning
@@ -141,9 +154,9 @@ Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
 - addfsheader.sh: Check for crc32 and xxd before using them
 - Remove sha256 support
 
-linux-5.15.71-fsimx6ul-2023.12
+linux-5.15.71-fsimx6sx-2024.01
 -----------------------------------------------
-Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+Supported boards: efusA9X, efusA9Xr2, PicoCOMA9X, PicoCoreMX6SX
 
 - Update to NXP Linux Version lf-5.15.71-2.2.1
 - Switch to FSL_ASOC_CARD sound driver for sgtl5000
@@ -156,16 +169,18 @@ Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
 - Add support to disable pin controls nodes in the device tree
 - Apply patches from mainline linux-5.15.131
 - Fix Realtek Ethernet Phy Bug in Low Power Mode
-- Fix fsimx6ul 512MHz dc supply warning
+- Fix backlight flicker for inverted pwm
+- Improve auxiliary_core driver
+- Fix picocoma9x rtscts pad settings
+- PCOMA9X: Increase CMA size to 200MB
 
-
-
-buildroot-fsimx6ul-2023.12
+buildroot-fsimx6sx-2024.01
 -----------------------------------------------
-Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+Supported boards: efusA9X, efusA9Xr2, PicoCOMA9X, PicoCoreMX6SX
 
-- Update to Buildroot 2023.02.6
-- Update IMX specific packages to NXP Yocto version lf-5.15.71-2.2.1
+- Update fsimx6sx to Buildroot 2023.02.6
+- Update fsimx6sx IMX specific packages to NXP Yocto version 
+  lf-5.15.71-2.2.1
 - Add F&S Kernel and U-Boot versioning
 - Add F&S psplash bootscreen
 - Add support for weston fbdev-backend.
@@ -177,18 +192,19 @@ Examples
 
 (no changes)
 
+
+
 Toolchain
 ---------
 fs-toolchain-11.2-armv7ahf.tar.bz2 for Linux
 
 
 
-
 Documentation
 -------------
 
-- Update to version 2.5 of FSiMX6UL_FirstSteps_eng.pdf
-- Update to version 0.23 of LinuxOnFSBoards_eng.pdf
+- Update to version 2.3 of FSiMX6SX_FirstSteps_eng.pdf
+- Update to version 0.22 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.

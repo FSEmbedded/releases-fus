@@ -2,20 +2,20 @@
 
 <manifest>
 
-  <release version="fsimx6ul-B2023.12"/>
+  <release version="fsimx6sx-B2024.01"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="beede69f217b00f50423132d6725d0ace7b01a89" upstream="master">
-    <linkfile dest="linux-fsimx6ul" src="."/>
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="e2a5e660d1a4a5f796e68692deddcf29ab2f8db7" upstream="master">
+    <linkfile dest="linux-fsimx6sx" src="."/>
   </project>
 
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="4db11fc7464642358fe560e13db9511b66570367" upstream="master">
-    <linkfile dest="u-boot-fsimx6ul" src="."/>
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="6886ba9ea37790dc77ef58a94fcbe8b2e50486c6" upstream="master">
+    <linkfile dest="u-boot-fsimx6sx" src="."/>
   </project>
 
-  <project name="buildroot-fus" path="buildroot-fus" remote="fus" revision="2314e7e551801e4bfab018ec89984d537e8f3c57" upstream="master"/>
+  <project name="buildroot-fus" path="buildroot-fus" remote="fus" revision="eb25d00ec947985f81244bcd44df3ab34575a977" upstream="master"/>
 
   <project name="linux-examples-fus" path="linux-examples-fus" remote="fus" revision="a0b4c436df27bf44fc6d7419035fb797722a3403" upstream="master"/>
 
