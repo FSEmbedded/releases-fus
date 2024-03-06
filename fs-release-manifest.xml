@@ -2,20 +2,20 @@
 
 <manifest>
 
-  <release version="fsimx8ulp-pre"/>
-  <default sync-j="2"/>
+  <release version="fsimx93-pre"/>
+  <default revision="mickledore" sync-j="4"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="addfbabfaf17cd89f5573ae07df71d96341f1e1b" upstream="fsimx8ulp">
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="1d0a5c9920883b0af57b2507cfa8293aa5c8b0c9" upstream="fsimx93">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="47e56524563fc45e7f50bc04a6629598220dea5a" upstream="fsimx8ulp">
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="ef7985b74435ad0bd71edda9ed1c93ed541cf52b" upstream="fsimx93">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="fbf8eb1c9401d7d7d972e28c5c9b3b3086f5a139" upstream="fsimx8ulp">
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="fb66908876e6848cb0f2f7bf7e73ebfad979a648" upstream="fsimx93">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
@@ -30,8 +30,8 @@
   <remote name="nxp-imx"     fetch="https://github.com/nxp-imx"/>
   <remote name="imx-support" fetch="https://github.com/nxp-imx-support"/>
 
-  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="a57506c46d92bf0767060102d2139be06d46f575" upstream="mickledore"/>
-  <project name="meta-openembedded" remote="oe" path="yocto-fus/sources/meta-openembedded" revision="922f41b39f364e5b6be596b4b51e0fb37ffe1971" upstream="mickledore" />
+  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="7235399a86b134e57d5eb783d7f1f57ca0439ae5" upstream="mickledore"/>
+  <project name="meta-openembedded" remote="oe" path="yocto-fus/sources/meta-openembedded" revision="8e1f0fa6bfac0e96fedc666fe9066f92c85afb27" upstream="mickledore" />
   <project name="meta-clang" remote="kraj" path="yocto-fus/sources/meta-clang" revision="af4dcba009ba98250315520f3003fde4ee164cce" upstream="mickledore" />
 
   <project name="fsl-community-bsp-base" remote="community" path="yocto-fus/sources/base" revision="84df0b1ff416c6739472f7f7eadff04fa90d38f6" upstream="master">

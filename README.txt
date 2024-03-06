@@ -1,17 +1,17 @@
-F&S i.MX8M-Mini Yocto Release 2023.10 (fsimx8mm-Y2023.10)
+F&S i.MX93 Yocto Pre Release 2024.03 (fsimx93-Y2024.03-pre)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX8MM_FirstSteps_eng.pdf
+  doc/FSiMX93_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
-This is a major release for all F&S boards and modules based on the
-i.MX8M-Mini CPU (Solo, Dual and Quad), i.e. PicoCoreMX8MM(r2)-LPDDR4, 
-PicoCoreMX8MM-DDR3L
+This is a major pre release for all F&S boards and modules based on the
+i.MX93 CPU, i.e. PicoCoreMX93
+
 More boards may be added to this family in the future.
 All these boards can work with software that is created from this release
 package.
@@ -33,16 +33,8 @@ doc/                    Hardware and software manuals, schematics
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !                               Attention                                     !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-To use this release, you will have to update to Nboot 2023.10 and 
-U-boot Y2023.10 first. For this we have added an U-Boot update script named 
-"update-uboot-nboot-sysimg.scr" to the sdcard directory. Rename it to "update.scr" and copy 
-everything to an USB-Stick. Plug the USB-Stick to the board and start it.
-After the bootdelay the update should begin automatically. 
-The board will reset 2 times. It will install Nboot, Uboot and Sysimg.
-When everything is complete the line 
-"---- update COMPLETE! ----"
-will be printed to the console.
-Unplug the USB stick or the update will run again on the next reboot.
+This pre release is based on NXP lf-6.1.55-2.2.0 release. In the pre release 
+F&S nboot is not supported yet.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !                               Attention                                     !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -50,62 +42,37 @@ Unplug the USB stick or the update will run again on the next reboot.
 
 Here are some highlights of this release.
 
-1. New Linux Kernel 5.15.131
+1. New Linux Kernel 6.1.55
 
- The Linux kernel is now based on 5.15.131
- - New optimizations for EXT4.
- - OverlayFS has better performance and copying up more attributes.
- - Many graphics improvements among the DRM/KMS drivers.
- - Linux 5.15 I/O can achieve up to ~3.5M IOPS per-core.
- - The PREEMPT_RT locking code was merged as a big step forward towards 
-  getting 
-  the real-time (RT) patches upstreamed in the Linux kernel.
+ The Linux kernel is now based on 6.1.55
+ - Fixes and performance optimizations for EXT4.
+ - Significant performance optimizations for BTRFS.
+ - Many graphics improvements.
+ - Support for statx to report direct I/O alignment details.
+ - Various Security improvments (Linux Security).
  - Various scheduler improvements.
- - Various power management improvements.
- - Opt-in L1 data cache flushing on context switching as a security 
-  feature for the paranoid and other specialized conditions.
- - Improvements around compile-time and run-time detection of buffer overflows.
- - Additional protection around side channel attacks via clearing used registers
-  prior to returning, making use of the compiler-side support.
+ - Initial Rust infrastructure.
+ ...
+ Many other improvments.
 
-  (https://www.phoronix.com/review/linux-515-features)
+  (https://www.phoronix.com/review/linux-61-features)
 
  Of course, there are also many changes for other CPU types (like x86)
  and other graphics cores (like AMD, Nvidia, Intel) but these are not
  of interest here.
 
-2. New bootloader U-Boot 2021.04
+2. New bootloader U-Boot 2023.04
 
- The U-Boot is now based on 2021.04.
- Additional to the security and feature updates of the mainline U-Boot,
- there have been many updates on the fsimage command and the general layout
- of the bootloaders in the flash memory. Because of this, it is necessary to
- update first the U-Boot, reset and the Nboot.
- You can use the update.scr from the sdcard directory for this.
+ The U-Boot is now based on 2023.04.
+ Based on NXP version
 
-3. New Yocto version 4.0 Kirkstone 
+3. New Yocto version 4.2 Mickledore 
 
- Updating Yocto to Version 4.0 Kirkstone. This provides many new package
- versions like Qt6.3 or Chroium 101.
- We have also updated the poky layer to version 4.0.11
+ Updating Yocto to Version 4.2.4 Mickledore.
 
 4. Improved Image versioning
 
- The exact versions of Nboot, U-Boot and Linux Kernel will now be printed 
- during the boot process. 
- If the image is build with an tagged commit the tag name will be printed.
- If the commit is not tagged, the git commits hash will be printed.
- If the image is based on an uncommitted git, the flag "-dirty" will be added 
- to the last commits name.
-
- We use an own Linux version string that will be printed additionally to the
- mainline Linux version. This way modules that are built for the same Linux 
- version with just some slight changes, can still be loaded without rebuilding
- the whole rootfile system.
-
- Linux device trees are also versioned with the current version of the linux git.
-
- You can check the versions of the different components at runtime at /sys/bdinfo/
+TODO:
 
 5. New Release concept over github
 
@@ -141,84 +108,59 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-u-boot-2021.04-fsimx8mm-Y2023.10 ()
+u-boot-v2023.04-fs0.1-fsimx93-Y2024.03-pre ()
 -----------------------------------------------
-Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
-                  PicoCoreMX8MM-DDR3L 
+Supported boards: PicoCoreMX93
 
-- Update to NXP u-boot-201.04
-- Add mcu_rdc settings to fsimx8mp
-- Improve Uboot versioning
-- Fix bootaux command
-- Introduce crc32 checksums for fsimage save command
-- Nboot can now be written to NAND flash with U-Boot
-  (No kobs tool needed anymore)
-- Relocate U-Boot and Environment in fsimage save if needed
-- Have new NAND/MMC layouts for fsimx8mm/mn/mp
-- Uboot is now located in the boot partition of eMMC
-- Fix fat_size for files bigger than 2GB
-- Drop board revision from BOARD-CFG names
-- Add option -b to fsimage save to select boot partition
-- Add command fsimage boot to show current boot settings
-- On fsimx8mm, add old device tree names for compatibility
+- arm:dts:imx93: Add a per clock for lpuart2
+- arm:mach-imx:imx9: Initialize lpuart2 root clock
+- Add board support for fsimx93
+- common: Impvore usb_storage for usb devices
+- Correct copyright message
+- Improve picocoremx93 device tree
 
 
 
-linux-5.15.71-fsimx8mm-Y2023.10 ()
+linux-v6.1.55-fs0.1-fsimx93-Y2024.03-pre ()
 -----------------------------------------------
-Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
-                  PicoCoreMX8MM-DDR3L
+Supported boards: PicoCoreMX93
 
-- Update to NXP Linux Version lf-5.15.71-2.2.1
-- Remove fsimx8m support
-- Switch to FSL_ASOC_CARD sound driver for sgtl5000
-- Add F&S Versioning for kernel and device tree
-- Improve uart dma support
-- Add leds-pca963x-fus driver and revert the original to 
-  the mainline driver
-- Enable power key support for PicoCore boards
-- Improve fsimx8m variants uart clock speed
-- Improve SDIO stability for Azurewave wlan chips
-- Add support to disable pin controls nodes in the device tree
-- Fix picocoremx8mp Bluetooth error after suspend-to-mem
-- Apply patches from mainline linux-5.15.131
-- Use new naming convention for PicoCoreMX8MM boards
-- Add DTS version for fsimx8mm
-- Fix Realtek Ethernet Phy Bug in Low Power Mode
-- Don't use nand-on-flash-bad block table for fsimx8mm
+- arch:arm64:dts:freescale: Improve imx93.dtsi
+- clock: Improve binding clock definitions for imx93
+- arch:arm64:dts:f+s: Add device tree support for picocoremx93
+- char: Add bdinfo driver
+- rtc: Add rtc pcf85263 driver
+- leds: Add leds-pca963x-fus driver
+- spi: Improve spidev driver
+- input:touch:focaltech: Improve focaltech touch driver
+- Add support to use fsversion
+- gpu:drm:bridge: Add F+S version of sn65dsi84-dsi2lvds driver
+- arch:arm64:configs: Add default configuration for fsimx93
+- arch:arm64:dts:f+s:picocoremx93: enable epxp node
+- arch:arm64:dts:f+s: add picocoremx93-adp-lvds2lvds2-EE1010B1T-1CP
+- drivers:input:touchscreen:goodix: configure interrupt direction
+- dts:F+S:picocoremx93: complete BT070L1060CS0I1AD-A for ADP-LVDS2LVDS1
 
 
-meta-fus-fsimx8mm-Y2023.10 ()
+meta-fus-mickledore-4.2.4-fs0.1-fsimx93-Y2024.04-pre ()
 -----------------------------------------------
-Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
-                  PicoCoreMX8MM-DDR3L
+Supported boards: PicoCoreMX93
 
-- Create standalone meta-fus repository
-- Update meta-fus to Kirkstone (Yocto 4.0)
-- Add new packages to fus-image-std:
-  fiwared, can-utils, libgpiod-tools, spitools
-- Fix out-of-tree kernel module building
-- Add optional nxp-wifi driver support for Azurewave wlan
-- Add calibration file for TSC2004 touch chip
-- Add layer versions to the final image
-- Set default Linux terminal to vt100
-- Remove U-Boot from sysimg
-- Add update script for updating NBoot, U-Boot and sysimg
-- Remove Kernel Image from the rootfs
-- Add F&S psplash Logo
+- Rework meta-fus structure
+  Use meta-bsp and meta-sdk, add initial support for fsimx93
+- conf:machine:fsimx93: enable 2d acceleration
+- Improve linux-fus recipe for fsimx93
 
 
-
-atf-5.15.71-fsimx8mm-2023.10 ()
+atf-lf_v2.8 ()
 -----------------------------------------
-Supported boards: PicoCoreMX8MM-LPDDR4 PicoCoreMX8MMr2-LPDDR4
-                  PicoCoreMX8MM-DDR3L
+Supported boards: PicoCoreMX93
 
-- Update to NXP version lf-5.15.71-2.2.1
-
+- Use NXP version lf-6.1.55-2.2.0
 
 
-firmware-imx-8.10.1 ddr synopsys ()
+
+firmware-imx-8.22 ddr synopsys ()
 -------------------------------------------
 
 (no changes)
@@ -235,7 +177,7 @@ Examples
 Documentation
 -------------
 
-- Update to version 1.8 of FSiMX8MM_FirstSteps_eng.pdf
+- Initial version 1.0 of FSiMX93_FirstSteps_eng.pdf
 - Update to version 0.20 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.

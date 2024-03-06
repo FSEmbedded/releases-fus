@@ -21,7 +21,7 @@ EXAMPLES_DIR=examples-fus
 LINUX_DIR=linux-fus
 UBOOT_DIR=u-boot-fus
 YOCTO_DIR=yocto-fus
-META_FUS_DIR=sources/meta-fus/
+META_FUS_BSP_DIR=sources/meta-fus/meta-bsp
 KERNEL_PATH=recipes-kernel/linux/
 UBOOT_PATH=recipes-bsp/u-boot/
 DL_DIR="downloads"
@@ -395,10 +395,10 @@ fi
 $run cd $YOCTO_DIR
 
 # Write linux-fus.bbappend
-do_write_bbappend $LINUX_SRC_URI $LINUX_FUS_COMMIT $META_FUS_DIR/$KERNEL_PATH/$LINUX_FUS_BBAPPEND
+do_write_bbappend $LINUX_SRC_URI $LINUX_FUS_COMMIT $META_FUS_BSP_DIR/$KERNEL_PATH/$LINUX_FUS_BBAPPEND
 
 # Write uboot-fus.bbappend
-do_write_bbappend $UBOOT_SRC_URI $UBOOT_FUS_COMMIT $META_FUS_DIR/$UBOOT_PATH/$UBOOT_FUS_BBAPPEND
+do_write_bbappend $UBOOT_SRC_URI $UBOOT_FUS_COMMIT $META_FUS_BSP_DIR/$UBOOT_PATH/$UBOOT_FUS_BBAPPEND
 
 # Create downloads directory if it does not exist yet
 if [ ! -d $DL_DIR ] ; then
