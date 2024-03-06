@@ -2,20 +2,20 @@
 
 <manifest>
 
-  <release version="fsimx8mm-Y2023.10"/>
+  <release version="fsimx8mn-Y2024.02"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="e93b855085e5185f8769936879adff58e3579f8d" upstream="master">
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="f8758923388e0ae69128e006eb6183b20a48cbc5" upstream="master">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="6e1e5219f3a30fe81a89393ea383d55039513a67" upstream="master">
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="b9e0105d146cd8cc4395eba84270b5b4c914f3e2" upstream="master">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="ba36ddfb63e8f643d4eba637aa745fce8f6d175f" upstream="master">
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="be68b14b358d21fbc8a2395ddea5e7726e711f25" upstream="master">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
@@ -43,7 +43,7 @@
   <project name="meta-freescale-3rdparty" path="yocto-fus/sources/meta-freescale-3rdparty" remote="community" revision="5977197340c7a7db17fe3e02a4e014ad997565ae" upstream="kirkstone"/>
   <project name="meta-freescale-distro" path="yocto-fus/sources/meta-freescale-distro" remote="community" revision="d5bbb487b2816dfc74984a78b67f7361ce404253" upstream="kirkstone"/>
 
-  <project name="meta-imx" path="yocto-fus/sources/meta-imx" remote="nxp-imx" revision="refs/tags/rel_imx_5.15.71_2.2.1" upstream="kirkstone-5.15.71-2.2.1">
+  <project name="meta-imx" path="yocto-fus/sources/meta-imx" remote="nxp-imx" revision="refs/tags/rel_imx_5.15.71_2.2.2" upstream="kirkstone-5.15.71-2.2.2">
     <linkfile dest="yocto-fus/README-IMXBSP" src="README"/>
   </project>
 
@@ -52,7 +52,8 @@
   <project name="meta-qt6" path="yocto-fus/sources/meta-qt6" remote="QT6" revision="ed785a25d12e365d1054700d4fc94a053176eb14" upstream="6.3"/>
   <project name="meta-timesys" path="yocto-fus/sources/meta-timesys" remote="Timesys" revision="d1ad27bfacc937048e7f9084b17f4d7c917d2004" upstream="master"/>
   <project name="meta-virtualization" path="yocto-fus/sources/meta-virtualization" remote="yocto" revision="9482648daf0bb42ff3475e7892542cf99f3b8d48" upstream="master"/>
-  <project name="poky" path="yocto-fus/sources/poky" remote="yocto" revision="fc697fe87412b9b179ae3a68d266ace85bb1fcc6" upstream="kirkstone"/>
+  <!-- Update poky to 4.0.16 -->
+  <project name="poky" path="yocto-fus/sources/poky" remote="yocto" revision="577d041a39a02e152461919698745368144720d5" upstream="kirkstone"/>
   <project name="meta-basler-imx8" path="yocto-fus/sources/meta-basler-imx8" remote="basler" revision="d1e9de52c4f396e03a270e71d553bce6b042465e" upstream="kirkstone-5.15.71-2.2.0"/>
   <project name="meta-basler-tools" path="yocto-fus/sources/meta-basler-tools" remote="basler" revision="59ef2ce614a1b8716cd8e618a68681eba9891b5d" upstream="kirkstone"/>
 
