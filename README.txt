@@ -1,50 +1,36 @@
-F&S i.MX8M-Nano Yocto Release 2024.02 (fsimx8mn-Y2024.02)
+F&S i.MX6UL Yocto Release 2024.03 (fsimx6ul-Y2024.03)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX8MN_FirstSteps_eng.pdf
+  doc/FSiMX6UL_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
-This is a major release for all F&S boards and modules based on the
-i.MX8M-Nano CPU, i.e. PicoCoreMX8MN-LPDDR4 or PicoCoreMX8MN-DDR3L
+This is a major release for all F&S boards and modules based on 
+the i.MX6-UltraLite and i.MX6ULL CPUs from NXP 
+(or i.MX6UL and i.MX6ULL for short).
+Currently these are the modules efusA7UL, PicoCOM1.2, PicoCoreMX6UL,
+PicoCoreMX6UL100 and PicoCOMA7.
 More boards may be added to this family in the future.
 All these boards can work with software that is created from this release
 package.
 
-Please note that Yocto releases use a 'Y' for the version number. The
+Please note that Buildroot releases use a 'Y' for the version number. The
 version counting is independent form other releases.
 
 
 The release consists of the following files and directories:
 
-Readme-yocto-f+s.txt    Release notes (this text)
-setup-yocto             Script to download and install the Yocto release
-binaries/               Precompiled images (full names)
-sdcard/                 Precompiled images (names as expected by
-                        install script)
-doc/                    Hardware and software manuals, schematics
-
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!                               Attention                                     !
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-To use this release, you will have to update to Nboot 2024.02 and 
-U-boot Y2024.02 first. For this we have added an U-Boot update script named 
-"update_disabled.scr" to the sdcard directory. Rename it to "update.scr" and copy 
-everything to an USB-Stick. Plug the USB-Stick to the board and start it.
-After the bootdelay the update should begin automatically. 
-The board will reset 2 times. It will install Nboot, Uboot and Sysimg.
-When everything is complete the line 
-"---- update COMPLETE! ----"
-will be printed to the console.
-Unplug the USB stick or the update will run again on the next reboot.
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!                               Attention                                     !
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+README.txt               Release notes (this text)
+setup-yocto              Script to download and install the Yocto release
+fs-release-manifest.xml  Definition of Source Code Versions
+binaries/                Precompiled images (full names)
+sdcard/                  Precompiled images (names as expected by
+                         install script)
+doc/                     Hardware and software manuals, schematics
 
 
 Here are some highlights of this release.
@@ -78,9 +64,7 @@ Here are some highlights of this release.
  The U-Boot is now based on 2021.04.
  Additional to the security and feature updates of the mainline U-Boot,
  there have been many updates on the fsimage command and the general layout
- of the bootloaders in the flash memory. Because of this, it is necessary to
- update first the U-Boot, reset and the Nboot.
- You can use the update.scr from the sdcard directory for this.
+ of the bootloaders in the flash memory.
 
 3. New Yocto version 4.0 Kirkstone 
 
@@ -132,6 +116,13 @@ Here are some highlights of this release.
  nxp-mlan driver. For Bluetooth please use the mainline driver.
 
 
+Known Issues
+
+1. This Release does not support the Silex WLAN chip on the modules efusA7UL
+
+There is currently no driver avaialble for the Linux Kernel 5.15
+For Silex WLAN chip support, please use the release fsimx6ul-Y2020.03
+
 =========================================================================
 
 The following list shows the most noticeable changes in this release in
@@ -140,57 +131,61 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-u-boot-2021.04-fsimx8mn-2024.02 ()
+nbootimx6ul_51.bin (VN51)
+------------------------------------
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+
+[VN49]
+- 0005378: [NBoot] Ad9 support for new boards efusA9Xr2, armStoneA9R3, armStoneA9r4, PicoCoreMX6SXr2
+
+[VN50]
+- 0005541: [NBoot] NAND dump does not work
+- 0005540: [NBoot] Memory errors on armStoneA9
+- 0005542: [NBoot] Board revision is wrong on armStoneA9
+
+[VN51]
+- 0005951: [NBoot] Add new board NetDCUA7
+- 0005950: [NBoot] Add secure boot for UL with MMC
+
+
+
+u-boot-2021.04-fsimx6ul-2024.03
 -----------------------------------------------
-Supported boards: PicoCoreMX8MN-LPDDR4 PicoCoreMX8MN-DDR3L 
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7 
 
 - Update to NXP u-boot-201.04
-- Add mcu_rdc settings to fsimx8mp
 - Improve Uboot versioning
 - Fix bootaux command
-- Introduce crc32 checksums for fsimage save command
-- Nboot can now be written to NAND flash with U-Boot
-  (No kobs tool needed anymore)
-- Relocate U-Boot and Environment in fsimage save if needed
-- Have new NAND/MMC layouts for fsimx8mm/mn/mp
-- Uboot is now located in the boot partition of eMMC
 - Fix fat_size for files bigger than 2GB
 - Drop board revision from BOARD-CFG names
-- Add option -b to fsimage save to select boot partition
-- Add command fsimage boot to show current boot settings
-- Add support for loading secondary SPL and Uboot
-- Update Secure Boot to new release
+- addfsheader.sh: Check for crc32 and xxd before using them
+- Remove sha256 support
 
 
 
-linux-5.15.71-fsimx8mn-2024.02 ()
+linux-5.15.148-fsimx6ul-2024.03
 -----------------------------------------------
-Supported boards: PicoCoreMX8MN-LPDDR4 PicoCoreMX8MN-DDR3L
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
 
 - Update to NXP Linux Version lf-5.15.71-2.2.1
-- Remove fsimx8m support
 - Switch to FSL_ASOC_CARD sound driver for sgtl5000
 - Add F&S Versioning for kernel and device tree
 - Improve uart dma support
 - Add leds-pca963x-fus driver and revert the original to 
   the mainline driver
 - Enable power key support for PicoCore boards
-- Improve fsimx8m variants uart clock speed
 - Improve SDIO stability for Azurewave wlan chips
 - Add support to disable pin controls nodes in the device tree
-- Use new naming convention for PicoCoreMX8MM boards
 - Fix Realtek Ethernet Phy Bug in Low Power Mode
-- Don't use nand-on-flash-bad block table for fsimx8mm
 - Apply patches from mainline linux-5.15.148
-- Add DTS version for fsimx8mn
-- Update fsimx8mn to Kernel 5.15
+- Fix fsimx6ul 512MHz dc supply warning
 - Add display support for BT070L1060CS0I1AD
 
 
 
-meta-fus-fsimx8mn-2024.02 ()
+meta-fus-fsimx6ul-2024.03
 -----------------------------------------------
-Supported boards: PicoCoreMX8MN-LPDDR4 PicoCoreMX8MN-DDR3L
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
 
 - Create standalone meta-fus repository
 - Update meta-fus to Kirkstone (Yocto 4.0)
@@ -201,30 +196,14 @@ Supported boards: PicoCoreMX8MN-LPDDR4 PicoCoreMX8MN-DDR3L
 - Add calibration file for TSC2004 touch chip
 - Add layer versions to the final image
 - Set default Linux terminal to vt100
-- Remove U-Boot from sysimg
-- Add update script for updating NBoot, U-Boot and sysimg
 - Remove Kernel Image from the rootfs
 - Add F&S psplash Logo
-- Update fsimx8mn machine to Yocto 4.0
+- Update fsimx6ul machine to Yocto 4.0
 
 
 
-atf-5.15.71-fsimx8mn-2024.02 ()
------------------------------------------
-Supported boards: PicoCoreMX8MN-LPDDR4 PicoCoreMX8MN-DDR3L
 
-- Update to NXP version lf-5.15.71-2.2.1
-
-
-
-firmware-imx-8.10.1 ddr synopsys ()
--------------------------------------------
-
-(no changes)
-
-
-
-Examples
+linux-examples-fus-fs1
 --------
 
 (no changes)
@@ -234,8 +213,8 @@ Examples
 Documentation
 -------------
 
-- Update to version 1.1 of FSiMX8MN_FirstSteps_eng.pdf
-- Update to version 0.22 of LinuxOnFSBoards_eng.pdf
+- Update to version 2.5 of FSiMX6UL_FirstSteps_eng.pdf
+- Update to version 0.23 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.

@@ -2,24 +2,28 @@
 
 <manifest>
 
-  <release version="fsimx8mn-Y2024.02"/>
+  <release version="fsimx6ul-Y2024.03"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="f8758923388e0ae69128e006eb6183b20a48cbc5" upstream="master">
+  <kernel version="fsimx6ul-2024.03"/>
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="2675b3b047dab64806967854a401c8dd7b4571f9" upstream="master">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="b9e0105d146cd8cc4395eba84270b5b4c914f3e2" upstream="master">
+  <uboot version="fsimx6ul-2024.03"/>
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="1b2222ead24ded0c1791987a1660592d40710fae" upstream="master">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="be68b14b358d21fbc8a2395ddea5e7726e711f25" upstream="master">
+  <yocto version="fsimx6ul-2024.03"/>
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="940742476183e7fa6e7e0101b9e37ce00209769d" upstream="master">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
 
+  <examples version="fs1"/>
   <project name="linux-examples-fus" path="linux-examples-fus" remote="fus" revision="a0b4c436df27bf44fc6d7419035fb797722a3403" upstream="master"/>
 
   <remote fetch="https://github.com/nxp-imx" name="nxp-imx"/>
