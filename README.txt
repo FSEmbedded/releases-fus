@@ -1,16 +1,16 @@
-F&S i.MX93 Yocto Pre Release 2024.03 (fsimx93-Y2024.03-pre)
+F&S i.MX8ULP Yocto Pre Release 2024.04 (fsimx8ULP-Y2024.04-pre)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX93_FirstSteps_eng.pdf
+  doc/FSiMX8ULP_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
 This is a major pre release for all F&S boards and modules based on the
-i.MX93 CPU, i.e. PicoCoreMX93
+i.MX8ULP CPU, i.e. PicoCoreMX8ULP or SolderCore8ULP
 
 More boards may be added to this family in the future.
 All these boards can work with software that is created from this release
@@ -108,53 +108,47 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-u-boot-v2023.04-fs0.1-fsimx93-Y2024.03-pre ()
+u-boot-v2023.04-fs0.2-fsimx8ulp-Y2024.04-pre ()
 -----------------------------------------------
-Supported boards: PicoCoreMX93
+Supported boards: PicoCoreMX8ULP and SolderCore8ULP
+-board: fsimx8ulp: remove unnecessary configuration
+-dts: cleanup fsimx8ulp.dts
+-use fdt_fixup_memory to set correct ram-size in linux fdt
+-remove incompatible pin muxing and board configuration
+-provide board specific defconfigs
+-include/improve devicetree for PicoCore8ULP and SolderCore8ULP
+-include ram timings for Nanya, Samsung, Foresee and micron
 
-- arm:dts:imx93: Add a per clock for lpuart2
-- arm:mach-imx:imx9: Initialize lpuart2 root clock
-- Add board support for fsimx93
-- common: Impvore usb_storage for usb devices
-- Correct copyright message
-- Improve picocoremx93 device tree
 
-
-
-linux-v6.1.55-fs0.1-fsimx93-Y2024.03-pre ()
+linux-v6.1.55-fs0.2-fsimx8ulp-Y2024.04-pre ()
 -----------------------------------------------
-Supported boards: PicoCoreMX93
+Supported boards: PicoCoreMX8ULP and SolderCore8ULP
+-arm64:configs:fsimx8ulp_defconfig: add TOUCHSCREEN_ILITEK module
+-dts:F+S:picocoremx8ulp: increase i2c frequency
+-gpu:drm:bridge:tc358775: use framesync mode
+-gpu:drm:bridge:tc358775: improve reset sequence
+-dts:F+S:picocoremx8ulp: add dts for BT070L1060CS0I1AD-A display
+-dts:F+S:fsimx8ulp: seperate dtsi for soldercore and picocore 8ulp
+-leds: Add leds-pca963x-fus driver
+-dts:F+S:picocoremx8ulp: add audio config for AP Domain
+-Add PWM usage for driver gpio-pca953x.c
+-dts: F+S: add picocoremx8ulp devicetree
+-dts: fsimx8ulp.dts: define ele-reserved node on reserved memory
 
-- arch:arm64:dts:freescale: Improve imx93.dtsi
-- clock: Improve binding clock definitions for imx93
-- arch:arm64:dts:f+s: Add device tree support for picocoremx93
-- char: Add bdinfo driver
-- rtc: Add rtc pcf85263 driver
-- leds: Add leds-pca963x-fus driver
-- spi: Improve spidev driver
-- input:touch:focaltech: Improve focaltech touch driver
-- Add support to use fsversion
-- gpu:drm:bridge: Add F+S version of sn65dsi84-dsi2lvds driver
-- arch:arm64:configs: Add default configuration for fsimx93
-- arch:arm64:dts:f+s:picocoremx93: enable epxp node
-- arch:arm64:dts:f+s: add picocoremx93-adp-lvds2lvds2-EE1010B1T-1CP
-- drivers:input:touchscreen:goodix: configure interrupt direction
-- dts:F+S:picocoremx93: complete BT070L1060CS0I1AD-A for ADP-LVDS2LVDS1
-
-
-meta-fus-mickledore-4.2.4-fs0.1-fsimx93-Y2024.04-pre ()
+meta-fus-mickledore-4.2.4-fs0.2-fsimx8ulp-Y2024.04-pre ()
 -----------------------------------------------
-Supported boards: PicoCoreMX93
+Supported boards: PicoCoreMX8ULP
 
 - Rework meta-fus structure
-  Use meta-bsp and meta-sdk, add initial support for fsimx93
+  Use meta-fus-bsp and meta-fus-sdk, add initial support for fsimx93,
+  and fsimx8ulp.
 - conf:machine:fsimx93: enable 2d acceleration
 - Improve linux-fus recipe for fsimx93
 
 
 atf-lf_v2.8 ()
 -----------------------------------------
-Supported boards: PicoCoreMX93
+Supported boards: PicoCoreMX93, PicoCoreMX8ULP, SolderCore8ULP
 
 - Use NXP version lf-6.1.55-2.2.0
 
@@ -177,7 +171,7 @@ Examples
 Documentation
 -------------
 
-- Initial version 1.0 of FSiMX93_FirstSteps_eng.pdf
+- Initial version 1.0 of FSiMX8ULP_FirstSteps_eng.pdf
 - Update to version 0.20 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.

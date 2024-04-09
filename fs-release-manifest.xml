@@ -2,20 +2,20 @@
 
 <manifest>
 
-  <release version="fsimx93-pre"/>
+  <release version="fsimx8ulp-pre"/>
   <default revision="mickledore" sync-j="4"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="1d0a5c9920883b0af57b2507cfa8293aa5c8b0c9" upstream="fsimx93">
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="319a886a21483b19de336b494aca1bc3eeee802e" upstream="fsimx8ulp">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="ef7985b74435ad0bd71edda9ed1c93ed541cf52b" upstream="fsimx93">
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="72055cb105f19cb51be60a8c64b8dee6697e7cf0" upstream="fsimx8ulp">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="fb66908876e6848cb0f2f7bf7e73ebfad979a648" upstream="fsimx93">
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="dd0dd510a2d0f301635284ccc28dad37ef280142" upstream="fsimx93">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
