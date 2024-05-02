@@ -1,19 +1,20 @@
-F&S i.MX6UL Yocto Release 2024.03 (fsimx6ul-Y2024.03)
+F&S i.MX6 Yocto Release 2024.04 (fsimx6-Y2024.04)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX6UL_FirstSteps_eng.pdf
+  doc/FSiMX6_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
-This is a major release for all F&S boards and modules based on 
-the i.MX6-UltraLite and i.MX6ULL CPUs from NXP 
-(or i.MX6UL and i.MX6ULL for short).
-Currently these are the modules efusA7UL, PicoCOM1.2, PicoCoreMX6UL,
-PicoCoreMX6UL100 and PicoCOMA7.
+This is a major release for all F&S boards and modules based on
+the i.MX6 CPUs from NXP.
+
+Currently these are the modules armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
+efusA9, efusA9r2, PicoMODA9, NetDCUA9, QBlissA9, QBlissA9r2
+
 More boards may be added to this family in the future.
 All these boards can work with software that is created from this release
 package.
@@ -24,14 +25,12 @@ version counting is independent form other releases.
 
 The release consists of the following files and directories:
 
-README.txt               Release notes (this text)
-setup-yocto              Script to download and install the Yocto release
-fs-release-manifest.xml  Definition of Source Code Versions
-binaries/                Precompiled images (full names)
-sdcard/                  Precompiled images (names as expected by
-                         install script)
-doc/                     Hardware and software manuals, schematics
-
+Readme.txt    Release notes (this text)
+setup-buildroot         Script to download and install the Buildroot release
+binaries/               Precompiled images (full names)
+sdcard/                 Precompiled images (names as expected by
+                        install script)
+doc/                    Hardware and software manuals, schematics
 
 Here are some highlights of this release.
 
@@ -118,10 +117,9 @@ Here are some highlights of this release.
 
 Known Issues
 
-1. This Release does not support the Silex WLAN chip on the modules efusA7UL
+1. The ADP-mPCIe-Wlan adapter does not work with this release
 
-There is currently no driver avaialble for the Linux Kernel 5.15
-For Silex WLAN chip support, please use the release fsimx6ul-Y2020.03
+ The PCIe card is recogniced correctly, but the mwifiex-pcie driver load.03
 
 =========================================================================
 
@@ -131,12 +129,14 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-nbootimx6ul_51.bin (VN51)
+nbootimx6_51.bin (VN51)
 ------------------------------------
-Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+Supported boards: armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
+                  efusA9, efusA9r2, PicoMODA9, NetDCUA9, QBlissA9, QBlissA9r2
 
 [VN49]
-- 0005378: [NBoot] Ad9 support for new boards efusA9Xr2, armStoneA9R3, armStoneA9r4, PicoCoreMX6SXr2
+- 0005378: [NBoot] Ad9 support for new boards efusA9Xr2, armStoneA9R3,
+            armStoneA9r4, PicoCoreMX6SXr2
 
 [VN50]
 - 0005541: [NBoot] NAND dump does not work
@@ -149,43 +149,42 @@ Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
 
 
 
-u-boot-2021.04-fsimx6ul-2024.03
+u-boot-2021.04-fsimx6-2024.04
 -----------------------------------------------
-Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7 
+Supported boards: armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
+                  efusA9, efusA9r2, PicoMODA9, NetDCUA9, QBlissA9, QBlissA9r2
 
-- Update to NXP u-boot-201.04
+- Update to NXP u-boot-2021.04
 - Improve Uboot versioning
 - Fix bootaux command
 - Fix fat_size for files bigger than 2GB
 - Drop board revision from BOARD-CFG names
 - addfsheader.sh: Check for crc32 and xxd before using them
-- Remove sha256 support
+- Remove sha256 and led blinking support
 
-
-
-linux-5.15.148-fsimx6ul-2024.03
+linux-5.15.71-fsimx6-2024.04
 -----------------------------------------------
-Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+Supported boards: armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
+                  efusA9, efusA9r2, PicoMODA9, NetDCUA9, QBlissA9, QBlissA9r2
 
 - Update to NXP Linux Version lf-5.15.71-2.2.1
 - Switch to FSL_ASOC_CARD sound driver for sgtl5000
 - Add F&S Versioning for kernel and device tree
 - Improve uart dma support
-- Add leds-pca963x-fus driver and revert the original to 
+- Add leds-pca963x-fus driver and revert the original to
   the mainline driver
-- Enable power key support for PicoCore boards
 - Improve SDIO stability for Azurewave wlan chips
 - Add support to disable pin controls nodes in the device tree
+- Apply patches from mainline linux-5.15.131
 - Fix Realtek Ethernet Phy Bug in Low Power Mode
-- Apply patches from mainline linux-5.15.148
-- Fix fsimx6ul 512MHz dc supply warning
-- Add display support for BT070L1060CS0I1AD
+- Fix backlight flicker for inverted pwm
+- Use common dtsi files for efus and armstone boards
 
 
-
-meta-fus-fsimx6ul-2024.03
+meta-fus-fsimx6-2024.04
 -----------------------------------------------
-Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+Supported boards: armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
+                  efusA9, efusA9r2, PicoMODA9, NetDCUA9, QBlissA9, QBlissA9r2
 
 - Create standalone meta-fus repository
 - Update meta-fus to Kirkstone (Yocto 4.0)
@@ -198,8 +197,9 @@ Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
 - Set default Linux terminal to vt100
 - Remove Kernel Image from the rootfs
 - Add F&S psplash Logo
-- Update fsimx6ul machine to Yocto 4.0
-
+- Update fsimx6 machine to Yocto 4.0
+- Remove fbi, use weston-image instead
+- Add touchscreen calibration for SX8654
 
 
 
@@ -213,8 +213,8 @@ linux-examples-fus-fs1
 Documentation
 -------------
 
-- Update to version 2.5 of FSiMX6UL_FirstSteps_eng.pdf
-- Update to version 0.23 of LinuxOnFSBoards_eng.pdf
+- Update to version 4.4 of FSiMX6_FirstSteps_eng.pdf
+- Update to version 0.22 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.
