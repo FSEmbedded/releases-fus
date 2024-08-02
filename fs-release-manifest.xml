@@ -2,23 +2,23 @@
 
 <manifest>
 
-  <release version="fsimx6-Y2024.04"/>
+  <release version="fsimx8mp-Y2024.07"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <kernel version="fsimx6-2024.04"/>
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="560f2da26521d0c5185f162cda80692a24efcf9c" upstream="master">
+  <kernel version="fsimx8mp-2024.07"/>
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="53b46c6486e73c2af8aeb2f4b5c558134652fcf4" upstream="master">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <uboot version="fsimx6-2024.04"/>
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="cdaa1cfea93b78ca242752ba8a9d166699f91ff3" upstream="master">
+  <uboot version="fsimx8mp-2024.07"/>
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="66237cad4819e2867cc1464396068702e5955541" upstream="master">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <yocto version="fsimx6-2024.04"/>
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="58f526824bc72c006a8ba94e2f7b5d359291ab10" upstream="master">
+  <yocto version="fsimx8mp-2024.07"/>
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="7ba56ff5fa5efc4843d1813f2a899c9a067b2c7f" upstream="master">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
@@ -56,8 +56,8 @@
   <project name="meta-qt6" path="yocto-fus/sources/meta-qt6" remote="QT6" revision="ed785a25d12e365d1054700d4fc94a053176eb14" upstream="6.3"/>
   <project name="meta-timesys" path="yocto-fus/sources/meta-timesys" remote="Timesys" revision="d1ad27bfacc937048e7f9084b17f4d7c917d2004" upstream="master"/>
   <project name="meta-virtualization" path="yocto-fus/sources/meta-virtualization" remote="yocto" revision="9482648daf0bb42ff3475e7892542cf99f3b8d48" upstream="master"/>
-  <!-- Update poky to 4.0.16 -->
-  <project name="poky" path="yocto-fus/sources/poky" remote="yocto" revision="577d041a39a02e152461919698745368144720d5" upstream="kirkstone"/>
+  <!-- Update poky to 4.0.20 -->
+  <project name="poky" path="yocto-fus/sources/poky" remote="yocto" revision="6bd3969d32730538608e680653e032e66958fe84" upstream="kirkstone"/>
   <project name="meta-basler-imx8" path="yocto-fus/sources/meta-basler-imx8" remote="basler" revision="d1e9de52c4f396e03a270e71d553bce6b042465e" upstream="kirkstone-5.15.71-2.2.0"/>
   <project name="meta-basler-tools" path="yocto-fus/sources/meta-basler-tools" remote="basler" revision="59ef2ce614a1b8716cd8e618a68681eba9891b5d" upstream="kirkstone"/>
 
