@@ -2,20 +2,22 @@
 
 <manifest>
 
-  <release version="fsimx8ulp-pre"/>
-  <default revision="mickledore" sync-j="4"/>
+  <release arch="fsimx93" version="Y2024.09-pre"/>
+  <docker version="fus-ubuntu-2022.04.2"/>
+
+  <default revision="scarthgap" sync-j="4"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="319a886a21483b19de336b494aca1bc3eeee802e" upstream="fsimx8ulp">
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="914d17cb21ca3008d4b2e28475b1cc69bdd3f64a" upstream="fsimx93">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="72055cb105f19cb51be60a8c64b8dee6697e7cf0" upstream="fsimx8ulp">
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="366ae9833eedd36667ae14593f9555480d6fe885" upstream="fsimx93">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="dd0dd510a2d0f301635284ccc28dad37ef280142" upstream="fsimx93">
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="231c0ac70157172d84713d62bfce16762523e68a" upstream="fsimx93">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
@@ -23,35 +25,39 @@
   <remote name="yp"          fetch="https://git.yoctoproject.org"/>
   <remote name="oe"          fetch="https://github.com/openembedded"/>
   <remote name="kraj"        fetch="https://github.com/kraj"/>
+
   <remote name="community"   fetch="https://github.com/Freescale"/>
   <remote name="ossystems"   fetch="https://github.com/OSSystems"/>
-  <remote name="qt"          fetch="https://code.qt.io/yocto"/>
+  <remote name="qt"          fetch="https://github.com/YoeDistro"/>
   <remote name="timesys"     fetch="https://github.com/TimesysGit"/>
-  <remote name="nxp-imx"     fetch="https://github.com/nxp-imx"/>
+
+  <remote name="imx"         fetch="https://github.com/nxp-imx"/>
   <remote name="imx-support" fetch="https://github.com/nxp-imx-support"/>
 
-  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="7235399a86b134e57d5eb783d7f1f57ca0439ae5" upstream="mickledore"/>
-  <project name="meta-openembedded" remote="oe" path="yocto-fus/sources/meta-openembedded" revision="8e1f0fa6bfac0e96fedc666fe9066f92c85afb27" upstream="mickledore" />
-  <project name="meta-clang" remote="kraj" path="yocto-fus/sources/meta-clang" revision="af4dcba009ba98250315520f3003fde4ee164cce" upstream="mickledore" />
+  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="0b37512fb4b231cc106768e2a7328431009b3b70" upstream="scarthgap"/>
+  <project name="meta-openembedded" remote="oe" path="yocto-fus/sources/meta-openembedded" revision="1235dd4ed4a57e67683c045ad76b6a0f9e896b45" upstream="scarthgap"/>
+  <project name="meta-clang" remote="kraj" path="yocto-fus/sources/meta-clang" revision="66414c17ae60e489bef9a97031323e92c247fbe1" upstream="scarthgap"/>
 
-  <project name="fsl-community-bsp-base" remote="community" path="yocto-fus/sources/base" revision="84df0b1ff416c6739472f7f7eadff04fa90d38f6" upstream="master">
+  <project name="fsl-community-bsp-base" remote="community" path="yocto-fus/sources/base" revision="84df0b1ff416c6739472f7f7eadff04fa90d38f6" upstream="scarthgap">
     <linkfile dest="yocto-fus/README" src="README"/>
     <linkfile dest="yocto-fus/setup-environment" src="setup-environment"/>
   </project>
-  <project name="meta-freescale" remote="community" path="yocto-fus/sources/meta-freescale" revision="7327e03c61823268a5a957fe090c4cc5e1735b34" upstream="master" />
-  <project name="meta-freescale-3rdparty" remote="community" path="yocto-fus/sources/meta-freescale-3rdparty" revision="bccd93f1ceece608e69799b6fc8f79e8a519f89e" upstream="master" />
-  <project name="meta-freescale-distro" remote="community" path="yocto-fus/sources/meta-freescale-distro" revision="7956a0ab407a33c40fdc6eb4fabdcb7dc54fd359" upstream="master" />
-  <project name="meta-arm" remote="yp" path="yocto-fus/sources/meta-arm" revision="c6380674f59489b327c5047d803cc35b68642cd4" upstream="mickledore" />
-  <project name="meta-qt6" remote="qt" path="yocto-fus/sources/meta-qt6" revision="1406d0a85525a71fe5d7892d7f915404290a78ad" upstream="6.5.0" />
-  <project name="meta-browser" remote="ossystems" path="yocto-fus/sources/meta-browser" revision="e232c2e21b96dc092d9af8bea4b3a528e7a46dd6" />
-  <project name="meta-security" remote="yp" path="yocto-fus/sources/meta-security" revision="d7db0a3bd1a8639df7570483f003ce00cbe274a2" upstream="mickledore" />
-  <project name="meta-timesys" remote="timesys" path="yocto-fus/sources/meta-timesys" revision="0792a1f2c23e123cc4098d52b7696da990f5d8d4" upstream="mickledore" />
-  <project name="meta-virtualization" remote="yp" path="yocto-fus/sources/meta-virtualization" revision="38e6b3e2fe0219c773f4637a09221ca5d15bf6fc" upstream="mickledore" />
+  <project name="meta-freescale" remote="community" path="yocto-fus/sources/meta-freescale" revision="41b923e59e048b9b2942ff737a4ddac386954c62" upstream="scarthgap"/>
+  <project name="meta-freescale-3rdparty" remote="community" path="yocto-fus/sources/meta-freescale-3rdparty" revision="8b61684f0b1ba8bacdf3a69d993445e9791d4932" upstream="scarthgap"/>
+  <project name="meta-freescale-distro" remote="community" path="yocto-fus/sources/meta-freescale-distro" revision="158cc55b6ee30d09957b380859dba52c0f6af68d" upstream="scarthgap"/>
 
-  <project name="meta-imx" remote="nxp-imx" path="yocto-fus/sources/meta-imx" revision="refs/tags/rel_imx_6.1.55_2.2.0" upstream="mickledore-6.1.55-2.2.0" >
-     <linkfile src="tools/imx-setup-release.sh" dest="yocto-fus/imx-setup-release.sh"/>
-     <linkfile src="README" dest="yocto-fus/README-IMXBSP"/>
+  <project name="meta-arm" remote="yp" path="yocto-fus/sources/meta-arm" revision="8aa8a1f17f5b64bc691544f989f04fc83df98adb" upstream="scarthgap"/>
+  <project name="meta-qt6" remote="qt" path="yocto-fus/sources/meta-qt6" revision="d4ad3746864a815b9c42bed7f0f81e0471ca975f" upstream="6.7.2" />
+  <project name="meta-browser" remote="ossystems" path="yocto-fus/sources/meta-browser" revision="dc31889c0899971def535dc1c040edf18bc16691" />
+  <project name="meta-security" remote="yp" path="yocto-fus/sources/meta-security" revision="11ea91192d43d7c2b0b95a93aa63ca7e73e38034" upstream="scarthgap"/>
+  <project name="meta-timesys" remote="timesys" path="yocto-fus/sources/meta-timesys" revision="b96d8de949939ad08094f71ed6ed4f88eaf41d5e" upstream="master"/>
+  <project name="meta-virtualization" remote="yp" path="yocto-fus/sources/meta-virtualization" revision="1a547c0aa0d75c4143cbb66de6e653d51cdc8bda" upstream="scarthgap"/>
+
+  <project name="meta-imx" remote="imx" path="yocto-fus/sources/meta-imx" revision="refs/tags/rel_imx_6.6.23_2.0.0">
+     <linkfile src="yocto-fus/tools/imx-setup-release.sh" dest="imx-setup-release.sh"/>
+     <linkfile src="yocto-fus/README" dest="README-IMXBSP"/>
   </project>
-  <project name="meta-nxp-demo-experience" remote="imx-support" path="yocto-fus/sources/meta-nxp-demo-experience" revision="mickledore-6.1.55-2.2.0" />
+  <project name="meta-matter" remote="imx" path="yocto-fus/sources/meta-matter" revision="imx_matter_2024_q1-post" />
+  <project name="meta-nxp-demo-experience" remote="imx-support" path="yocto-fus/sources/meta-nxp-demo-experience" revision="scarthgap-6.6.23-2.0.0" />
 
 </manifest>
