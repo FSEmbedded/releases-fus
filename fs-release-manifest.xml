@@ -2,18 +2,18 @@
 
 <manifest>
 
-  <release version="fsimx8mp-Y2024.07"/>
+  <release version="armstonemx8mp-Y2024.07.1"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <kernel version="fsimx8mp-2024.07"/>
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="53b46c6486e73c2af8aeb2f4b5c558134652fcf4" upstream="master">
+  <kernel version="fsimx8mp-2024.07.1"/>
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="5d7a387d7d5e0d82d865ba73a37c5c259f5ef326" upstream="master">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <uboot version="fsimx8mp-2024.07"/>
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="66237cad4819e2867cc1464396068702e5955541" upstream="master">
+  <uboot version="fsimx8mp-2024.07.1"/>
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="a660f878b21e26ffcc78c1b2972857c19a73b876" upstream="master">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
