@@ -1,15 +1,20 @@
-F&S armStoneMX8MP Yocto Release 2024.07.1 (armstonemx8mp-Y2024.07.1)
-====================================================================
+F&S i.MX8M-Mini Yocto Release 2024.10 (fsimx8mm-Y2024.10)
+==============================================================
 
 Please see the file
 
-  doc/FSiMX8MP_FirstSteps_eng.pdf
+  doc/FSiMX8MM_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
-This is a maintenance release for armStoneMX8MP.
+This is a maintenance release for all F&S boards and modules based on the
+i.MX8M-Mini CPU (Solo, Dual and Quad), i.e. PicoCoreMX8MM(r2)-LPDDR4,
+PicoCoreMX8MM-DDR3L, OSM8MM
+More boards may be added to this family in the future.
+All these boards can work with software that is created from this release
+package.
 
 Please note that Yocto releases use a 'Y' for the version number. The
 version counting is independent form other releases.
@@ -29,10 +34,31 @@ doc/                     Hardware and software manuals, schematics
 
 Here are some highlights of this release.
 
-1. Add support for armStoneMX8MP revision 1.10 
+1. Update Linux Kernel to patch level 5.15.160
+ This fixes several smaller bugs and CVEs.
+ For more information please see
+ https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.15.72
+ to
+ https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.15.160
 
- It feature an optional RS485 transceiver, an EEPROM, a new audio codec
- and several smaller bug fixes and improvements.
+ Also adds support for the new F&S LVDS Displays and improves the
+ Cortex-M support in Linux and adds SPI-NOR flash support to the
+ efusmx8mp.
+
+2. Improved boot loader U-Boot 2021.04
+
+ Several bug fixes and improvements, like the Resource Domain Control
+ support in U-Boot device tree and an improved xhci USB driver.
+
+3. Tested with Yocto poky layer version 4.0.20
+
+ This fixes several smaller bugs and CVEs, like CVE-2024-6387 OpenSSH
+ signal handler race condition.
+ For more information, please see
+ https://docs.yoctoproject.org/4.0.20/migration-guides/release-notes-4.0.19.html
+ to
+ https://docs.yoctoproject.org/4.0.20/migration-guides/release-notes-4.0.20.html
+
 
 =========================================================================
 
@@ -42,30 +68,35 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-u-boot-2021.04-fsimx8mp-2024.07.1 ()
+u-boot-2021.04-fsimx8mm-2024.10 ()
 -----------------------------------------------
-Supported boards: armStonemx8MP
+Supported boards: PicoCoreMX8MM(r2)-LPDDR4, PicoCoreMX8MM-DDR3L, OSM8MM
 
-- Add support for armStoneMX8MP Rev 110
-- Support output of checksum in fsimage
-- Improve boottime for fastboot
+- Add support for OSM8MM
+- Include imx_tmu driver for fsimx8m(m/n/p)
+- Fix USB handling for fsimx8mm
+- Adjust size of CMA only for DRAM > 1GB
 
 
-
-linux-5.15.160-fsimx8mp-2024.07.1 ()
+linux-5.15.160-fsimx8mm-2024.10 ()
 -----------------------------------------------
-Supported boards: armStonemx8MP
-- Add support for armStoneMX8MP Rev 110
-- Disable SD UHS support by default for
-  armstonemx8mp
+Supported boards: PicoCoreMX8MM(r2)-LPDDR4, PicoCoreMX8MM-DDR3L, OSM8MM
+- Add support for OSM8MM
+- Use bitbanging for SPI_A on ADP-OSM-BB
+- Handle backlight control better for OSM8MM
+- Update version of PCoreBBDSI for fsimx8mm
+- Fix basler support for fsimx8mm
+- Fix pwm frequency for pca963x
 
-meta-fus-fsimx8mp-2024.07 ()
+
+meta-fus-fsimx8mm-2024.10 ()
 -----------------------------------------------
+Supported boards: PicoCoreMX8MM(r2)-LPDDR4, PicoCoreMX8MM-DDR3L, OSM8MM
+- Add support for OSM8MM
+- Fix name for new display Device-Tree from PicoCoreMX8MMr2-LPDDR4
 
-(no changes)
 
-
-atf-5.15.71-fsimx8mp-2024.07 ()
+atf-5.15.71-fsimx8mm-2024.10 ()
 -----------------------------------------
 
 (no changes)
@@ -88,8 +119,8 @@ linux-examples-fus-fs1
 Documentation
 -------------
 
-- Update to version 1.7 of FSiMX8MP_FirstSteps_eng.pdf
-- Update to version 0.19 of LinuxOnFSBoards_eng.pdf
+- Update to version 1.9 of FSiMX8MM_FirstSteps_eng.pdf
+- Update to version 0.22 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.

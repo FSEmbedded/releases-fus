@@ -2,23 +2,23 @@
 
 <manifest>
 
-  <release version="armstonemx8mp-Y2024.07.1"/>
+  <release version="fsimx8mm-Y2024.10"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <kernel version="fsimx8mp-2024.07.1"/>
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="5d7a387d7d5e0d82d865ba73a37c5c259f5ef326" upstream="master">
+  <kernel version="fsimx8mm-2024.10"/>
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="61537d8ddb699f6b167808e0a698b54a0a953f57" upstream="master">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <uboot version="fsimx8mp-2024.07.1"/>
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="a660f878b21e26ffcc78c1b2972857c19a73b876" upstream="master">
+  <uboot version="fsimx8mm-2024.10"/>
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="4ba6fe61c1991509871aa752252b86bb4bfd9c5a" upstream="master">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <yocto version="fsimx8mp-2024.07"/>
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="7ba56ff5fa5efc4843d1813f2a899c9a067b2c7f" upstream="master">
+  <yocto version="fsimx8mm-2024.10"/>
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="55b3b13bac5a60a87bf53603ace80811541941c3" upstream="master">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
