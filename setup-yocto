@@ -5,12 +5,12 @@
 set -e
 
 VERSION=1.0
-YOCTO_MANIFEST="fs-release-manifest.xml"
+YOCTO_MANIFEST=${YOCTO_MANIFEST:-"fs-release-manifest.xml"}
 
 RELEASE=$(grep '<release' "${YOCTO_MANIFEST}"| grep -Po 'version="\K.*?(?=")')
 
-YOCTO_DOWNLOAD_URL="https://github.com/FSEmbedded/releases-fus"
-YOCTO_BRANCH="main"
+YOCTO_DOWNLOAD_URL=${YOCTO_DOWNLOAD_URL:-"https://github.com/FSEmbedded/releases-fus"}
+YOCTO_BRANCH=${YOCTO_BRANCH:-"main"}
 
 
 UBOOT_FUS_BBAPPEND="u-boot-fus.bbappend"
