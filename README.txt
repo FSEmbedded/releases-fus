@@ -1,16 +1,16 @@
-F&S i.MX93 Yocto Pre Release 2024.09 (fsimx93-Y2024.09-pre)
+F&S i.MX8ULP Yocto Pre Release 2024.12 (fsimx8ulp-Y2024.12-pre)
 ==============================================================
 
-Please see the file
+Please see the new revision of following file
 
-  doc/FSiMX93_FirstSteps_eng.pdf
+  doc/FSiMX8ULP_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
 This is a major pre release for all F&S boards and modules based on the
-i.MX93 CPU, i.e. PicoCoreMX93 or OSM93
+i.MX8ULP CPU, i.e. PicoCoreMX8ULP or OSM8ULP
 
 More boards may be added to this family in the future.
 All these boards can work with software that is created from this release
@@ -30,21 +30,13 @@ sdcard/                 Precompiled images (names as expected by
 doc/                    Hardware and software manuals, schematics
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!                               Attention                                     !
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-This pre release is based on NXP lf-6.6.23-2.0.0 release. In the pre release
-F&S nboot is not supported yet.
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!                               Attention                                     !
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+This pre release is based on NXP lf-6.6.23-2.0.0 release.
 
 Here are some highlights of this release.
 
-1. New Linux Kernel 6.6.23
+1. New Linux Kernel 6.6.43
 
- The Linux kernel is now based on 6.6.23
+ The Linux kernel is now based on 6.6.43
  - EEVDF replaces the existing CFS code scheduler.
  - ReiserFS Officially Declared "Obsolete"
  - KSMBD Declared Stable
@@ -112,113 +104,106 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-u-boot-v2024.04-fs0.1-fsimx93-Y2024.09-pre ()
+u-boot-v2024.04-fs0.2-fsimx8ulp-Y2024.12-pre ()
 -----------------------------------------------
-Supported boards: PicoCoreMX93, OSM93
+Supported boards: PicoCoreMX93, OSM93, PicoCoreMX8ULP, OSM8ULP
 
-- NXP version of u-boot-2024.04 (lf-6.6.23-2.0.0)
-- Merge branch 'rel_imx' into fsimx93
-- configs:fsimx93: update defconfig to 2024.04
-- board:fsimx93: update fsimx93 to 2024.04
-- board:fsimx93: adjust lpddr4 timings for osm.
-- arch:arm:dts: Improve fs-osm-sf-mx93-adp-osm-bb-u-boot.dtsi
-- board:f+s:fsimx93: Improve RAM timings
-- arm:dts:imx93: Add a per clock for lpuart3 to lpuart8
-- arm:mach-imx:imx9: Initialize lpuart[3-8] root clocks
-- arch:arm:mach-imx:imx9:native: Rename board_fix_fdt() to arch_fix_fdt()
-- board:f+s:common: Improve fs_fdt_common functionality
-- board:f+s:common: Enable fs_eth_common function for iMX9 architecture
-- board:f+s:common: Add fs common functionality for fsimx93
-- arch:arm: Add F+S common configuartion
-- board:f+s:fsimx93: Remove unused function for android
-- board:f+s:fsimx93: Improve functionality for fsimx93
-- configs: Improve fsimx93 board configuartion
-  use F+S common functions
-- configs: Improve fsimx93_defconfig
-  add fixup, CONFIG_SYS_MAXARGS
-- arch:arm:dts: Improve picocoremx93 device tree
-- arch:arm:dts: Improve device trees for picocoremx93
-- board:f+s:fsimx93: Improve fsimx93.c
-- configs: Split fsimx93_deconfig in two configurations
-- Improve build process for fsimx93
-- In imx8m/soc.c, rename board_fix_fdt() to arch_fix_fdt()
-- arch:arm:dts: Improve picocoremx93.dtsi
-  improve SPI_B configuration
-- board:f+s:fsimx93:Improve support for fsimx93
+- board:F+S: create NXP-Firmware dir
+- Merge branch 'nboot_feature' into fsimx93
+- board:F+S: small improvements after merge
+- board:F+S:fs_fdt_common: search in __symbols__ to get node offs
+- Makefile: rename target firmware.fs to flash.fs
+- arch:arm:mach-imx:ele_ahab: fix typo
+- make uboot-info.fs as default target
+- board:F+S:fs_cntr_common: Expect DRAM-FW dynamically during loading
+- cmd:fsimage: allow -b 0/1/2 args during fsimage save
+- board:F+S:fs_cntr_common: bugfix ptr-arithmetic in hash-validation
+- board:F&S:common: improve verbosity in bootflow
+- cmd:fsimage: fix board-id overwrite for cntr images
+- tools:imx8image: add UPOWER && M33 Core
+- board:F+S:common: consider target fsimx8ulp
+- board:F&S:ffsimx8ulp: add nboot support
+- arch:asm:mach-imx:imx8ulp: determine LPUART clk during runtime
+- arm:mach-imx:imx8ulp: configure MDA2-8 as DID1
+- board:F&S:common:fs_cntr_common: Workaround loading board-cfg for 8ulp
+- cmd:fsimage: validate U-Boot Image in save_uboot
+- board:F+S:common:fs_bootrom: ensure alignment during the search for FSH
+- board:F+S: add prepare_nboot target
+- scripts:addfsheader: Trapping and exit on error
+- cmd:fsimage: allow to save non flash.fs images in fastboot
+- board:F+S:*:nboot: add git-version in nboot version
+- board:F+S:fsimx8ulp:nboot add OSM8ULP-FERT1
+- board:F+S:fsimx8ulp: increase FDT and SPL-Stack size
+- board:F+S:fsimx8ulp: remove SPL_BOARD_INIT
+- board:F+S:fsimx8ulp: add osm8ulp-fert2
+- board:F+S:fsimx8ulp:nboot: improve OSM DRAM config
+- board:F+S:fsimx8ulp: use fdt_fixup_memory_banks
+- arch:arm:dts: add fs-osm-sf-mx8ulp dts
+- board:F+S:fsimx8ulp:nboot: add have-eth feature for PCore
+- board:F+S:fsimx8ulp: small improvements
+- cmd:fsimage: bugfix use correct header
+- board:F+S:fsimx*: set sec_boot=yes, when board is closed
 
-
-linux-v6.6.48-fs0.1-fsimx93-Y2024.09-pre ()
+linux-v6.6.48-fs0.2-fsimx8ulp-Y2024.12-pre ()
 -----------------------------------------------
-Supported boards: PicoCoreMX93, OSM93
+Supported boards: PicoCoreMX93, OSM93, PicoCoreMX8ULP, OSM8ULP
 
-- NXP Version lf-6.6.23-2.0.0
-- Merge branch 'linux-imx-6.6.x' into fsimx93
-- Original linux-6.6.48
-- Merge branch 'linux-6.6.x' into linux-imx-patch-6.6.x
-- Merge branch 'linux-imx-patch-6.6.x' into fus-6.6.x
-- arch:arm64:boot:dts:f+s: Improve support for picocoremx93
-- arch:arm64:boot:dts:f+s: Improve the indentation in Makefile
-- arch:arm64:boot:dts:f+s: Remove support for display j070wvtc0211
-- arch:arm64:boot:dts:f+s: Improve BT070L1060CS0I1AD-A display support
-- arch:arm64:boot:dts:f+s: Add support for ee0350et-2cp display
-- arch:arm64:boot:dts:f+s: Improve support for EE1010B1T-1CP display
-- arch:arm64:configs: Improve fsimx93_defconfig
-- arch:arm64:boot:dts:F+S: Adjust device tree for the BT070L1060CS0I1AD-A
-  for osm93 with adapter board
+- drivers:rtc: remove rtc-pcf85263.c
+- drivers:rtc:rtc-pcf85363: add clk-out and drive property
+- arch:arm64:boot:dts:F+S: update rtc node for fsimx93
+- arm64:boot:dts:F+S:picocoremx93: add gpio_adp for BT070L1060CS0I1AD-A
+- arm64:boot:dts:F+S:picocoremx93: use SoM specific labels and alias IDs
+- arm64:boot:dts:F+S:fs-osm-mx93: add pinctrl for USB_*_OC
+- arm64:boot:dts:F+S: add fs-osm-sf-mx8ulp-adp-osm-bb
+- arm64:boot:dts:F+S: rework picocoremx8ulp devicetrees
+- arch:arm64:boot:dts:F+S: add imx8ulp.dtsi
+- arm64:configs:fsimx8ulp: build IMX_SEC_ENCLAVE as internal
+- gpu:drm:panel:newvision: add F&S version for nv3051d
+- gpu:drm:panel:newvision-fus: add modes
+- arm64:boot:dts:F+S: improve fsimx8ulp display dts
+- gpu:drm:bridge:nwl-dsi: add drm_atomic_bridge_chain_pre_enable()
+- dts:F+S:picocoremx8ulp: improve Display support
 
 
-meta-fus-scarthgap-5.0.3-fs0.1-fsimx93-Y2024.09-pre ()
+meta-fus-scarthgap-5.0.3-fs0.2-fsimx93-Y2024.12-pre ()
 -----------------------------------------------
-Supported boards: PicoCoreMX93, OSM93
+Supported boards: PicoCoreMX93, OSM93, PicoCoreMX8ULP, OSM8ULP
 
-- Update layer to scarthgap
-- Fix image_types_fus
-- Fix osm device tree names
-- Restructure meta-fus layers
-- Improve fsimx93.conf
-  change SERIAL_CONSOLES to "115200,ttyLP6"
-- Improve handling of NXP wifi mxm-wifiex driver
-- Improve alsa-state to deploy asound configuration
-- Remove 0001-lib-build_OID_ patch
-- Improve packagegroup-qt6-fsimx.bb
-- Extend fus-image-std.bb to remove getty tty1
-- Move wic directory to meta-fus-bsp
-- meta-fus-bsp:conf:machine: Improve KERNEL_DEVICETREE in fsimx93.conf
-  Remove device trees for j070wvtc0211 display
-- meta-fsu-bsp:conf:machine: Improve KERNEL_DEVICETREE in fsimx93.conf
-  Add support for ee0350et-2cp MIPI display.
-- meta-fus-bsp:conf:machine: Improve fsimx93.conf
-  Rework bootloader configuration
-- meta-fus-bsp:imx-mkimage: Rework imx-boot_1.0.bbappend
-  add support to use multiple default configurations
-- meta-bus-bsp:alsa: Add imx-alsa-plugins_%.bbapend
-  Handling QA issue warning
-- meta-fus-sdk:dymaic-layer:qt6: Add qtbase_%.bbapend
-- meta-fus-bsp:u-boot: Improve 0001-Set-file-system-RW.patch
-- meta-fus-sdk:dymaic-layer:qt6: Add qtlanguageserver_%.bbapend
-- meta-fus-sdk:dymaic-layer:qt6: Add qtwayland_%.bbapend
-- meta-fus-bsp:machine: Improve fsimx93.conf
-  Disable ptest support for qtbase, qtdeclarative, qtlanguageserver
-  and qtwayland packages
-- meta-fus-sdk:classes: Improve image_types_fus.bbclass
-  Add IMAGE_NAME_SUFFIX
-  Set IMAGE_NAME_SUFFIX = "-qt" in fus-image-qt6.bb
+- meta-fus-bsp:recipes-bsp:u-boot: Generate .scmversion from annotated tag
+- meta-fus-bsp:uboot: add nboot recipe
+- Use github for F&S specific gits
+- Improve fsimx93 bootloader building
+- Update uboot-fus
+- Update linux-fus
+- Improve fus-image-std
+- Update atf-fus
+- meta-fus-bsp:recipes-bsp: add realtimed recipe
+- meta-fus-bsp:conf:machine:fsimx8ulp: update machine conf
+- meta-fus-bsp:conf:machine:fsimx93: update machine conf
+- recipe-kernel: update linux rev
+- recipes-bsp: update u-boot rev
+- recipes-bsp: update nboot rev
+- recipes-bsp: update atf rev
+
 
 atf-lf_v2.10 ()
 -----------------------------------------
-Supported boards: PicoCoreMX93, OSM93
+Supported boards: PicoCoreMX93, OSM93, PicoCoreMX8ULP, OSM8ULP
 
-- Use NXP version lf-6.6.23-2.0.0
-
+- plat:imx:imx93: allow OCRAM access in NonSecure state
+- plat:imx:imx93: support varius LPUART Devices for different Boards
+- plat:imx:imx93: allow OCRAM access in NonSecure state
 
 firmware-imx-8.24 ddr synopsys ()
 -------------------------------------------
+Supported boards: PicoCoreMX93, OSM93
 
 (no changes)
 
 
-firmware-ele-imx-0.1.2 ()
+firmware-ele-imx-1.2.0 ()
 -------------------------------------------
+Supported boards: PicoCoreMX8ULP, OSM8ULP
 
 (no changes)
 
@@ -232,8 +217,8 @@ Examples
 Documentation
 -------------
 
-- Initial version 1.0 of FSiMX93_FirstSteps_eng.pdf
-- Update to version 0.20 of LinuxOnFSBoards_eng.pdf
+- FSiMX8ULP_FirstSteps_eng.pdf
+- LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.
