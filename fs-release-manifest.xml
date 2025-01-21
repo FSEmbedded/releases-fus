@@ -2,29 +2,25 @@
 
 <manifest>
 
-  <release version="fsimx6sx-Y2024.12"/>
+  <release version="osm8mm-Y2024.10.1"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <kernel version="fsimx6sx-2024.12"/>
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="b2d113a1018fedff5533fb227f3e34e7de9bc0ed" upstream="linux-fus-silex">
+  <kernel version="osm8mm-2024.10.1"/>
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="b1502a3467bacbfcde0873ded2df83dc803a83ce" upstream="fus-5.15.x">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <uboot version="fsimx6sx-2024.12"/>
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="b7b497e9a3c50182aa4cdebb74287e17c88212bc" upstream="master">
+  <uboot version="osm8mm-2024.10.1"/>
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="893f8884a4acf937eb9aa5a623db516fae5b57b1" upstream="master">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <yocto version="fsimx6sx-2024.12"/>
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="66b1f398ce03840a04cc1f2d71a01292501cafeb" upstream="master">
+  <yocto version="osm8mm-2024.10.1"/>
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="8b330e0850d8b828eab2cbe5d20e7df1470af83a" upstream="master">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
-  </project>
-
-  <yocto version="fsimx6sx-2024.12"/>
-  <project name="meta-silex-fus" path="yocto-fus/sources/meta-silex-fus" remote="fus" revision="75c94ce0d7fb237a99cc629ce5fbfb61fcdb2372" upstream="master">
   </project>
 
   <examples version="fs1"/>
