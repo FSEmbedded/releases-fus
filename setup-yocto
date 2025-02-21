@@ -3,18 +3,17 @@
 
 # Abbort script on command failure
 set -e
+. helper-setup-yocto
 
-VERSION=1.0
+VERSION=1.1
 YOCTO_MANIFEST="fs-release-manifest.xml"
 
 RELEASE=$(grep '<release' "${YOCTO_MANIFEST}"| grep -Po 'version="\K.*?(?=")')
+DOCKER_VERSION=$(grep '<docker' "${YOCTO_MANIFEST}"| grep -Po 'version="\K.*?(?=")')
 
 YOCTO_DOWNLOAD_URL="https://github.com/FSEmbedded/releases-fus"
 YOCTO_BRANCH="main"
 
-
-UBOOT_FUS_BBAPPEND="u-boot-fus.bbappend"
-LINUX_FUS_BBAPPEND="linux-fus.bbappend"
 WORKDIR=$(pwd)
 
 EXAMPLES_DIR=examples-fus
@@ -24,229 +23,21 @@ YOCTO_DIR=yocto-fus
 META_FUS_BSP_DIR=sources/meta-fus/meta-fus-bsp
 KERNEL_PATH=recipes-kernel/linux/
 UBOOT_PATH=recipes-bsp/u-boot/
+
 DL_DIR="downloads"
 UPDATE="false"
+DOCKER_CMD="bash"
 
-# Parse line with $1 and echo the value of $2 from manifest $3
-parse_xml_value()
-{
-	entry=$1
-	value=$2
-	manifest=$3
-
-	result=$(grep "path=\"${entry}\"" "${manifest}"| grep -Po "${value}=\"\K.*?(?=\")")
-
-	echo $result
-}
+ARCH=$(grep '<release' "${YOCTO_MANIFEST}"| grep -Po 'arch="\K.*?(?=")')
+MACHINE="${MACHINE:-$ARCH}"
+DISTRO="${DISTRO:-fus-imx-wayland}"
+IMAGE="${IMAGE:-fus-image-std}"
 
 LINUX_FUS_COMMIT=$(parse_xml_value "linux-fus" "revision" "${YOCTO_MANIFEST}")
 LINUX_FUS_BRANCH=$(parse_xml_value "linux-fus" "upstream" "${YOCTO_MANIFEST}")
 
 UBOOT_FUS_COMMIT=$(parse_xml_value "u-boot-fus" "revision" "${YOCTO_MANIFEST}")
 UBOOT_FUS_BRANCH=$(parse_xml_value "u-boot-fus" "upstream" "${YOCTO_MANIFEST}")
-
-UBOOT_SRC_URI="git://\${DL_DIR}/$UBOOT_DIR;branch=$UBOOT_FUS_BRANCH;protocol=file"
-LINUX_SRC_URI="git://\${DL_DIR}/$LINUX_DIR;branch=$LINUX_FUS_BRANCH;protocol=file"
-
-
-# ----- Helper functions ------------------------------------------------------
-
-# Show usage on error
-show_usage()
-{
-    echo
-    echo "Usage: $0 [options] <target>"
-    echo
-    echo "Extract the sources (u-boot, linux, yocto, examples) to directory"
-    echo "<target>. If a dl directory is available in the release, also copy"
-    echo "the extra packages in it to the download directory."
-    echo
-    echo "Options:"
-    echo "-r | --release <release>"
-    echo "                Use given <release> directory to locate sources"
-    echo "                (default: directory where this script is located)"
-    echo "-d | --dl <dl>  Use <dl> directory as Yocto download directory"
-    echo "                (default: \$DL_DIR or 'downloads' in Yocto's top dir)"
-    echo "-f | --force    Force installation, overwrite files in directories"
-    echo "                <target> and <dl> if they exist; be careful!"
-    echo "-n | --dry-run  Show what would be done, do not change anything"
-    echo "-u | --update   Update all gits to the newest versions in the manifest.xml"
-    echo "-h | --help     Show this help"
-    echo
-    exit 1
-}
-
-# If force is on, delete $1 and show type, otherwise just show existing name
-do_delete()
-{
-    if [ $force == 1 ] ; then
-	if [ -L "$1" ] ; then
-	    echo "  [DELETE SYMLINK  ] $1"
-	    $run /bin/rm -f "$1"
-	elif [ -d "$1" ] ; then
-	    echo "  [DELETE DIRECTORY] $1"
-	    $run /bin/rm -rf "$1"
-	else
-	    echo "  [DELETE FILE     ] $1"
-	    $run /bin/rm -f "$1"
-	fi
-    else
-	stop=1
-	if [ -L "$1" ] ; then
-	    echo "Symlink already exists:   $1"
-	elif [ -d "$1" ] ; then
-	    echo "Directory already exists: $1"
-	else
-	    echo "File already exists:      $1"
-	fi
-    fi
-}
-
-# Create directory $1
-do_mkdir()
-{
-    echo "  [CREATE DIRECTORY] $1"
-	echo
-    $run /bin/mkdir -p "$1"
-}
-
-# Extract $1 to directory $2
-do_extract()
-{
-    echo "  [EXTRACT ARCHIVE ] $1"
-    echo "  [TO              ] $2"
-	echo
-    $run /bin/tar xf "$1" -C "$2"
-}
-
-
-do_set_git_credentials()
-{
-	echo "  [GIT CREDENTIALS]"
-
-    if ! git config --global user.name
-	then
-		$run read -p "Please enter the user name that should be used for git: " username
-		$run git config --global user.name "$username"
-	fi
-
-	if ! git config --global user.email
-	then
-		$run read -p "Please enter the email that should be used for git: " email
-		$run git config --global user.email "$email"
-	fi
-	
-}
-# Clone git from $1 to directory $2
-# Check out branch $3 commit $4
-do_clone_checkout()
-{
-    echo "  [CLONING GIT ] $1"
-    echo "  [TO          ] $2"
-    $run git clone "$1" "$2"
-	echo "  [CHECKING OUT] $3 $4"
-	echo
-	$run cd "$2"
-	existed_in_local=$(git branch --list $3)
-	if [ -z "$existed_in_local" ]; then
-		$run git checkout --track origin/$3
-	fi
-	$run git checkout "$4"
-	$run cd -
-}
-
-# Copy $1 to $2
-do_copy()
-{
-    echo "  [COPY PACKAGE    ] $1"
-    echo "  [TO              ] $2"
-	echo
-    $run /bin/cp -f "$1" "$2"
-}
-
-# Create symlink $1 to point to $2
-do_symlink()
-{
-    echo "  [CREATE SYMLINK  ] $1"
-    echo "  [TO POINT TO     ] $2"
-	echo
-    $run /bin/ln -s "$2" "$1"
-}
-
-# Write SRC_URI $1 and SRCREV $2 to bbappend at $3
-do_write_bbappend()
-{
-	if [ "$#" -eq 2 ]; then
-		echo "  [CREATING 		] $2"
-		echo "  [FROM 			] $1"
-		$run cp -f $1 $2
-	elif [ "$#" -eq 3 ]; then
-		echo "  [CREATING 		] $3"
-		echo "  [SRC_URI  		] $1"
-		echo "  [SRCREV  		] $2"
-		echo
-		if [ "$run" != ":" ] ; then
-			echo "SRC_URI = \"${1}\"" > $3
-			echo "SRCREV = \"${2}\"" >> $3
-		fi
-	else
-		echo "write_bbappend failed"
-	fi
-
-}
-
-# Download yocto repostiories
-do_yocto_download()
-{
-
-    echo "  [DOWNOAD MANIFEST] $YOCTO_MANIFEST"
-    echo "  [FROM            ] $YOCTO_DOWNLOAD_URL"
-	echo "  [TAG          ] $RELEASE"
-	echo
-
-	# Create yocto directory if it does not exist yet
-	if [ ! -d "$YOCTO_DIR" ] ; then
-		$run do_mkdir "$YOCTO_DIR"
-	fi
-
-	# Download Yocto
-	# Download the repo tool that handles the download of several GIT repos
-	if [ ! -x ./repo ]
-	then
-		$run echo "Downloading repo tool"
-		$run curl curl https://storage.googleapis.com/git-repo-downloads/repo > repo
-		$run chmod a+x repo
-	fi
-
-	# Fakeinit repo so we can copy our local manifest
-	$run echo "Getting download information (repo init)"
-	$run ./repo init -u $YOCTO_DOWNLOAD_URL -b $YOCTO_BRANCH -m $YOCTO_MANIFEST
-	$run cp $WORKDIR/$YOCTO_MANIFEST .repo/manifests/
-
-	# Download the GIT repositories:
-	$run echo "Downloading all Yocto packages (repo sync)"
-	$run ./repo sync -m $YOCTO_MANIFEST
-
-	# Create local branches so Yocto can find the commits
-	$run ./repo start $LINUX_FUS_BRANCH $LINUX_DIR
-	$run ./repo start $UBOOT_FUS_BRANCH $UBOOT_DIR
-}
-
-# Update yocto repostiories
-do_yocto_update()
-{
-
-    echo "  [UPDATE MANIFEST] $YOCTO_MANIFEST"
-    echo "  [FROM            ] $YOCTO_DOWNLOAD_URL"
-	echo "  [TAG          ] $RELEASE"
-	echo
-
-	$run cp $WORKDIR/$YOCTO_MANIFEST .repo/manifests/
-
-	# Download the GIT repositories:
-	$run echo "Updating all Yocto packages (repo sync)"
-	$run ./repo sync -m $YOCTO_MANIFEST
-}
 
 # ----- Parse arguments -------------------------------------------------------
 
@@ -256,6 +47,11 @@ TARGET=
 
 while [ $# -gt 0 ] ; do
     case "${1,,}" in
+	--accept-eula)
+	    ACCEPT_EULA="-e"
+		HEADLESS="--headless"
+	    shift
+		;;
 	-r|--release)
 	    if [ -z "$2" ] ; then
 		echo
@@ -274,11 +70,35 @@ while [ $# -gt 0 ] ; do
 	    DL_DIR="$2"
 	    shift 2
 	    ;;
+	--docker)
+		shift
+		while [ $# -gt 0 ] ; do
+			case "${1,,}" in
+				cmd=*)
+					DOCKER_CMD=${1#*=}
+					shift
+					;;
+				params=*)
+					DOCKER_PARAMS=${1#*=}
+					shift
+					;;
+				*)
+					shift
+					;;
+			esac
+		done
+		do_docker
+		exit 0
+	    ;;
+	--build)
+		do_build
+		exit 0
+	    ;;
 	-h|--help)
 	    show_usage
 	    ;;
 	-f|--force)
-	    force=1
+	    force="true"
 	    shift
 	    ;;
 	-n|--dry-run)
@@ -292,7 +112,6 @@ while [ $# -gt 0 ] ; do
 	-v|--version)
 	    echo $VERSION
 		exit
-	    shift
 		;;
 	-*)
 	    echo
@@ -302,13 +121,14 @@ while [ $# -gt 0 ] ; do
 
 	*)
 	    TARGET="$1"
+		echo "TARGET=$TARGET" > .env
 	    shift
 	    ;;
     esac
 done
 
-if [ -z $RELEASE ] ; then
-    RELEASE=$(dirname $0)
+if [ -z "$RELEASE" ] ; then
+    RELEASE=$(dirname "$0")
 fi
 
 echo
@@ -394,22 +214,16 @@ fi
 
 $run cd $YOCTO_DIR
 
-# Write linux-fus.bbappend
-# do_write_bbappend $LINUX_SRC_URI $LINUX_FUS_COMMIT $META_FUS_BSP_DIR/$KERNEL_PATH/$LINUX_FUS_BBAPPEND
-
-# Write uboot-fus.bbappend
-# do_write_bbappend $UBOOT_SRC_URI $UBOOT_FUS_COMMIT $META_FUS_BSP_DIR/$UBOOT_PATH/$UBOOT_FUS_BBAPPEND
-
 # Create downloads directory if it does not exist yet
-if [ ! -d $DL_DIR ] ; then
-		do_mkdir $DL_DIR
+if [ ! -d "$DL_DIR" ] ; then
+		do_mkdir "$DL_DIR"
 fi
 
 # Print user manual from yocto-f+s-utilities
 $run source ./yocto-f+s-utilities
 $run print_usage
 
-$run cd $WORKDIR
+$run cd "$WORKDIR"
 
 # Copy extra packages from dl, if any
 if [ -d "$DL_REL_DIR" ] ; then

@@ -1,0 +1,239 @@
+#!/bin/bash
+# ----- Helper functions ------------------------------------------------------
+
+# Show usage on error
+show_usage()
+{
+    echo
+    echo "Usage: $0 [options] <target>"
+    echo
+    echo "Extract the sources (u-boot, linux, yocto, examples) to directory"
+    echo "<target>. If a dl directory is available in the release, also copy"
+    echo "the extra packages in it to the download directory."
+    echo
+    echo "Options:"
+    echo "-r | --release <release>"
+    echo "                Use given <release> directory to locate sources"
+    echo "                (default: directory where this script is located)"
+    echo "-d | --dl <dl>  Use <dl> directory as Yocto download directory"
+    echo "                (default: \$DL_DIR or 'downloads' in Yocto's top dir)"
+    echo "-f | --force    Force installation, overwrite files in directories"
+    echo "                <target> and <dl> if they exist; be careful!"
+    echo "-n | --dry-run  Show what would be done, do not change anything"
+    echo "-u | --update   Update all gits to the newest versions in the manifest.xml"
+    echo "-h | --help     Show this help"
+    echo
+    exit 1
+}
+
+# Parse line with $1 and echo the value of $2 from manifest $3
+parse_xml_value()
+{
+	entry=$1
+	value=$2
+	manifest=$3
+
+	result=$(grep "path=\"${entry}\"" "${manifest}"| grep -Po "${value}=\"\K.*?(?=\")")
+
+	echo "$result"
+}
+
+# If force is on, delete $1 and show type, otherwise just show existing name
+do_delete()
+{
+    if [ "$force" == "true" ] ; then
+	if [ -L "$1" ] ; then
+	    echo "  [DELETE SYMLINK  ] $1"
+	    $run /bin/rm -f "$1"
+	elif [ -d "$1" ] ; then
+	    echo "  [DELETE DIRECTORY] $1"
+	    $run /bin/rm -rf "$1"
+	else
+	    echo "  [DELETE FILE     ] $1"
+	    $run /bin/rm -f "$1"
+	fi
+    else
+	stop=1
+	if [ -L "$1" ] ; then
+	    echo "Symlink already exists:   $1"
+	elif [ -d "$1" ] ; then
+	    echo "Directory already exists: $1"
+	else
+	    echo "File already exists:      $1"
+	fi
+    fi
+}
+
+# Create directory $1
+do_mkdir()
+{
+    echo "  [CREATE DIRECTORY] $1"
+	echo
+    $run /bin/mkdir -p "$1"
+}
+
+# Extract $1 to directory $2
+do_extract()
+{
+    echo "  [EXTRACT ARCHIVE ] $1"
+    echo "  [TO              ] $2"
+	echo
+    $run /bin/tar xf "$1" -C "$2"
+}
+
+
+do_set_git_credentials()
+{
+	echo "  [GIT CREDENTIALS]"
+
+    if ! git config --global user.name
+	then
+		$run read -p "Please enter the user name that should be used for git: " username
+		$run git config --global user.name "$username"
+	fi
+
+	if ! git config --global user.email
+	then
+		$run read -p "Please enter the email that should be used for git: " email
+		$run git config --global user.email "$email"
+	fi
+	
+}
+# Clone git from $1 to directory $2
+# Check out branch $3 commit $4
+do_clone_checkout()
+{
+    echo "  [CLONING GIT ] $1"
+    echo "  [TO          ] $2"
+    $run git clone "$1" "$2"
+	echo "  [CHECKING OUT] $3"
+	echo
+	$run cd "$2"
+	$run git checkout "$3"
+	$run cd -
+}
+
+# Copy $1 to $2
+do_copy()
+{
+    echo "  [COPY PACKAGE    ] $1"
+    echo "  [TO              ] $2"
+	echo
+    $run /bin/cp -f "$1" "$2"
+}
+
+# Create symlink $1 to point to $2
+do_symlink()
+{
+    echo "  [CREATE SYMLINK  ] $1"
+    echo "  [TO POINT TO     ] $2"
+	echo
+    $run /bin/ln -s "$2" "$1"
+}
+
+
+# Download yocto repositories
+do_yocto_download()
+{
+
+    echo "  [DOWNLOAD MANIFEST] $YOCTO_MANIFEST"
+    echo "  [FROM            ] $YOCTO_DOWNLOAD_URL"
+	echo "  [TAG          ] $RELEASE"
+	echo
+
+	# Create yocto directory if it does not exist yet
+	if [ ! -d "$YOCTO_DIR" ] ; then
+		$run do_mkdir "$YOCTO_DIR"
+	fi
+
+	# Download Yocto
+	# Download the repo tool that handles the download of several GIT repos
+	if [ ! -x ./repo ]
+	then
+		$run echo "Downloading repo tool"
+		$run curl curl https://storage.googleapis.com/git-repo-downloads/repo > repo
+		$run chmod a+x repo
+	fi
+
+	# Fake init repo so we can copy our local manifest
+	$run echo "Getting download information (repo init)"
+	$run ./repo init -u "$YOCTO_DOWNLOAD_URL" -b "$YOCTO_BRANCH" -m "$YOCTO_MANIFEST"
+	$run cp "$WORKDIR/$YOCTO_MANIFEST" .repo/manifests/
+
+	# Download the GIT repositories:
+	$run echo "Downloading all Yocto packages (repo sync)"
+	$run ./repo sync -m "$YOCTO_MANIFEST"
+
+	# Create local branches so Yocto can find the commits
+	$run ./repo start "$LINUX_FUS_BRANCH" "$LINUX_DIR"
+	$run ./repo start "$UBOOT_FUS_BRANCH" "$UBOOT_DIR"
+}
+
+# Update yocto repostiories
+do_yocto_update()
+{
+
+    echo "  [UPDATE MANIFEST] $YOCTO_MANIFEST"
+    echo "  [FROM            ] $YOCTO_DOWNLOAD_URL"
+	echo "  [TAG          ] $RELEASE"
+	echo
+
+	$run cp "$WORKDIR/$YOCTO_MANIFEST" .repo/manifests/
+
+	# Download the GIT repositories:
+	$run echo "Updating all Yocto packages (repo sync)"
+	$run ./repo sync -m "$YOCTO_MANIFEST"
+}
+
+do_docker()
+{
+	if [ -f .env ]; then
+		source .env
+	fi
+
+	if ! docker --version; then
+		echo "Docker not found. Please install it first"
+		exit 1
+	fi
+	if [ -z "$TARGET" ]; then
+		echo "Error! Please setup the release first at $TARGET"
+		exit 1
+	fi
+
+	if [ -d "$TARGET"/docker-fus ];then
+		"$TARGET"/docker-fus/docker_run.sh -i $DOCKER_VERSION -d $TARGET -p "$DOCKER_PARAMS" $HEADLESS -c "$DOCKER_CMD"
+	else
+		echo "Error! Docker is not supported in this release."
+		exit 1
+	fi	
+}
+
+do_build()
+{
+
+	if [ -f .env ]; then
+		source .env
+	fi
+    if [[ -z "$DISTRO" || -z "$MACHINE" || -z "$IMAGE" ]];then
+		echo "Error! Please define DISTRO, MACHINE and IMAGE"
+		exit 1
+	fi
+	if [ -z "$TARGET" ]; then
+		echo "Error! Please setup the release first"
+		exit 1
+	fi
+
+	if [ -z "$YOCTO_BUILD_DIR" ]; then
+		YOCTO_BUILD_DIR="build-$MACHINE-$DISTRO"
+	fi
+
+	BUILD_CMD="cd $YOCTO_DIR && DISTRO=$DISTRO MACHINE=$MACHINE source fus-setup-release.sh $ACCEPT_EULA -b $YOCTO_BUILD_DIR -c \"bitbake $IMAGE\""
+
+	if [ -d $TARGET/docker-fus ];then
+		DOCKER_CMD="$BUILD_CMD"
+		do_docker
+	else
+		cd "$TARGET" || exit 1
+		"$BUILD_CMD"
+	fi
+}
