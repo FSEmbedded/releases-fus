@@ -1,17 +1,17 @@
-F&S i.MX8M-Plus Yocto Pre Release 2025.03 (fsimx8mp-Y2025.03-pre)
+F&S i.MX8M-Mini Yocto Pre Release 2025.04 (fsimx8mp-Y2025.04-pre)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX8MP_FirstSteps_eng.pdf
+  doc/FSiMX8MM_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
 This is a major pre-release for all F&S boards and modules based on the
-i.MX8M-Plus CPU (Solo, Dual and Quad), i.e. PicoCoreMX8MP(r2), armStoneMX8MP,
-efusmx8mp or SMARCMX8MP (FSSMMX8MP). More boards may be added to this family 
+i.MX8M-Mini CPU (Solo, Dual and Quad), i.e. PicoCoreMX8MM(r2)-LPDDR4,
+PicoCoreMX8MM-DDR3L, OSM8MM. More boards may be added to this family 
 in the future.
 All these boards can work with software that is created from this release
 package.
@@ -53,7 +53,7 @@ Here are some highlights of this release.
 
 3. New Yocto version 5.0 Scarthgap
 
-	Updating Yocto to Version 5.0.4 Scarthgap.
+	Updating Yocto to Version 5.0.8 Scarthgap.
 
 	The meta-fus layer is now based on meta-freescale and not meta-imx.
 	meta-freescale offers better long time support and more stable releases,
@@ -77,7 +77,7 @@ Here are some highlights of this release.
 
  1.Download manifest repository
 
-	 git clone -b fsimx8mp-Y2025.03-pre https://github.com/FSEmbedded/releases-fus.git
+	 git clone -b fsimx8mm-Y2025.04-pre https://github.com/FSEmbedded/releases-fus.git
 
  2. Prepare Yocto-Build environment
 	Run setup-yocto to prepare your Yocto-Build environment. The script will read the repo manifest.xml
@@ -110,7 +110,7 @@ Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
 
 
 
-linux-v6.6.69-fs0.4-pre
+linux-v6.6.69-fs0.5-pre
 -----------------------------------------------
 Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
                   efusmx8mp SMARCMX8MP
@@ -119,7 +119,7 @@ Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
 
 
 
-meta-fus-yocto-5.0.4-fs0.3-pre
+meta-fus-yocto-5.0.8-fs0.1-pre
 -----------------------------------------------
 Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
                   efusmx8mp SMARCMX8MP
@@ -149,8 +149,8 @@ Examples
 Documentation
 -------------
 
-- Update to version 1.6 of FSiMX8MP_FirstSteps_eng.pdf
-- Update to version 0.19 of LinuxOnFSBoards_eng.pdf
+- Update to version 1.9 of FSiMX8MM_FirstSteps_eng.pdf
+- Update to version 0.22 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.
