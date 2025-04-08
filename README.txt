@@ -1,4 +1,4 @@
-F&S i.MX8M-Mini Yocto Pre Release 2025.04 (fsimx8mp-Y2025.04-pre)
+F&S i.MX8M-Mini Yocto Pre Release 2025.04 (fsimx8mp-Y2025.04.1-pre)
 ==============================================================
 
 Please see the file
@@ -77,7 +77,7 @@ Here are some highlights of this release.
 
  1.Download manifest repository
 
-	 git clone -b fsimx8mm-Y2025.04-pre https://github.com/FSEmbedded/releases-fus.git
+	 git clone -b fsimx8mm-Y2025.04.1-pre https://github.com/FSEmbedded/releases-fus.git
 
  2. Prepare Yocto-Build environment
 	Run setup-yocto to prepare your Yocto-Build environment. The script will read the repo manifest.xml
@@ -110,16 +110,17 @@ Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
 
 
 
-linux-v6.6.69-fs0.5-pre
+linux-v6.6.69-fs0.6-pre
 -----------------------------------------------
 Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
                   efusmx8mp SMARCMX8MP
 
 - Update fsimx8 boards to Kernel 6.6
+- fix commit error on fsimx8mn.dtsi
 
 
 
-meta-fus-yocto-5.0.8-fs0.1-pre
+meta-fus-yocto-5.0.8-fs0.2-pre
 -----------------------------------------------
 Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
                   efusmx8mp SMARCMX8MP
