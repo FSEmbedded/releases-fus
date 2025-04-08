@@ -2,7 +2,7 @@
 
 <manifest>
 
-  <release arch="fsimx8mm" version="Y2025.04-pre"/>
+  <release arch="fsimx8mm" version="Y2025.04.1-pre"/>
 
   <docker version="fus-ubuntu-2022.04.2"/>
 
@@ -12,7 +12,7 @@
 
   <project name="docker-fus" path="docker-fus" remote="fus" revision="d64a9c7d8ede9336640569a5f06c64d2ff887c19" upstream="ubuntu-22.04"/>
 
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="ca15ea5d35580a5098609cbf4e64ea5e31f6cdea" upstream="linux-fus-6.6.x">
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="ec50a0e7655e817c3f08f17eaf7b8111109beecf" upstream="linux-fus-6.6.x">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
@@ -20,7 +20,7 @@
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="2bf42350715b95211d308095bc578daeaf2cf4b1" upstream="scarthgap">
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="d2e6d3c799c805f94978103d2b4fc4b0c2446c23" upstream="scarthgap">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
