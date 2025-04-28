@@ -1,15 +1,15 @@
-F&S i.MX8M-Mini OSM Yocto Release 2024.10.1 (osm8mm-Y2024.10.1)
+F&S i.MX8M-Plus OSM Yocto Release 2025.04 (osm8mp-Y2025.04)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX8MM_FirstSteps_eng.pdf
+  doc/FSiMX8MP_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
-This is a maintenance release specific for the module "FS 8MM OSM-SF".
+This is a maintenance release specific for the module "FS 8MP OSM-SF".
 
 Please note that Yocto releases use a 'Y' for the version number. The
 version counting is independent form other releases.
@@ -63,33 +63,41 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-u-boot-2021.04-osm8mm-2024.10.1 ()
+u-boot-v2021.04-fs1.0 ()
 -----------------------------------------------
-Supported boards: OSM8MM
-- Remove unwanted internal pull-ups for osm8mm
+Supported boards: OSM8MP
+- Add support for OSM8MP
 
 
-linux-5.15.160-osm8mm-2024.10.1 ()
+
+linux-v5.15.160-fs1.0 ()
 -----------------------------------------------
-Supported boards: OSM8MM
-- Remove unwanted internal pull-ups for osm8mm
-- Add support for new LVDS display on osm8mm
-- Set LED7 for F&S displays to unused
-- Add hysteresis for touch interrupt on ADP-OSM-BB
-- Set Atheros ethernet phy link detection to interrupt
-- Increase deassert delay for reset of Realtek phy
+Supported boards: OSM8MP
+- Fix old display for fssmmx8mp
+- Enable mipi-csi (CSI_B) for fssmmx8mp
+- Fix USB OTG role detection on fssmmx8mp
+- Handle 0-bits in empty pages
+- Add support for OSM8MP
 
 
-meta-fus-osm8mm-2024.10.1 ()
+
+meta-fus-yocto-4.0.20-fs1.0 ()
 -----------------------------------------------
-Supported boards: OSM8MM
-- Add support for LVDS display on osm8mm
+Supported boards: OSM8MP
+- fs-setup-release: ensures active shell, when sourced script failes
+- Add support for OSM8MP
+- Use only annotated Tag for UBoot version
+- Remote "-F+S" from UBoot header under Yocto
 
 
-atf-5.15.71-fsimx8mm-2024.10 ()
+
+atf-5.15.71-fsimx8mp-2024.07 ()
 -----------------------------------------
+Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
+                  efusMX8MP FSSMMX8MP OSM8MP
+- Fix poweroff command and ON/OFF button in imx_system_off()
+- Fix debug build console for fsimx8mp
 
-(no changes)
 
 
 firmware-imx-8.10.1 ddr synopsys ()
@@ -109,7 +117,7 @@ linux-examples-fus-fs1
 Documentation
 -------------
 
-- Update to version 1.9 of FSiMX8MM_FirstSteps_eng.pdf
+- Update to version 1.8 of FSiMX8MP_FirstSteps_eng.pdf
 - Update to version 0.22 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
