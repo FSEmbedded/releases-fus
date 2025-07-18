@@ -2,7 +2,7 @@
 
 <manifest>
 
-  <release arch="fsimx8mm" version="Y2025.04.1-pre"/>
+  <release arch="fsimx93" version="Y2025.02.1-pre"/>
 
   <docker version="fus-ubuntu-2022.04.2"/>
 
@@ -12,18 +12,22 @@
 
   <project name="docker-fus" path="docker-fus" remote="fus" revision="d64a9c7d8ede9336640569a5f06c64d2ff887c19" upstream="ubuntu-22.04"/>
 
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="ec50a0e7655e817c3f08f17eaf7b8111109beecf" upstream="linux-fus-6.6.x">
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="e543087d54458ed7bfcd92fd5f3433490383dfb3" upstream="linux-fus-6.6.x">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="d71a0b4f987232fb75c8deeb9789b9e3f902324c" upstream="master">
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="31a218a31553354b4e31cec89aee17f52d335a2b" upstream="fsimx93">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="d2e6d3c799c805f94978103d2b4fc4b0c2446c23" upstream="scarthgap">
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="b3e66b6c53cd4dbb56a236aa2ef70cf3a2a9cc4e" upstream="scarthgap">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
+
+  <project name="meta-fus-nboot" path="yocto-fus/sources/meta-fus-nboot" remote="fus" revision="994c1591a72abba39c6fda8d6a9706077130182a" upstream="scarthgap">
+  </project>
+
   <remote name="yp"          fetch="https://git.yoctoproject.org"/>
   <remote name="oe"          fetch="https://github.com/openembedded"/>
   <remote name="kraj"        fetch="https://github.com/kraj"/>
@@ -36,18 +40,15 @@
   <remote name="imx"         fetch="https://github.com/nxp-imx"/>
   <remote name="imx-support" fetch="https://github.com/nxp-imx-support"/>
 
-  <!-- poky yocto-5.0.8 -->
-  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="dc4827b3660bc1a03a2bc3b0672615b50e9137ff" upstream="scarthgap"/>
-  <!-- meta-openembedded scarthgap -->
-  <project name="meta-openembedded" remote="oe" path="yocto-fus/sources/meta-openembedded" revision="67ad83dd7c2485dae0c90eac345007af6195b84d" upstream="scarthgap"/>
-  <project name="meta-clang" remote="kraj" path="yocto-fus/sources/meta-clang" revision="b9ef02282197380ef05edbd0eb852e1934ceb59b" upstream="scarthgap"/>
+  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="200d12b6a58ad961d60a7774ca0f7a9d29498724" upstream="scarthgap"/>
+  <project name="meta-openembedded" remote="oe" path="yocto-fus/sources/meta-openembedded" revision="72018ca1b1a471226917e8246e8bbf9a374ccf97" upstream="scarthgap"/>
+  <project name="meta-clang" remote="kraj" path="yocto-fus/sources/meta-clang" revision="2b7433611d80f6d0ee1b04156fa91fc73d3c2665" upstream="scarthgap"/>
 
   <project name="fsl-community-bsp-base" remote="community" path="yocto-fus/sources/base" revision="84df0b1ff416c6739472f7f7eadff04fa90d38f6" upstream="scarthgap">
     <linkfile dest="yocto-fus/README" src="README"/>
     <linkfile dest="yocto-fus/setup-environment" src="setup-environment"/>
   </project>
-  <!-- meta-freescale scarthgap -->
-  <project name="meta-freescale" remote="community" path="yocto-fus/sources/meta-freescale" revision="31031c3bedc1986348b2394f42db8e83ed47af02" upstream="scarthgap"/>
+  <project name="meta-freescale" remote="community" path="yocto-fus/sources/meta-freescale" revision="be9267fca85959c79b19ab65e48c8f3d7faf2b40" upstream="scarthgap"/>
   <project name="meta-freescale-3rdparty" remote="community" path="yocto-fus/sources/meta-freescale-3rdparty" revision="6c063450d464eb2f380443c7d9af1b94ce9b9d75" upstream="scarthgap"/>
   <project name="meta-freescale-distro" remote="community" path="yocto-fus/sources/meta-freescale-distro" revision="b9d6a5d9931922558046d230c1f5f4ef6ee72345" upstream="scarthgap"/>
 
