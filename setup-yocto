@@ -1,18 +1,26 @@
 #!/bin/bash
 #
 
-# Abbort script on command failure
+# Abort script on command failure
 set -e
 . helper-setup-yocto
 
-VERSION=1.1
-YOCTO_MANIFEST="fs-release-manifest.xml"
+VERSION=1.2
+# manifest file for repo tool
+YOCTO_MANIFEST=${YOCTO_MANIFEST:-"fs-release-manifest.xml"}
 
-RELEASE=$(grep '<release' "${YOCTO_MANIFEST}"| grep -Po 'version="\K.*?(?=")')
-DOCKER_VERSION=$(grep '<docker' "${YOCTO_MANIFEST}"| grep -Po 'version="\K.*?(?=")')
+RELEASE=$(grep '<release' "${YOCTO_MANIFEST}" | grep -Po 'version="\K.*?(?=")')
+DOCKER_VERSION=$(grep '<docker' "${YOCTO_MANIFEST}" | grep -Po 'version="\K.*?(?=")')
 
-YOCTO_DOWNLOAD_URL="https://github.com/FSEmbedded/releases-fus"
-YOCTO_BRANCH="main"
+# F&S github home
+FUS_GITHUB_HOME_URL="https://github.com/FSEmbedded"
+# env. defines home repository URL
+GITHUB_HOME_URL=${GITHUB_HOME_URL:-"${FUS_GITHUB_HOME_URL}"}
+# env. defines repository name for releases
+RELEASES_REPO_NAME=${RELEASES_REPO_NAME:-"releases-fus"}
+
+YOCTO_DOWNLOAD_URL="${GITHUB_HOME_URL}/${RELEASES_REPO_NAME}"
+YOCTO_BRANCH=${YOCTO_BRANCH:-"main"}
 
 WORKDIR=$(pwd)
 
@@ -121,7 +129,7 @@ while [ $# -gt 0 ] ; do
 
 	*)
 	    TARGET="$1"
-		echo "TARGET=$TARGET" > .env
+	    echo "TARGET=$TARGET" > .env
 	    shift
 	    ;;
     esac

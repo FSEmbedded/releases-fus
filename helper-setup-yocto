@@ -151,7 +151,7 @@ do_yocto_download()
 	if [ ! -x ./repo ]
 	then
 		$run echo "Downloading repo tool"
-		$run curl curl https://storage.googleapis.com/git-repo-downloads/repo > repo
+		$run curl https://storage.googleapis.com/git-repo-downloads/repo > repo
 		$run chmod a+x repo
 	fi
 
