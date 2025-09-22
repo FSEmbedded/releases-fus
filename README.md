@@ -1,16 +1,15 @@
-# F&S i.MX93 Yocto Release 2025.08 (fsimx93-Y2025.08)
+# F&S i.MX8ULP Yocto Release 2025.09-pre (fsimx8ulp-Y2025.09-pre)
 
-This is a major release for all F&S boards and modules based on the i.MX93 SoC,
+This is a pre release for all F&S boards and modules based on the i.MX8ULP SoC,
 based on the [NXP lf-6.6.52-2.2.1 release](https://www.nxp.com/docs/en/release-note/RN00210.pdf).
 
 **Supported Boards**
-- PicoCoreMX93 rev 1.10
-- efusMX93 rev 1.00
-- OSM-SF-MX93 rev 1.10
+- PicoCoreMX8ULP rev 1.10
+- OSM-SF-MX8ULP rev 1.10
 
 Please see the new revision of following file
 
-  [FSiMX93_FirstSteps_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/FSiMX93%20Linux%20First%20Steps.pdf)
+  [FSiMX8ULP_FirstSteps_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/FSiMX8ULP%20Linux%20First%20Steps.pdf)
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
@@ -71,7 +70,7 @@ Here are some highlights of this release.
 ### 2. New bootloader U-Boot 2024.04
 
  The U-Boot is now based on 2024.04.
- Add support for A/B Update, Secure Boot and OP-TEE to the U-Boot.
+ Add support for A/B Update, OP-TEE to the U-Boot.
 
 ### 3. New Yocto version 5.0.11 Scarthgap
 
@@ -104,7 +103,7 @@ Here are some highlights of this release.
 
  1. Download manifest repository
 
-	 git clone -b fsimx93-Y2025.08 https://github.com/FSEmbedded/releases-fus.git
+	 git clone -b fsimx8ulp-Y2025.09-pre https://github.com/FSEmbedded/releases-fus.git
 
  2. Prepare Yocto-Build environment
 	Run setup-yocto to prepare your Yocto-Build environment. The script will read the repo manifest.xml
@@ -118,7 +117,8 @@ Here are some highlights of this release.
 	can be executed for the Yocto system. This command will open a docker shell, where you can execute
 	all yocto commands as usual.
 
-	 ./setup-yocto --docker
+	 ./setup-yocto <yocto-buildir> --docker
+	  cd yocto-fus/
 
 ### 5. New Version naming for F&S Linux, U-Boot and meta-fus
 
@@ -142,29 +142,28 @@ The following list shows the most noticeable changes in this release in
 more detail since our last release for this platform. For a detailed description
 please check the respective git histories.
 
-### [u-boot-v2024.04-fus1.0](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.0])
+### [u-boot-v2024.04-fus1.1-pre](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.1-pre])
 
 - Update to version v2024.04
-- Add support for fsimx93 boards
+- Add support for fsimx8ulp boards
 - Add F&S update support
 - Add F&S boot strategy support
 - Add fsimage support
-- Add support for A/B update
-- Add secure boot support
 - Add OP-TEE Support
 
-### [linux-v6.6.101-2.2.1-fus1.0](https://github.com/FSEmbedded/linux-fus/tree/v6.6.101-2.2.1-fus1.0)
+### [linux-v6.6.101-2.2.1-fus1.1-pre](https://github.com/FSEmbedded/linux-fus/tree/v6.6.101-2.2.1-fus1.1-pre)
 
 - Update to version 6.6.101
-- Add support for fsimx93 boards
+- Add support for fsimx8ulp boards
+- Add bluetooth support
 - Add F&S displays support
 - Add bdinfo support
 
 
-### [meta-fus-yocto-5.0.11-fus1.0](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.11-fus1.0)
+### [meta-fus-yocto-5.0.11-fus1.1-pre](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.11-fus1.1-pre)
 
 - Split meta-fus in meta-fus-bsp and meta-fus-sdk
-- Add fsimx93 support
+- Add fsimx8ulp support
 - Update layer to yocto scarthgap
 - Add dynamic layers for basler and qt6
 - Clone fus specific gits from github again
@@ -173,7 +172,6 @@ please check the respective git histories.
 - Use meta-freescale as base layer instead of meta-imx
 - Add possibility to add Chromium and SPDX generation
   via the fus-setup-release script
-- Add fsimx93 secure boot support
 - Add bcsend support to connect to the board via FSDeviceSpy
 - Improve remote desktop support
 - Update Kernel, Uboot, and ATF to the latest F&S versions
@@ -184,11 +182,11 @@ please check the respective git histories.
 - Allow OCRAM access in NonSecure state
 - Support various LPUART Devices for different Boards
 
-### nboot-2025.08.1
+### nboot-2025.09
 
-- Add fsimx93 board support
+- Add fsimx8ulp boards support
 - Add F&S specific container layout
-- firmware-imx-8.27 ddr synopsys
+- firmware-upower-1.3.1
 - firmware-ele-imx-2.0.2.1
 
 
@@ -199,7 +197,7 @@ please check the respective git histories.
 
 ### Documentation
 
-- [FSiMX93_FirstSteps_eng.pdf]((https://www.fs-net.de/assets/download/docu/common/en/FSiMX93%20Linux%20First%20Steps.pdf)
+- [FSiMX8ULP_FirstSteps_eng.pdf]((https://www.fs-net.de/assets/download/docu/common/en/FSiMX8ULP%20Linux%20First%20Steps.pdf)
 - [LinuxOnFSBoards_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/LinuxOnFSBoards_eng.pdf)
 
 Please download the hardware documentation directly from our website.

@@ -2,36 +2,35 @@
 
 <manifest>
 
-  <release arch="fsimx93" version="Y2025.08"/>
+  <release arch="fsimx8ulp" version="Y2025.09"/>
+  <docker version="fus-ubuntu-2022.04.2"/>
   <default revision="scarthgap" sync-j="4"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <docker version="fus-ubuntu-2022.04.2"/>
-  <project name="docker-fus" path="docker-fus" remote="fus" revision="a27019936f3c96e5f139cc44b974ce8394d0942c" upstream="ubuntu-22.04"/>
-
-  <linux version="v6.6.101-2.2.1-fus1.0"/>
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="a4271fdfe8ea01be4bf6f67744325f5f00c18bc1" upstream="master">
+  <!-- Docker fus-ubuntu-2022.04.2 -->
+  <project name="docker-fus" path="docker-fus" remote="fus" revision="d64a9c7d8ede9336640569a5f06c64d2ff887c19" upstream="ubuntu-22.04"/>
+  <!-- linux-v6.6.101-2.2.1-fus1.0 -->
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="41cc87a2c657dd4fb02705b2618944e52b20fac9" upstream="linux-fus-6.6.x">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
-
-  <uboot version="v2024.04-fus1.0"/>
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="39f44205718fdf604bf64be46e1e12b8d141ad89" upstream="master">
+  <!-- U-Boot-v2024.04-fus1.0 -->
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="12915fc5ba005158cac01a4c47e03ace6ae13f0c" upstream="uboot-fus-2024.04">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
-
-  <meta-fus version="yocto-5.0.11-fus1.0"/>
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="6f103d360cf1e71b328d4b6518f2674773ca5f23" upstream="scarthgap">
+  <!-- meta-fus-yocto-5.0.11-fus1.0 -->
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="16e9f4b33e71e9f00ef793a86b749aff6af699c6" upstream="fsimx8ulp">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
-
-  <nboot version="fsimx93-2025.08.1"/>
-  <project name="meta-fus-nboot" path="yocto-fus/sources/meta-fus-nboot" remote="fus" revision="e4f80a1312f1843979d03621b2e6f79e89bcbdf0" upstream="scarthgap">
+  <!-- meta-fus-nboot-fsimx8ulp-2025.09 -->
+  <project name="meta-fus-nboot" path="yocto-fus/sources/meta-fus-nboot" remote="fus" revision="6f79272a243c604cb5804464cd0ecc71fa2b1400" upstream="scarthgap">
   </project>
 
+<!--
   <project name="meta-fus-updater" path="yocto-fus/sources/meta-fus-updater" remote="fus" revision="e11d48cb12077f7f2d018ae7bd055a36e17ca758" upstream="scarthgap"/>
   <project name="meta-fus-updater-azure" path="yocto-fus/sources/meta-fus-updater-azure" remote="fus" revision="4fe7ce4551c2200c0a70e1a6aa4a6a61aa376f20" upstream="scarthgap"/>
+-->
 
 
   <remote name="yp"          fetch="https://git.yoctoproject.org"/>
