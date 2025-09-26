@@ -2,23 +2,23 @@
 
 <manifest>
 
-  <release version="osm8mp-Y2025.04.1"/>
+  <release version="osm8mm-Y2024.10.1"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <kernel version="v5.15.160-fs1.0.1"/>
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="e485464304c2f824608254c55292381aa8c3b86a" upstream="master">
+  <kernel version="osm8mm-2024.10.2"/>
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="0697ca76f517ea7f249b7e9914cdc211da637aac" upstream="linux-fus-5.15.x">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <uboot version="v2021.04-fs1.0.1"/>
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="e109db627365d7cc21935a3e3f519ec684a9daf8" upstream="uboot-fus-2021.04">
+  <uboot version="osm8mm-2024.10.2"/>
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="e634cae9c02b32c96c7896c545b65e72ee852d43" upstream="uboot-fus-2021.04">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
-  <yocto version="yocto-4.0.20-fs1.0"/>
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="35133b5a7e2d4e46ffb08750b2122e6a12d8bb0a" upstream="master">
+  <yocto version="osm8mm-2024.10.2"/>
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="8b330e0850d8b828eab2cbe5d20e7df1470af83a" upstream="master">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
