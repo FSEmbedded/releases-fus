@@ -1,23 +1,15 @@
-F&S i.MX6 Yocto Release 2024.04.1 (fsimx6-Y2024.04.1)
+F&S i.MX8M-Plus OSM Yocto Release 2025.04.1 (osm8mp-Y2025.04.1)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX6_FirstSteps_eng.pdf
+  doc/FSiMX8MP_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
-This is a maintenance release for all F&S boards and modules based on
-the i.MX6 CPUs from NXP.
-
-Currently these are the modules armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
-efusA9, efusA9r2, PicoMODA9, NetDCUA9
-
-More boards may be added to this family in the future.
-All these boards can work with software that is created from this release
-package.
+This is a maintenance release specific for the module "FS 8MP OSM-SF".
 
 Please note that Yocto releases use a 'Y' for the version number. The
 version counting is independent form other releases.
@@ -25,56 +17,43 @@ version counting is independent form other releases.
 
 The release consists of the following files and directories:
 
-Readme.txt 				Release notes (this text)
-setup-Yocto       		Script to download and install the Buildroot release
-fs-release-manifest.xml	Release Manifest, containing the used versions
-binaries/               Precompiled images (full names)
-sdcard/                 Precompiled images (names as expected by
-                        install script)
-doc/                    Hardware and software manuals, schematics
+README.txt               Release notes (this text)
+setup-yocto              Script to download and install the Yocto release
+fs-release-manifest.xml  Release Manifest, containing the used versions 
+                         as git hashes
+binaries/                Precompiled images (full names)
+sdcard/                  Precompiled images (names as expected by
+                         install script)
+doc/                     Hardware and software manuals, schematics
+
 
 Here are some highlights of this release.
 
-1. New Linux Kernel v5.15.185-2.2.0-fs1.0
+1. Update Linux Kernel to patch level 5.15.160
+ This fixes several smaller bugs and CVEs.
+ For more information please see
+ https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.15.72
+ to
+ https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.15.160
 
- The F&S Kernel is now based on the linux-fslc kernel.
- The fslc kernel has LTS updates for the NXP release versions, so security fixes
- can be applied more easily.
- The Linux kernel is now based on mainline version 5.15.185 and NXP Version 2.2.0
+ Also adds support for the new F&S LVDS Displays and improves the
+ Cortex-M support in Linux and adds SPI-NOR flash support to the
+ efusmx8mp.
 
-2. New bootloader U-Boot u-boot-2021.04-v2021.04-fs1.1
+2. Improved boot loader U-Boot 2021.04
 
- Provide some minor bug fixes.
+ Several bug fixes and improvements, like the Resource Domain Control
+ support in U-Boot device tree and an improved xhci USB driver.
 
-2. meta-fus layer is now based on poky 4.0.29
+3. Tested with Yocto poky layer version 4.0.20
 
- We have updated the poky layer to version 4.0.29 and many other layers
- to their latest versions. For a detailed description see fs-release-manifest.xml
+ This fixes several smaller bugs and CVEs, like CVE-2024-6387 OpenSSH
+ signal handler race condition.
+ For more information, please see
+ https://docs.yoctoproject.org/4.0.20/migration-guides/release-notes-4.0.19.html
+ to
+ https://docs.yoctoproject.org/4.0.20/migration-guides/release-notes-4.0.20.html
 
-3. New Version naming for F&S Linux, U-Boot and meta-fus
-
- Linux and U-Boot and meta-fus now get their own version number to be more
- transparent and flexible.
- The Version numbers reflect the Version of the original package, if needed
- the NXP version and the F&S Version. For example the linux   version name is
- composed like this
-
- [Version Orig. Kernel]-[Version IMX]-[Version FS]
-
- linux-v5.15.185-2.2.0-fs1.0
-
- This way it is easier to recognize the applied patch levels and the same
- package versions can be used in multiple releases.
-
- The actual packages versions are marked as annotated tags in the git history.
- The Name of the overall release (like fsimx93-Y2025.08) is still set as a light tag.
-
-
-Known Issues
-
-1. The ADP-mPCIe-Wlan adapter does not work with this release
-
- The PCIe card is recogniced correctly, but the mwifiex-pcie driver load.
 
 =========================================================================
 
@@ -84,51 +63,51 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-nbootimx6_51.bin (VN51)
-------------------------------------
-Supported boards: armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
-                  efusA9, efusA9r2, PicoMODA9, NetDCUA9
+u-boot-v2021.04-fs1.0.1 ()
+-----------------------------------------------
+Supported boards: OSM8MP
+- Fix warnings for function-prototypes
+- Update ADP-OSM-BB to revision 1.30 for osm8mp
+- Fix SDIO_A for high speed SDHC cards on ADP-OSM-BB
+
+
+
+linux-v5.15.160-fs1.0.1 ()
+-----------------------------------------------
+Supported boards: OSM8MP
+- Update ADP-OSM-BB to revision 1.30 for osm8mp
+- Fix SDIO_A for high speed SDHC cards on ADP-OSM-BB
+
+
+
+meta-fus-yocto-4.0.20-fs1.0 ()
+-----------------------------------------------
+Supported boards: OSM8MP
+- fs-setup-release: ensures active shell, when sourced script failes
+- Add support for OSM8MP
+- Use only annotated Tag for UBoot version
+- Remote "-F+S" from UBoot header under Yocto
+
+
+
+atf-5.15.71-fsimx8mp-2024.07 ()
+-----------------------------------------
+Supported boards: PicoCoreMX8MP PicoCoreMX8MPr2 armStonemx8MP
+                  efusMX8MP FSSMMX8MP OSM8MP
+- Fix poweroff command and ON/OFF button in imx_system_off()
+- Fix debug build console for fsimx8mp
+
+
+
+firmware-imx-8.10.1 ddr synopsys ()
+-------------------------------------------
 
 (no changes)
 
 
 
-u-boot-2021.04-v2021.04-fs1.1
------------------------------------------------
-Supported boards: armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
-                  efusA9, efusA9r2, PicoMODA9, NetDCUA9
-
-- video_link: Remove video_off variable
-- mxs_nand_fus.c: Handle 0-bits in empty pages
-- Improve fsimx6/sx realtek delay after HW reset
-
-
-
-linux-v5.15.185-2.2.0-fs1.0
------------------------------------------------
-Supported boards: armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
-                  efusA9, efusA9r2, PicoMODA9, NetDCUA9
-
-- Fix number of chip-selects property in all F&S DTS
-- Fix imx uart dma watermark level
-- Fix ipu_pixel_clk parent recognition
-- gpmi-nand-fus.c: Handle 0-bits in empty pages
-- Add armstonea9r3q default touch controller
-- Update to v5.15.185
-
-
-
-meta-fus-yocto-4.0.29-fs1.0
------------------------------------------------
-Supported boards: armStoneA9, armStoneA9r2, armStoneA9r3, armStoneA9r4,
-                  efusA9, efusA9r2, PicoMODA9, NetDCUA9, QBlissA9, QBlissA9r2
-
-- Update to 4.0.29
-
-
-
 linux-examples-fus-fs1
-----------------------------------------------
+-------------------------------------------
 
 (no changes)
 
@@ -137,7 +116,7 @@ linux-examples-fus-fs1
 Documentation
 -------------
 
-- Update to version 4.4 of FSiMX6_FirstSteps_eng.pdf
+- Update to version 1.8 of FSiMX8MP_FirstSteps_eng.pdf
 - Update to version 0.22 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
