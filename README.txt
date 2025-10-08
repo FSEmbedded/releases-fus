@@ -1,15 +1,23 @@
-F&S i.MX8M-Mini OSM Yocto Release 2024.10.2 (osm8mm-Y2024.10.2)
+F&S i.MX6UL Yocto Release 2024.03.1 (fsimx6ul-Y2024.03.1)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX8MM_FirstSteps_eng.pdf
+  doc/FSiMX6UL_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
-This is a maintenance release specific for the module "FS 8MM OSM-SF".
+This is a maintenance release for all F&S boards and modules based on
+the i.MX6-UltraLite and i.MX6ULL CPUs from NXP.
+
+Currently these are the modules efusA7UL, PicoCOM1.2, PicoCoreMX6UL,
+PicoCoreMX6UL100 and PicoCOMA7.
+
+More boards may be added to this family in the future.
+All these boards can work with software that is created from this release
+package.
 
 Please note that Yocto releases use a 'Y' for the version number. The
 version counting is independent form other releases.
@@ -17,43 +25,57 @@ version counting is independent form other releases.
 
 The release consists of the following files and directories:
 
-README.txt               Release notes (this text)
-setup-yocto              Script to download and install the Yocto release
-fs-release-manifest.xml  Release Manifest, containing the used versions 
-                         as git hashes
-binaries/                Precompiled images (full names)
-sdcard/                  Precompiled images (names as expected by
-                         install script)
-doc/                     Hardware and software manuals, schematics
-
+Readme.txt 				Release notes (this text)
+setup-yocto       		Script to download and install the Yocto release
+fs-release-manifest.xml	Release Manifest, containing the used versions
+binaries/               Precompiled images (full names)
+sdcard/                 Precompiled images (names as expected by
+                        install script)
+doc/                    Hardware and software manuals, schematics
 
 Here are some highlights of this release.
 
-1. Update Linux Kernel to patch level 5.15.160
- This fixes several smaller bugs and CVEs.
- For more information please see
- https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.15.72
- to
- https://cdn.kernel.org/pub/linux/kernel/v5.x/ChangeLog-5.15.160
+1. New Linux Kernel v5.15.185-2.2.0-fs1.0
 
- Also adds support for the new F&S LVDS Displays and improves the
- Cortex-M support in Linux and adds SPI-NOR flash support to the
- efusmx8mp.
+ The F&S Kernel is now based on the linux-fslc kernel.
+ The fslc kernel has LTS updates for the NXP release versions, so security fixes
+ can be applied more easily.
+ The Linux kernel is now based on mainline version 5.15.185 and NXP Version 2.2.0
 
-2. Improved boot loader U-Boot 2021.04
+2. New bootloader U-Boot u-boot-2021.04-v2021.04-fs1.2
 
- Several bug fixes and improvements, like the Resource Domain Control
- support in U-Boot device tree and an improved xhci USB driver.
+ Provide some minor bug fixes.
 
-3. Tested with Yocto poky layer version 4.0.20
+2. meta-fus layer is now based on poky 4.0.29
 
- This fixes several smaller bugs and CVEs, like CVE-2024-6387 OpenSSH
- signal handler race condition.
- For more information, please see
- https://docs.yoctoproject.org/4.0.20/migration-guides/release-notes-4.0.19.html
- to
- https://docs.yoctoproject.org/4.0.20/migration-guides/release-notes-4.0.20.html
+ We have updated the poky layer to version 4.0.29 and many other layers
+ to their latest versions. For a detailed description see fs-release-manifest.xml
 
+3. New Version naming for F&S Linux, U-Boot and meta-fus
+
+ Linux and U-Boot and meta-fus now get their own version number to be more
+ transparent and flexible.
+ The Version numbers reflect the Version of the original package, if needed
+ the NXP version and the F&S Version. For example the linux   version name is
+ composed like this
+
+ [Version Orig. Kernel]-[Version IMX]-[Version FS]
+
+ linux-v5.15.185-2.2.0-fs1.0
+
+ This way it is easier to recognize the applied patch levels and the same
+ package versions can be used in multiple releases.
+
+ The actual packages versions are marked as annotated tags in the git history.
+ The Name of the overall release (like fsimx93-Y2025.08) is still set as a light tag.
+
+
+Known Issues
+
+1. This Release does not support the Silex WLAN chip on the modules efusA7UL
+
+The Silex WLAN  chip is not supported in this release-
+If you need Silex WLAN chip support, please contact F&S.
 
 =========================================================================
 
@@ -63,42 +85,48 @@ source code is also used for other platforms. This is why you will
 also find references to other CPU types and F&S boards here in the
 change log.
 
-u-boot-2021.04-osm8mm-2024.10.2 ()
+nbootimx6_52.bin (VN52)
+------------------------------------
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+
+- Change DRAM Timing for PicoCOMA7
+
+
+
+u-boot-2021.04-v2021.04-fs1.2
 -----------------------------------------------
-Supported boards: OSM8MM
-- Apply changes to osm8mm dts from linux-fus
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+
+- video_link: Remove video_off variable
+- mxs_nand_fus.c: Handle 0-bits in empty pages
+- Improve fsimx6/sx realtek delay after HW reset
 
 
-linux-5.15.160-osm8mm-2024.10.2 ()
+
+linux-v5.15.185-2.2.0-fs1.0
 -----------------------------------------------
-Supported boards: OSM8MM
-- Fix SDIO_A for high speed SDHC cards on ADP-OSM-BB
-- Update ADP-OSM-BB to revision 1.30 for osm8mm
-- Fix polarity for touch interrupt on osm8mm
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
+
+- Fix number of chip-selects property in all F&S DTS
+- Fix imx uart dma watermark level
+- Fix ipu_pixel_clk parent recognition
+- gpmi-nand-fus.c: Handle 0-bits in empty pages
+- Add armstonea9r3q default touch controller
+- Update to v5.15.185
 
 
-meta-fus-osm8mm-2024.10.2 ()
+
+meta-fus-yocto-4.0.29-fs1.1
 -----------------------------------------------
-Supported boards: OSM8MM
+Supported boards: efusA7UL PicoCOM1.2 PicoCoreMX6UL PicoCoreMX6UL100 PicoCOMA7
 
-(no changes)
-
-
-atf-5.15.71-fsimx8mm-2024.10 ()
------------------------------------------
-
-(no changes)
-
-
-firmware-imx-8.10.1 ddr synopsys ()
--------------------------------------------
-
-(no changes)
+- Update to 4.0.29
+- Add i.MX6UL touchscreen controller rules
 
 
 
 linux-examples-fus-fs1
--------------------------------------------
+----------------------------------------------
 
 (no changes)
 
@@ -107,7 +135,7 @@ linux-examples-fus-fs1
 Documentation
 -------------
 
-- Update to version 1.9 of FSiMX8MM_FirstSteps_eng.pdf
+- Update to version 2.5 of FSiMX6UL_FirstSteps_eng.pdf
 - Update to version 0.22 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
