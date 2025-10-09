@@ -2,13 +2,13 @@
 
 <manifest>
 
-  <release version="fsimx6ul-Y2024.03.1"/>
+  <release version="fsimx6sx-Y2024.12.1"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <kernel version="v5.15.185-2.2.0-fs1.0"/>
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="47f33d6347d1d66d915a953e23fb4f2bbd584eb5" upstream="linux-fus-5.15.x">
+  <kernel version="v5.15.185-2.2.0-fs1.0-silex"/>
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="f24635c4285c3238c87df4bcdfbadaeeb583e20f" upstream="linux-fus-silex">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
@@ -21,6 +21,10 @@
   <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="29124cd9a05131d31955f6165807ece80d3a3219" upstream="kirkstone">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
+  </project>
+
+  <meta-silex version="fsimx6sx-2024.12"/>
+  <project name="meta-silex-fus" path="yocto-fus/sources/meta-silex-fus" remote="fus" revision="75c94ce0d7fb237a99cc629ce5fbfb61fcdb2372" upstream="master">
   </project>
 
   <nboot version="VN52"/>

@@ -1,19 +1,18 @@
-F&S i.MX6UL Yocto Release 2024.03.1 (fsimx6ul-Y2024.03.1)
+F&S i.MX6SX Yocto Release 2024.12.1 (fsimx6sx-Y2024.12.1)
 ==============================================================
 
 Please see the file
 
-  doc/FSiMX6UL_FirstSteps_eng.pdf
+  doc/FSiMX6SX_FirstSteps_eng.pdf
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
 This is a maintenance release for all F&S boards and modules based on
-the i.MX6-UltraLite and i.MX6ULL CPUs from NXP.
+the i.MX6-SoloX CPUs from NXP.
 
-Currently these are the modules efusA7UL, PicoCOM1.2, PicoCoreMX6UL,
-PicoCoreMX6UL100 and PicoCOMA7.
+Currently these are the modules efusA9X, efusA9Xr2, PicoCOMA9X, PicoCoreMX6SX.
 
 More boards may be added to this family in the future.
 All these boards can work with software that is created from this release
@@ -25,7 +24,7 @@ version counting is independent form other releases.
 
 The release consists of the following files and directories:
 
-Readme.txt 				Release notes (this text)
+README.txt 				Release notes (this text)
 setup-yocto       		Script to download and install the Yocto release
 fs-release-manifest.xml	Release Manifest, containing the used versions
 binaries/               Precompiled images (full names)
@@ -69,13 +68,22 @@ Here are some highlights of this release.
  The actual packages versions are marked as annotated tags in the git history.
  The Name of the overall release (like fsimx93-Y2025.08) is still set as a light tag.
 
+4. Support Silex WLAN  Chip on the efusA9X(r2)
+
+ The new driver version is based on version 4.5.25.38 of the original
+ Qualcomm driver which is available in branch CNSS.LEA.NRT_3.1 on
+ repository (tag v4.5.25.38)
+ There is also a Silex-specific version available on request that
+ improves roaming, adds bang radar and other improvements. Ask
+ F&S if interested.
 
 Known Issues
 
-1. This Release does not support the Silex WLAN chip on the modules efusA7UL
+1. The Slilex Bluetooth Chip on the efusmxA9X(r2) is not supported.
 
-The Silex WLAN  chip is not supported in this release-
-If you need Silex WLAN chip support, please contact F&S.
+   There is currently no driver available for the Linux Kernel 5.15.
+   For Silex Bluetooth chip support, please use the release fsimx6sx-B2019.11.1
+   for basic Bluetooth evaluation.
 
 =========================================================================
 
@@ -135,7 +143,7 @@ linux-examples-fus-fs1
 Documentation
 -------------
 
-- Update to version 2.5 of FSiMX6UL_FirstSteps_eng.pdf
+- Update to version 2.3 of FSiMX6SX_FirstSteps_eng.pdf
 - Update to version 0.22 of LinuxOnFSBoards_eng.pdf
 
 Please download the hardware documentation directly from our website.
