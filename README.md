@@ -1,6 +1,6 @@
-# F&S i.MX8ULP Yocto Release 2025.09-pre (fsimx8ulp-Y2025.09-pre)
+# F&S i.MX8ULP Yocto Release 2025.11 (fsimx8ulp-Y2025.11)
 
-This is a pre release for all F&S boards and modules based on the i.MX8ULP SoC,
+This is a main release for all F&S boards and modules based on the i.MX8ULP SoC,
 based on the [NXP lf-6.6.52-2.2.1 release](https://www.nxp.com/docs/en/release-note/RN00210.pdf).
 
 **Supported Boards**
@@ -9,7 +9,7 @@ based on the [NXP lf-6.6.52-2.2.1 release](https://www.nxp.com/docs/en/release-n
 
 Please see the new revision of following file
 
-  [FSiMX8ULP_FirstSteps_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/FSiMX8ULP%20Linux%20First%20Steps.pdf)
+  [FSiMX8ULP_FirstSteps_eng.pdf](https://www.fs-net.de/de/imx8ulp)
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
@@ -38,14 +38,14 @@ The release consists of the following files and directories:
 
 Here are some highlights of this release.
 
-### 1. New Linux Kernel 6.6.101
+### 1. New Linux Kernel 6.6.112
 
  The F&S Kernel is now based on the [linux-fslc kernel](https://github.com/Freescale/linux-fslc/).
 
  The fslc kernel has LTS updates for the NXP release versions, so security
  fixes can be applied more easily.
 
- The Linux kernel is now based on 6.6.101
+ The Linux kernel is now based on 6.6.112
  - EEVDF replaces the existing CFS code scheduler.
  - ReiserFS Officially Declared "Obsolete"
  - KSMBD Declared Stable
@@ -70,11 +70,11 @@ Here are some highlights of this release.
 ### 2. New bootloader U-Boot 2024.04
 
  The U-Boot is now based on 2024.04.
- Add support for A/B Update, OP-TEE to the U-Boot.
+ Add support for Secure-Boot,  A/B Update, OP-TEE to the U-Boot.
 
-### 3. New Yocto version 5.0.11 Scarthgap
+### 3. New Yocto version 5.0.13 Scarthgap
 
- Updating poky to Version 5.0.11 Scarthgap.
+ Updating poky to Version 5.0.13 Scarthgap.
  Updating other layers to their latest commits.
 
  The meta-fus layer in now split into meta-fus-bsp and meta-fus-sdk.
@@ -103,22 +103,28 @@ Here are some highlights of this release.
 
  1. Download manifest repository
 
-	 git clone -b fsimx8ulp-Y2025.09-pre https://github.com/FSEmbedded/releases-fus.git
+	```
+	git clone -b fsimx8ulp-Y2025.11 https://github.com/FSEmbedded/releases-fus.git
+	```
 
  2. Prepare Yocto-Build environment
 	Run setup-yocto to prepare your Yocto-Build environment. The script will read the repo manifest.xml
 	file and syncs all repositories that are needed for Yocto.
 
+	```
 	 cd releases-fus/
 	 ./setup-yocto <yocto-buildir>
+	```
 
  3. Prepare Docker-Environment
 	The ./setup-yocto script is capable of setting up a Docker environment in which the bitbake program
 	can be executed for the Yocto system. This command will open a docker shell, where you can execute
 	all yocto commands as usual.
 
+	```
 	 ./setup-yocto <yocto-buildir> --docker
 	  cd yocto-fus/
+	```
 
 ### 5. New Version naming for F&S Linux, U-Boot and meta-fus
 
@@ -142,7 +148,7 @@ The following list shows the most noticeable changes in this release in
 more detail since our last release for this platform. For a detailed description
 please check the respective git histories.
 
-### [u-boot-v2024.04-fus1.1-pre](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.1-pre])
+### [u-boot-v2024.04-fus1.2](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.2)
 
 - Update to version v2024.04
 - Add support for fsimx8ulp boards
@@ -150,17 +156,19 @@ please check the respective git histories.
 - Add F&S boot strategy support
 - Add fsimage support
 - Add OP-TEE Support
+- Add A/B update support
+- Add Secure-Boot support
 
-### [linux-v6.6.101-2.2.1-fus1.1-pre](https://github.com/FSEmbedded/linux-fus/tree/v6.6.101-2.2.1-fus1.1-pre)
+### [linux-v6.6.112-2.2.1-fus1.2](https://github.com/FSEmbedded/linux-fus/tree/v6.6.112-2.2.1-fus1.2)
 
-- Update to version 6.6.101
+- Update to version 6.6.112
 - Add support for fsimx8ulp boards
 - Add bluetooth support
 - Add F&S displays support
 - Add bdinfo support
 
 
-### [meta-fus-yocto-5.0.11-fus1.1-pre](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.11-fus1.1-pre)
+### [meta-fus-yocto-5.0.13-fus1.2](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.13-fus1.2)
 
 - Split meta-fus in meta-fus-bsp and meta-fus-sdk
 - Add fsimx8ulp support
@@ -177,12 +185,13 @@ please check the respective git histories.
 - Update Kernel, Uboot, and ATF to the latest F&S versions
 
 
-### [atf-lf_v2.10-fus1.0](https://github.com/FSEmbedded/atf-fus/tree/lf_v2.10-fus1.0)
+### [atf-v2.10-fus1.1](https://github.com/FSEmbedded/atf-fus/tree/v2.10-fus1.1)
 
-- Allow OCRAM access in NonSecure state
+- Preselect CLKMUX for TPM6/TPM7
 - Support various LPUART Devices for different Boards
+- Support Suspend for DSL and PD/DPD
 
-### nboot-2025.09
+### [nboot-2025.11](https://github.com/FSEmbedded/meta-fus-nboot/tree/fsimx8ulp-Y2025.11)
 
 - Add fsimx8ulp boards support
 - Add F&S specific container layout
@@ -197,7 +206,7 @@ please check the respective git histories.
 
 ### Documentation
 
-- [FSiMX8ULP_FirstSteps_eng.pdf]((https://www.fs-net.de/assets/download/docu/common/en/FSiMX8ULP%20Linux%20First%20Steps.pdf)
+- [FSiMX8ULP_FirstSteps_eng.pdf](https://www.fs-net.de/de/imx8ulp)
 - [LinuxOnFSBoards_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/LinuxOnFSBoards_eng.pdf)
 
 Please download the hardware documentation directly from our website.
