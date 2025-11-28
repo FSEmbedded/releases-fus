@@ -2,23 +2,23 @@
 
 <manifest>
 
-  <release version="fsimx6-B2024.04"/>
+  <release version="fsimx6-B2024.04.1"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <kernel version="fsimx6-2024.04"/>
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="560f2da26521d0c5185f162cda80692a24efcf9c" upstream="master">
+  <kernel version="v5.15.185-2.2.0-fs1.1"/>
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="638ac21154523d4f7d2b629abf31b66c86eccd3d" upstream="linux-fus-5.15.x">
     <linkfile dest="linux-fsimx6" src="."/>
   </project>
 
-  <uboot version="fsimx6-2024.04"/>
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="cdaa1cfea93b78ca242752ba8a9d166699f91ff3" upstream="master">
+  <uboot version="v2021.04-fs1.1"/>
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="e05969d3175fa24bcb575b57f453503dcbd5ff6c" upstream="uboot-fus-2021.04">
     <linkfile dest="u-boot-fsimx6" src="."/>
   </project>
 
-  <buildroot version="fsimx6-2024.04"/>
-  <project name="buildroot-fus" path="buildroot-fus" remote="fus" revision="a9fabdbe4c0bb235c0a5a408d4485acd4b79e330" upstream="master"/>
+  <buildroot version="fsimx6-2024.04.1"/>
+  <project name="buildroot-fus" path="buildroot-fus" remote="fus" revision="65ce934e6d798b63efb8968984bf4bf9aa8c4afd" upstream="master"/>
 
   <examples version="fs1"/>
   <project name="linux-examples-fus" path="linux-examples-fus" remote="fus" revision="a0b4c436df27bf44fc6d7419035fb797722a3403" upstream="master"/>
