@@ -27,16 +27,20 @@ show_usage()
 }
 
 # Parse line with $1 and echo the value of $2 from manifest $3
-parse_xml_value()
-{
-	entry=$1
-	value=$2
-	manifest=$3
+parse_xml_value() {
 
-	result=$(grep "path=\"${entry}\"" "${manifest}"| grep -Po "${value}=\"\K.*?(?=\")")
+    local tag_name="$1"
+    local attr_name="$2"
+    local xml_file="$3"
 
-	echo "$result"
+    # XML-Inhalt ohne Zeilenumbrüche einlesen
+    local content
+    content=$(tr -d '\n' < "$xml_file")
+
+    # Suche den Tag und extrahiere den Wert des Attributs
+    echo "$content" | grep -o "<$tag_name [^>]*>" | sed -n "s/.*$attr_name=\"\([^\"]*\)\".*/\1/p"
 }
+
 
 # If force is on, delete $1 and show type, otherwise just show existing name
 do_delete()

@@ -8,9 +8,8 @@ set -e
 VERSION=1.2
 # manifest file for repo tool
 YOCTO_MANIFEST=${YOCTO_MANIFEST:-"fs-release-manifest.xml"}
-
-RELEASE=$(grep '<release' "${YOCTO_MANIFEST}" | grep -Po 'version="\K.*?(?=")')
-DOCKER_VERSION=$(grep '<docker' "${YOCTO_MANIFEST}" | grep -Po 'version="\K.*?(?=")')
+RELEASE=$(parse_xml_value "release" "version" "${YOCTO_MANIFEST}")
+DOCKER_VERSION=$(parse_xml_value "docker" "version" "${YOCTO_MANIFEST}")
 
 # F&S github home
 FUS_GITHUB_HOME_URL="https://github.com/FSEmbedded"
@@ -36,16 +35,16 @@ DL_DIR="downloads"
 UPDATE="false"
 DOCKER_CMD="bash"
 
-ARCH=$(grep '<release' "${YOCTO_MANIFEST}"| grep -Po 'arch="\K.*?(?=")')
+ARCH=$(parse_xml_value "release" "arch" "${YOCTO_MANIFEST}")
 MACHINE="${MACHINE:-$ARCH}"
 DISTRO="${DISTRO:-fus-imx-wayland}"
 IMAGE="${IMAGE:-fus-image-std}"
 
-LINUX_FUS_COMMIT=$(parse_xml_value "linux-fus" "revision" "${YOCTO_MANIFEST}")
-LINUX_FUS_BRANCH=$(parse_xml_value "linux-fus" "upstream" "${YOCTO_MANIFEST}")
+LINUX_FUS_BRANCH=$(parse_xml_value "project name=\"linux-fus\"" "upstream" "${YOCTO_MANIFEST}")
 
-UBOOT_FUS_COMMIT=$(parse_xml_value "u-boot-fus" "revision" "${YOCTO_MANIFEST}")
-UBOOT_FUS_BRANCH=$(parse_xml_value "u-boot-fus" "upstream" "${YOCTO_MANIFEST}")
+UBOOT_FUS_COMMIT=$(parse_xml_value "project name=\"u-boot-fus\"" "revision" "${YOCTO_MANIFEST}")
+UBOOT_FUS_BRANCH=$(parse_xml_value "project name=\"u-boot-fus\"" "upstream" "${YOCTO_MANIFEST}")
+
 
 # ----- Parse arguments -------------------------------------------------------
 

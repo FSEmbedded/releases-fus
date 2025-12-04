@@ -1,15 +1,15 @@
-# F&S i.MX8ULP Yocto Release 2025.11 (fsimx8ulp-Y2025.11)
+# F&S PicoCoreMX8MM-DDR3L Yocto Release 2025.12 (picocoremx8mm-ddr3l-Y2025.12)
 
-This is a main release for all F&S boards and modules based on the i.MX8ULP SoC,
+This is a main release for the PicoCoreMX8MM-DDR3L  F&S module based on the i.MX8MM SoC,
 based on the [NXP lf-6.6.52-2.2.1 release](https://www.nxp.com/docs/en/release-note/RN00210.pdf).
 
 **Supported Boards**
-- PicoCoreMX8ULP rev 1.10
-- OSM-SF-MX8ULP rev 1.10
+- PicoCoreMX8MM-DDR3L rev 1.20
+
 
 Please see the new revision of following file
 
-  [FSiMX8ULP_FirstSteps_eng.pdf](https://www.fs-net.de/de/imx8ulp)
+  [FSiMX8MM_FirstSteps_eng.pdf](https://www.fs-net.de/en)
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
@@ -70,7 +70,7 @@ Here are some highlights of this release.
 ### 2. New bootloader U-Boot 2024.04
 
  The U-Boot is now based on 2024.04.
- Add support for Secure-Boot,  A/B Update, OP-TEE to the U-Boot.
+
 
 ### 3. New Yocto version 5.0.13 Scarthgap
 
@@ -104,7 +104,7 @@ Here are some highlights of this release.
  1. Download manifest repository
 
 	```
-	git clone -b fsimx8ulp-Y2025.11 https://github.com/FSEmbedded/releases-fus.git
+	git clone -b picocoremx8mm-ddr3l-Y2025.12 https://github.com/FSEmbedded/releases-fus.git
 	```
 
  2. Prepare Yocto-Build environment
@@ -142,36 +142,32 @@ Here are some highlights of this release.
  The actual packages versions are marked as annotated tags in the git history.
  The Name of the overall release (like fsimx93-Y2025.08) is still set as a light tag.
 
+## Known Issues
+
+- Secure Boot is not supported
+- F&S Over the Air Update is not supported
+- FreeRTOS is not supported
+- SD-Card will not be detected in Linux, when probed in U-Boot
+
 ## Changelog
 
 The following list shows the most noticeable changes in this release in
 more detail since our last release for this platform. For a detailed description
 please check the respective git histories.
 
-### [u-boot-v2024.04-fus1.2](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.2)
+### [u-boot-v2024.04-fus1.3](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.3)
 
 - Update to version v2024.04
-- Add support for fsimx8ulp boards
-- Add F&S update support
-- Add F&S boot strategy support
-- Add fsimage support
-- Add OP-TEE Support
-- Add A/B update support
-- Add Secure-Boot support
 
-### [linux-v6.6.112-2.2.1-fus1.2](https://github.com/FSEmbedded/linux-fus/tree/v6.6.112-2.2.1-fus1.2)
+
+### [linux-v6.6.112-2.2.1-fus1.3](https://github.com/FSEmbedded/linux-fus/tree/v6.6.112-2.2.1-fus1.23
 
 - Update to version 6.6.112
-- Add support for fsimx8ulp boards
-- Add bluetooth support
-- Add F&S displays support
-- Add bdinfo support
 
 
-### [meta-fus-yocto-5.0.13-fus1.2](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.13-fus1.2)
+### [meta-fus-yocto-5.0.13-fus1.3](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.13-fus1.3)
 
 - Split meta-fus in meta-fus-bsp and meta-fus-sdk
-- Add fsimx8ulp support
 - Update layer to yocto scarthgap
 - Add dynamic layers for basler and qt6
 - Clone fus specific gits from github again
@@ -185,18 +181,15 @@ please check the respective git histories.
 - Update Kernel, Uboot, and ATF to the latest F&S versions
 
 
-### [atf-v2.10-fus1.1](https://github.com/FSEmbedded/atf-fus/tree/v2.10-fus1.1)
+### [atf-v2.10-fus1.2](https://github.com/FSEmbedded/atf-fus/tree/v2.10-fus1.2)
 
-- Preselect CLKMUX for TPM6/TPM7
-- Support various LPUART Devices for different Boards
-- Support Suspend for DSL and PD/DPD
+- Update to v2.10
+- Support various UART Devices for different Boards
 
-### [nboot-2025.11](https://github.com/FSEmbedded/meta-fus-nboot/tree/fsimx8ulp-Y2025.11)
 
-- Add fsimx8ulp boards support
-- Add F&S specific container layout
-- firmware-upower-1.3.1
-- firmware-ele-imx-2.0.2.1
+### [nboot-2025.12](https://github.com/FSEmbedded/meta-fus-nboot/tree/fsimx8mm-Y2025.12)
+
+- Add fsimx8mm boards support
 
 
 ### [linux-examples-fus-fs1](https://github.com/FSEmbedded/linux-examples-fus/tree/fs1)
@@ -206,7 +199,7 @@ please check the respective git histories.
 
 ### Documentation
 
-- [FSiMX8ULP_FirstSteps_eng.pdf](https://www.fs-net.de/de/imx8ulp)
+- [FSiMX8MM_FirstSteps_eng.pdf](https://www.fs-net.de/)
 - [LinuxOnFSBoards_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/LinuxOnFSBoards_eng.pdf)
 
 Please download the hardware documentation directly from our website.

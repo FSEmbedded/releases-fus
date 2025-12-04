@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- picocoremx8mm-ddr3l-Y2025.12 -->
 <manifest>
+  <release
+    arch="fsimx8mm"
+    version="Y2025.12"
+    supportedBoards="PicocoreMX8MM-DDR3L"
+  />
 
-  <release arch="fsimx8ulp" version="Y2025.11"/>
+  <doc-firststeps version="V1.9"/>
+  <doc-linonfus version="V0.23"/>
   <docker version="fus-ubuntu-2022.04.2"/>
   <default revision="scarthgap" sync-j="4"/>
 
@@ -10,25 +17,23 @@
 
   <!-- Docker fus-ubuntu-2022.04.2 -->
   <project name="docker-fus" path="docker-fus" remote="fus" revision="a27019936f3c96e5f139cc44b974ce8394d0942c" upstream="ubuntu-22.04"/>
-  <!-- linux-v6.6.112-2.2.1-fus1.2 -->
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="0386232f971a6d901996cf77f9cf1a7bf8845bd7" upstream="master">
+  <!-- linux-v6.6.112-2.2.1-fus1.3 -->
+  <project name="linux-fus" path="linux-fus" remote="fus" revision="127cf2da653a5bacc16c1fff6fb4d8b3d36434d7" upstream="master">
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
-  <!-- U-Boot-v2024.04-fus1.2 -->
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="86f6e3c0826936eb79a0fced74babca35843a7ab" upstream="master">
+  <!-- U-Boot-v2024.04-fus1.3 -->
+  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="431e86b13172fb42ee9ce37cb2d2c807fe43bd16" upstream="master">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
-  <!-- meta-fus-yocto-5.0.13-fus1.2 -->
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="1a76b65dd5987c1ed8cafc5f93833b3da7f0297a" upstream="scarthgap">
+  <!-- meta-fus-yocto-5.0.13-fus1.3 -->
+  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="99621fcad35e9efecc727b70ef34cd55cf7252e3" upstream="scarthgap">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
-  <!-- meta-fus-nboot-fsimx8ulp-2025.11 -->
-  <project name="meta-fus-nboot" path="yocto-fus/sources/meta-fus-nboot" remote="fus" revision="87a98c01aec7ab62524e25a837fda18c0ce7189c" upstream="scarthgap">
+  <!-- meta-fus-nboot-fsimx8mm-2025.12 -->
+  <nboot version="fsimx8mm-2025.12"/>
+  <project name="meta-fus-nboot" path="yocto-fus/sources/meta-fus-nboot" remote="fus" revision="e212b40ae4b7243f7dcf4f9f237e300692d397f7" upstream="scarthgap">
   </project>
-
-  <project name="meta-fus-updater" path="yocto-fus/sources/meta-fus-updater" remote="fus" revision="b062460fdba901ffda8b655ad093e54da78c80f6" upstream="scarthgap"/>
-  <project name="meta-fus-updater-azure" path="yocto-fus/sources/meta-fus-updater-azure" remote="fus" revision="75ccd41edaed33e551ac84d0bdc14e5e9f5449a9" upstream="scarthgap"/>
 
   <remote name="yp"          fetch="https://git.yoctoproject.org"/>
   <remote name="oe"          fetch="https://github.com/openembedded"/>
@@ -65,9 +70,8 @@
   <project name="meta-arm" remote="yp" path="yocto-fus/sources/meta-arm" revision="0f1e7bf92c89759f0ab74cfa5be4ee47b092ad46" upstream="scarthgap"/>
   <!-- meta-qt6 scarthgap  updated to 6.9.1-->
   <project name="meta-qt6" remote="qt" path="yocto-fus/sources/meta-qt6" revision="1a7a776c9f79c6b0500c64b78841aac5438f33f2" upstream="6.10.0" />
-  <!-- meta-browser scarthgap  updated to HEAD (Chromium 132.0.6834.83)-->
-  <project name="meta-browser" remote="ossystems" path="yocto-fus/sources/meta-browser" revision="d4c6ed09cd724c25648f6cb4a02a350d7423a5a1" upstream="scarthgap"/>
-  <project name="meta-lts-mixins" remote="yp" path="yocto-fus/sources/meta-lts-mixins" revision="a0705b87e7c1a257dafb089063f3302ed49c87d3" upstream="scarthgap/rust"/>
+  <!-- meta-browser scarthgap  updated to HEAD (Chromium 129.0.6668.100)-->
+  <project name="meta-browser" remote="ossystems" path="yocto-fus/sources/meta-browser" revision="f988d616d37ddf160d3d747ed54d0a66d549f499" upstream="scarthgap"/>
   <project name="meta-security" remote="yp" path="yocto-fus/sources/meta-security" revision="bc865c5276c2ab4031229916e8d7c20148dfbac3" upstream="scarthgap"/>
   <!-- meta-timesys scarthgap  updated to 2.25.0-->
   <project name="meta-timesys" remote="timesys" path="yocto-fus/sources/meta-timesys" revision="35b2eb04641b94e31fb61cf3da4c482193d754b5" upstream="scarthgap"/>
