@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- picocoremx8mm-ddr3l-Y2025.12 -->
+<!-- fsimx8mp-Y2025.12 -->
 <manifest>
   <release
-    arch="fsimx8mm"
-    version="Y2025.12"
-    supportedBoards="PicocoreMX8MM-DDR3L"
-  />
+    arch="fsimx8mp" version="Y2025.12"
+    supportedBoards="PicocoreMX8MP PicocoreMX8MPr2 armStoneMX8MP efusMX8MP SMARCMX8MP FS8MPOSM-SF"/>
 
-  <doc-firststeps version="V1.9"/>
+  <default revision="scarthgap" sync-j="4"/>
+
+  <doc-firststeps version="V1.8"/>
   <doc-linonfus version="V0.23"/>
   <docker version="fus-ubuntu-2022.04.2"/>
-  <default revision="scarthgap" sync-j="4"/>
+  <nboot version="fsimx8mp-2025.12"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
-  <!-- Docker fus-ubuntu-2022.04.2 -->
-  <project name="docker-fus" path="docker-fus" remote="fus" revision="a27019936f3c96e5f139cc44b974ce8394d0942c" upstream="ubuntu-22.04"/>
-  <!-- linux-v6.6.112-2.2.1-fus1.3 -->
-  <project name="linux-fus" path="linux-fus" remote="fus" revision="127cf2da653a5bacc16c1fff6fb4d8b3d36434d7" upstream="master">
+  <project name="docker-fus" fus-version="fus-ubuntu-2022.04.2" revision="a27019936f3c96e5f139cc44b974ce8394d0942c" upstream="ubuntu-22.04" path="docker-fus" remote="fus"/>
+
+  <project name="linux-fus" fus-version="v6.6.112-2.2.1-fus1.4" revision="c27bb420bc44ddd9335622f13ad9b9c2107682df" path="linux-fus"  upstream="master" remote="fus" >
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
-  <!-- U-Boot-v2024.04-fus1.3 -->
-  <project name="u-boot-fus" path="u-boot-fus" remote="fus" revision="431e86b13172fb42ee9ce37cb2d2c807fe43bd16" upstream="master">
+
+  <project name="u-boot-fus" fus-version="v2024.04-fus1.4" revision="dbcd364e9924e05d440409bfdd8b10d00c7864dd" upstream="master" path="u-boot-fus" remote="fus">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
-  <!-- meta-fus-yocto-5.0.13-fus1.3 -->
-  <project name="meta-fus" path="yocto-fus/sources/meta-fus" remote="fus" revision="99621fcad35e9efecc727b70ef34cd55cf7252e3" upstream="scarthgap">
+
+  <project name="atf-fus" fus-version="v2.10-fus1.2" revision="07980b7973b1e60f52478d76ea8eae72edbff44d" upstream="master" path="atf-fus" remote="fus"/>
+
+  <project name="linux-examples-fus" fus-version="fs1"  revision="a0b4c436df27bf44fc6d7419035fb797722a3403" upstream="master" path="linux-examples-fus" remote="fus"/>
+
+  <project name="meta-fus" fus-version="yocto-5.0.14-fus1.0" revision="72a8979f8dbdaef6c2b9217fcd9de6f76bc6f89d" upstream="scarthgap" path="yocto-fus/sources/meta-fus" remote="fus">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
-  <!-- meta-fus-nboot-fsimx8mm-2025.12 -->
-  <nboot version="fsimx8mm-2025.12"/>
-  <project name="meta-fus-nboot" path="yocto-fus/sources/meta-fus-nboot" remote="fus" revision="e212b40ae4b7243f7dcf4f9f237e300692d397f7" upstream="scarthgap">
+
+  <project name="meta-fus-nboot" fus-version="fsimx8mp-2025.12" revision="c50b46cb101039faa3bc1aa626d3c500e6fbd5bb" upstream="scarthgap" path="yocto-fus/sources/meta-fus-nboot" remote="fus">
   </project>
 
   <remote name="yp"          fetch="https://git.yoctoproject.org"/>
@@ -49,8 +51,8 @@
 
   <remote name="rauc"        fetch="https://github.com/rauc"/>
 
-  <!-- poky yocto-5.0.13 -->
-  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="f16cffd030d21d12dd57bb95cfc310bda41f8a1f" upstream="scarthgap"/>
+  <!-- poky yocto-5.0.14 -->
+  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="7e8674996b0164b07e56bc066d0fba790e627061" upstream="scarthgap"/>
   <!-- meta-openembedded scarthgap updated to HEAD-->
   <project name="meta-openembedded" remote="oe" path="yocto-fus/sources/meta-openembedded" revision="e621da947048842109db1b4fd3917a02e0501aa2" upstream="scarthgap"/>
   <!-- meta-clang scarthgap updated to HEAD-->
@@ -86,3 +88,4 @@
   <project name="meta-nxp-connectivity" remote="imx" path="yocto-fus/sources/meta-nxp-connectivity" revision="refs/tags/rel_imx_6.6.52_2.2.0" upstream="imx_matter_2024_q3-post"/>
   <project name="meta-nxp-demo-experience" remote="imx-support" path="yocto-fus/sources/meta-nxp-demo-experience" revision="refs/tags/rel_imx_6.6.52_2.2.0" upstream="scarthgap-6.6.52-2.2.0"/>
 </manifest>
+
