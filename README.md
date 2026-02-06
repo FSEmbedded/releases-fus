@@ -1,18 +1,20 @@
-# F&S MX8MM  Yocto Release 2024.10.1 (fsimx8mm-Y2024.10.1)
+# F&S MX8MP  Yocto Release Y2024.07.2 (fsimx8mp-Y2024.07.2)
 
-This is a maintenance release for F&S modules of the i.MX8MM SoC family,
+This is a maintenance release for F&S modules of the i.MX8MP SoC family,
 based on the [NXP lf-5.15.71_2.2.2 release](https://www.nxp.com/docs/en/release-note/L5.15.71_2.2.2_LINUX_RN.pdf).
 
 **Supported Boards**
 
-- PicocoreMX8MM-LPDDR4
-- PicocoreMX8MMr2-LPDDR4
-- PicocoreMX8MM-DDR3L
-- FS8MMOSM-SF
+- PicocoreMX8MP
+- PicocoreMX8MPr2
+- armStoneMX8MP
+- efusMX8MP
+- SMARCMX8MP
+- FS8MPOSM-SF
 
 Please see the new revision of following file
 
-  [FSiMX8MM_FirstSteps_eng.pdf](https://www.fs-net.de/en)
+  [FSiMX8MP_FirstSteps_eng.pdf](https://www.fs-net.de/en)
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
@@ -40,11 +42,11 @@ Use the latest F&S Development Machine from the [F&S website](https://www.fs-net
 To build the example release binaries, run:
 
 ```bash
-git clone -b fsimx8mm-Y2024.10.1 https://github.com/FSEmbedded/releases-fus.git
+git clone -b fsimx8mp-Y2024.07.2 https://github.com/FSEmbedded/releases-fus.git
 cd releases-fus
 ./setup-yocto <build_dir>
 cd <build_dir>/yocto-fus
-DISTRO=fus-imx-wayland MACHINE=fsimx8mm . fus-setup-release.sh
+DISTRO=fus-imx-wayland MACHINE=fsimx8mp . fus-setup-release.sh
 bitbake fus-image-std
 ```
 
@@ -61,9 +63,9 @@ Applying the latest bug and security fixes.
  Updating poky to Version 4.0.32 Kirkstone.
  Updating other layers to their latest commits.
 
-## Adding support for FSOSM8MM
+## Adding support for FSOSM8MP
 
-Adding  support for the FSOSM8MM modules to the architecture specific releases
+Adding  support for the FSOSM8MP modules to the architecture specific releases
 
 ## Known Issues
 
@@ -77,8 +79,9 @@ please check the respective git histories.
 
 ### [u-boot-v2021.04-fs1.3](https://github.com/FSEmbedded/u-boot-fus/tree/v2021.04-fs1.3)
 
-- Add OSM8MM support
+- Add OSM8MP support
 - Switching to UART DM model
+- Improve Realtek PHY reset timings
 
 ### [linux-v5.15.197-2.2.0-fs1.0](https://github.com/FSEmbedded/linux-fus/tree/v5.15.197-2.2.0-fs1.0)
 
@@ -88,11 +91,11 @@ please check the respective git histories.
 
 ### [meta-fus-yocto-4.0.29-fs1.1](https://github.com/FSEmbedded/meta-fus/tree/yocto-4.0.29-fs1.1)
 
-- Add OSM8MM support
+- Add OSM8MP support
 
-### [nboot-fsimx8mm-2024.09.4]
+### [nboot-fsimx8mp-2025.04.1]
 
-- Add OSM8MM support
+- Add OSM8MP support
 
 ### [linux-examples-fus-fs1](https://github.com/FSEmbedded/linux-examples-fus/tree/fs1)
 
@@ -100,7 +103,7 @@ please check the respective git histories.
 
 ### Documentation
 
-- [FSiMX8MM_FirstSteps_eng.pdf](https://www.fs-net.de/)
+- [FSiMX8MP_FirstSteps_eng.pdf](https://www.fs-net.de/)
 - [LinuxOnFSBoards_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/LinuxOnFSBoards_eng.pdf)
 
 Please download the hardware documentation directly from our website.

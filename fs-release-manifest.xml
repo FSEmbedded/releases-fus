@@ -2,7 +2,7 @@
 
 <manifest>
 
-  <release version="fsimx8mm-Y2024.10.1"/>
+  <release version="fsimx8mp-Y2024.07.2"/>
   <default sync-j="2"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
@@ -23,7 +23,7 @@
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
 
-  <nboot version="fsimx8mm-2024.09.4"/>
+  <nboot version="fsimx8mp-2025.04.1"/>
 
   <examples version="fs1"/>
   <project name="linux-examples-fus" path="linux-examples-fus" remote="fus" revision="a0b4c436df27bf44fc6d7419035fb797722a3403" upstream="master"/>
