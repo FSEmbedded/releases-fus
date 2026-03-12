@@ -101,7 +101,7 @@ do_set_git_credentials()
 		$run read -p "Please enter the email that should be used for git: " email
 		$run git config --global user.email "$email"
 	fi
-	
+
 }
 # Clone git from $1 to directory $2
 # Check out branch $3 commit $4
@@ -209,7 +209,40 @@ do_docker()
 	else
 		echo "Error! Docker is not supported in this release."
 		exit 1
-	fi	
+	fi
+}
+
+do_cve_tracker()
+{
+	if [ -f .env ]; then
+		source .env
+	fi
+
+	local deploy_path="$TARGET/yocto-fus/build-${DISTRO}-${MACHINE}/tmp/deploy/"
+	local cve_tracker_dir="$TARGET/fs-cve-tracker"
+
+	if [ -z "$TARGET" ]; then
+		echo "Error! Please setup the release first at $TARGET"
+		exit 1
+	fi
+
+	if [[ ! -d "${cve_tracker_dir}" ]];then
+		echo "Error! F&S CVE Tracker is not supported in this release."
+		exit 1
+	fi
+
+	if [[ ! -d "$deploy_path" ]];then
+		echo "Error! Please run build first"
+		echo $deploy_path
+		exit 1
+	fi
+
+	mkdir -p "$TARGET/fs-cve-tracker/input/"
+	cp -f "$deploy_path/cyclonedx-export/bom.json" "${cve_tracker_dir}/input/bom_yocto.json"
+	cp -f "$deploy_path/cyclonedx-export/vex.json" "${cve_tracker_dir}/input/vex_yocto.json"
+	cp -f "$deploy_path/images/${ARCH}/recipe-linux-fus-debug.spdx.json" "${cve_tracker_dir}/input/"
+
+	python3 "${cve_tracker_dir}/fs-cve-tracker.py --docker up --release ${ARCH}-${RELEASE} --bom --improveVEX --openWeb"
 }
 
 do_build()

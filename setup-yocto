@@ -101,6 +101,10 @@ while [ $# -gt 0 ] ; do
 		do_build
 		exit 0
 	    ;;
+	--cve-tracker)
+		do_cve_tracker
+		exit 0
+	    ;;
 	-h|--help)
 	    show_usage
 	    ;;
