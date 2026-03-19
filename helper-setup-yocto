@@ -242,7 +242,7 @@ do_cve_tracker()
 	cp -f "$deploy_path/cyclonedx-export/vex.json" "${cve_tracker_dir}/input/vex_yocto.json"
 	cp -f "$deploy_path/images/${ARCH}/recipe-linux-fus-debug.spdx.json" "${cve_tracker_dir}/input/"
 
-	python3 "${cve_tracker_dir}/fs-cve-tracker.py --docker up --release ${ARCH}-${RELEASE} --bom --improveVEX --openWeb"
+	python3 ${cve_tracker_dir}/fs-cve-tracker.py --docker up --release ${ARCH}-${RELEASE} --bom --improveVEX --openBrowser
 }
 
 do_build()
