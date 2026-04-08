@@ -186,7 +186,7 @@ do_yocto_update()
 
 	# Download the GIT repositories:
 	$run echo "Updating all Yocto packages (repo sync)"
-	$run ./repo sync -m "$YOCTO_MANIFEST"
+	$run ./repo sync --fail-fast -m "$YOCTO_MANIFEST"
 }
 
 do_docker()
