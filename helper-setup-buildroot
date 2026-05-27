@@ -1,0 +1,276 @@
+#!/bin/bash
+# ----- Helper functions ------------------------------------------------------
+
+# Show usage on error
+show_usage()
+{
+    echo
+    echo "Usage: $0 [options] <target>"
+    echo
+    echo "Extract the sources (u-boot, linux, buildroot, examples) to directory"
+    echo "<target>. If a dl directory is available in the release, also copy"
+    echo "the extra packages in it to the download directory."
+    echo
+    echo "Options:"
+    echo "-r | --release <release>"
+    echo "                Use given <release> directory to locate sources"
+    echo "                (default: directory where this script is located)"
+    echo "-d | --dl <dl>  Use <dl> directory as Yocto download directory"
+    echo "                (default: \$DL_DIR or 'downloads' in Buildroot's top dir)"
+    echo "-f | --force    Force installation, overwrite files in directories"
+    echo "                <target> and <dl> if they exist; be careful!"
+    echo "-n | --dry-run  Show what would be done, do not change anything"
+    echo "-u | --update   Update all gits to the newest versions in the manifest.xml"
+    echo "-h | --help     Show this help"
+    echo
+    exit 1
+}
+
+# Parse line with $1 and echo the value of $2 from manifest $3
+parse_xml_value() {
+
+    local tag_name="$1"
+    local attr_name="$2"
+    local xml_file="$3"
+
+    # XML-Inhalt ohne Zeilenumbrüche einlesen
+    local content
+    content=$(tr -d '\n' < "$xml_file")
+
+    # Suche den Tag und extrahiere den Wert des Attributs
+    echo "$content" | grep -o "<$tag_name [^>]*>" | sed -n "s/.*$attr_name=\"\([^\"]*\)\".*/\1/p"
+}
+
+
+# If force is on, delete $1 and show type, otherwise just show existing name
+do_delete()
+{
+    if [ "$force" == "true" ] ; then
+	if [ -L "$1" ] ; then
+	    echo "  [DELETE SYMLINK  ] $1"
+	    $run /bin/rm -f "$1"
+	elif [ -d "$1" ] ; then
+	    echo "  [DELETE DIRECTORY] $1"
+	    $run /bin/rm -rf "$1"
+	else
+	    echo "  [DELETE FILE     ] $1"
+	    $run /bin/rm -f "$1"
+	fi
+    else
+	stop=1
+	if [ -L "$1" ] ; then
+	    echo "Symlink already exists:   $1"
+	elif [ -d "$1" ] ; then
+	    echo "Directory already exists: $1"
+	else
+	    echo "File already exists:      $1"
+	fi
+    fi
+}
+
+# Create directory $1
+do_mkdir()
+{
+    echo "  [CREATE DIRECTORY] $1"
+	echo
+    $run /bin/mkdir -p "$1"
+}
+
+# Extract $1 to directory $2
+do_extract()
+{
+    echo "  [EXTRACT ARCHIVE ] $1"
+    echo "  [TO              ] $2"
+	echo
+    $run /bin/tar xf "$1" -C "$2"
+}
+
+
+do_set_git_credentials()
+{
+	echo "  [GIT CREDENTIALS]"
+
+    if ! git config --global user.name
+	then
+		$run read -p "Please enter the user name that should be used for git: " username
+		$run git config --global user.name "$username"
+	fi
+
+	if ! git config --global user.email
+	then
+		$run read -p "Please enter the email that should be used for git: " email
+		$run git config --global user.email "$email"
+	fi
+
+}
+# Clone git from $1 to directory $2
+# Check out branch $3 commit $4
+do_clone_checkout()
+{
+    echo "  [CLONING GIT ] $1"
+    echo "  [TO          ] $2"
+    $run git clone "$1" "$2"
+	echo "  [CHECKING OUT] $3"
+	echo
+	$run cd "$2"
+	$run git checkout "$3"
+	$run cd -
+}
+
+# Copy $1 to $2
+do_copy()
+{
+    echo "  [COPY PACKAGE    ] $1"
+    echo "  [TO              ] $2"
+	echo
+    $run /bin/cp -f "$1" "$2"
+}
+
+# Create symlink $1 to point to $2
+do_symlink()
+{
+    echo "  [CREATE SYMLINK  ] $1"
+    echo "  [TO POINT TO     ] $2"
+	echo
+    $run /bin/ln -s "$2" "$1"
+}
+
+
+# Download buildroot repostiories
+do_buildroot_download()
+{
+
+	    echo "  [DOWNOAD MANIFEST] $BUILDROOT_MANIFEST"
+    	echo "  [FROM            ] $BUILDROOT_DOWNLOAD_URL"
+	echo "  [TAG          ] $RELEASE"
+	echo
+
+
+	# Download Buildroot
+	# Download the repo tool that handles the download of several GIT repos
+	if [ ! -x ./repo ]
+	then
+		$run echo "Downloading repo tool"
+		$run curl https://storage.googleapis.com/git-repo-downloads/repo > repo
+		$run chmod a+x repo
+	fi
+
+	# Fake init repo so we can copy our local manifest
+	$run echo "Getting download information (repo init)"
+	$run ./repo init -u $BUILDROOT_DOWNLOAD_URL -b $BUILDROOT_BRANCH -m $BUILDROOT_MANIFEST
+	$run cp $WORKDIR/$BUILDROOT_MANIFEST .repo/manifests/
+
+	# Download the GIT repositories:
+	$run echo "Downloading all Buildroot packages (repo sync)"
+	$run ./repo sync -m "$BUILDROOT_MANIFEST"
+	$run echo "Creating local branches"
+	# Create local branches so Buildroot can find the commits
+	$run ./repo start $LINUX_FUS_BRANCH $LINUX_DIR
+	$run ./repo start $UBOOT_FUS_BRANCH $UBOOT_DIR
+}
+
+# Update buildroot repostiories
+do_buildroot_update()
+{
+
+    	echo "  [UPDATE MANIFEST] $BUILDROOT_MANIFEST"
+    	echo "  [FROM            ] $BUILDROOT_DOWNLOAD_URL"
+	echo "  [TAG          ] $RELEASE"
+	echo
+
+	$run cp $WORKDIR/$BUILDROOT_MANIFEST .repo/manifests/
+
+	# Download the GIT repositories:
+	$run echo "Updating all Buildroot packages (repo sync)"
+	$run ./repo sync -m $BUILDROOT_MANIFEST
+}
+
+do_docker()
+{
+	if [ -f .env ]; then
+		source .env
+	fi
+
+	if ! docker --version; then
+		echo "Docker not found. Please install it first"
+		exit 1
+	fi
+	if [ -z "$TARGET" ]; then
+		echo "Error! Please setup the release first at $TARGET"
+		exit 1
+	fi
+
+	if [ -d "$TARGET"/docker-fus ];then
+		"$TARGET"/docker-fus/docker_run.sh -i $DOCKER_VERSION -d $TARGET -p "$DOCKER_PARAMS" $HEADLESS -c "$DOCKER_CMD"
+	else
+		echo "Error! Docker is not supported in this release."
+		exit 1
+	fi
+}
+
+do_cve_tracker()
+{
+	if [ -f .env ]; then
+		source .env
+	fi
+
+	local deploy_path="$TARGET/buildroot-fus"
+	local cve_tracker_dir="$TARGET/fs-cve-tracker"
+
+	if [ -z "$TARGET" ]; then
+		echo "Error! Please setup the release first at $TARGET"
+		exit 1
+	fi
+
+	if [[ ! -d "${cve_tracker_dir}" ]];then
+		echo "Error! F&S CVE Tracker is not supported in this release."
+		exit 1
+	fi
+
+	if [[ ! -f "$deploy_path/bom.json" ]];then
+		echo "Error! Please generate sbom first from $deploy_path directory"
+		echo "Step 1) Apply defconfig"
+		echo "        --> make fsimx6_wayland_defconfig (or any other defconfig)"
+		echo "Step 2) Genereate sbom"
+		echo "        --> make show-info | utils/generate-cyclonedx > bom.json"
+		echo "Step 3) Add Linux Kernel SPDX from the release directory"
+		echo "        --> cp sbom/spdx/recipe-linux-fus-debug.spdx.json $deploy_path"
+		exit 1
+	fi
+
+	mkdir -p "${cve_tracker_dir}/input/"
+	cp -f "$deploy_path/bom.json" "${cve_tracker_dir}/input/bom_buildroot.json"
+	cp -f "$deploy_path/recipe-linux-fus-debug.spdx.json" "${cve_tracker_dir}/input/"
+
+	python3 "${cve_tracker_dir}/fs-cve-tracker.py" --docker up --release ${ARCH}-${RELEASE} --bom ${cve_tracker_dir}/input/bom_buildroot.json --improveVEX --openBrowser
+}
+
+do_build()
+{
+
+	if [ -f .env ]; then
+		source .env
+	fi
+    if [[ -z "$DISTRO" || -z "$MACHINE" ]];then
+		echo "Error! Please define DISTRO, MACHINE and IMAGE"
+		exit 1
+	fi
+	if [ -z "$TARGET" ]; then
+		echo "Error! Please setup the release first"
+		exit 1
+	fi
+
+	if [ -z "$BUILD_DIR" ]; then
+		BUILD_DIR="build-$MACHINE-$DISTRO"
+	fi
+
+	BUILD_CMD="cd $BUILDROOT_DIR && make ${MACHINE}_${DISTRO}_defconfig && make"
+
+	if [ -d $TARGET/docker-fus ];then
+		DOCKER_CMD="$BUILD_CMD"
+		do_docker
+	else
+		cd "$TARGET" || exit 1
+		"$BUILD_CMD"
+	fi
+}

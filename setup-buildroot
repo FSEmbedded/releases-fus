@@ -3,14 +3,23 @@
 
 # Abbort script on command failure
 set -e
+. helper-setup-buildroot
 
 VERSION=1.1
 BUILDROOT_MANIFEST="fs-release-manifest.xml"
 
-RELEASE=$(grep '<release' "${BUILDROOT_MANIFEST}"| grep -Po 'version="\K.*?(?=")')
+RELEASE=$(parse_xml_value "release" "version" "${BUILDROOT_MANIFEST}")
+DOCKER_VERSION=$(parse_xml_value "docker" "version" "${BUILDROOT_MANIFEST}")
 
-BUILDROOT_DOWNLOAD_URL="https://github.com/FSEmbedded/releases-fus"
-BUILDROOT_BRANCH="main"
+# F&S github home
+FUS_GITHUB_HOME_URL="https://github.com/FSEmbedded"
+# env. defines home repository URL
+GITHUB_HOME_URL=${GITHUB_HOME_URL:-"${FUS_GITHUB_HOME_URL}"}
+# env. defines repository name for releases
+RELEASES_REPO_NAME=${RELEASES_REPO_NAME:-"releases-fus"}
+
+BUILDROOT_DOWNLOAD_URL="${GITHUB_HOME_URL}/${RELEASES_REPO_NAME}"
+BUILDROOT_BRANCH=${BUILDROOT_BRANCH:-"main"}
 WORKDIR=$(pwd)
 
 EXAMPLES_DIR=examples-fus
@@ -20,202 +29,14 @@ BUILDROOT_DIR=buildroot-fus
 
 DL_DIR="dl"
 UPDATE="false"
+DOCKER_CMD="bash"
 
-# Parse line with $1 and echo the value of $2 from manifest $3
-parse_xml_value()
-{
-	entry=$1
-	value=$2
-	manifest=$3
+ARCH=$(parse_xml_value "release" "arch" "${BUILDROOT_MANIFEST}")
+MACHINE="${MACHINE:-$ARCH}"
+DISTRO="${DISTRO:-wayland}"
 
-	result=$(grep "path=\"${entry}\"" "${manifest}"| grep -Po "${value}=\"\K.*?(?=\")")
-
-	echo $result
-}
-
-LINUX_FUS_COMMIT=$(parse_xml_value "linux-fus" "revision" "${BUILDROOT_MANIFEST}")
-LINUX_FUS_BRANCH=$(parse_xml_value "linux-fus" "upstream" "${BUILDROOT_MANIFEST}")
-
-UBOOT_FUS_COMMIT=$(parse_xml_value "u-boot-fus" "revision" "${BUILDROOT_MANIFEST}")
-UBOOT_FUS_BRANCH=$(parse_xml_value "u-boot-fus" "upstream" "${BUILDROOT_MANIFEST}")
-
-
-# ----- Helper functions ------------------------------------------------------
-
-# Show usage on error
-show_usage()
-{
-    echo
-    echo "Usage: $0 [options] <target>"
-    echo
-    echo "Extract the sources (u-boot, linux, buildroot, examples) to directory"
-    echo "<target>. If a dl directory is available in the release, also copy"
-    echo "the extra packages in it to the download directory."
-    echo
-    echo "Options:"
-    echo "-r | --release <release>"
-    echo "                Use given <release> directory to locate sources"
-    echo "                (default: directory where this script is located)"
-    echo "-d | --dl <dl>  Use <dl> directory as Yocto download directory"
-    echo "                (default: \$DL_DIR or 'downloads' in Yocto's top dir)"
-    echo "-f | --force    Force installation, overwrite files in directories"
-    echo "                <target> and <dl> if they exist; be careful!"
-    echo "-n | --dry-run  Show what would be done, do not change anything"
-    echo "-u | --update   Update all gits to the newest versions in the manifest.xml"
-    echo "-h | --help     Show this help"
-    echo
-    exit 1
-}
-
-# If force is on, delete $1 and show type, otherwise just show existing name
-do_delete()
-{
-    if [ $force == 1 ] ; then
-	if [ -L "$1" ] ; then
-	    echo "  [DELETE SYMLINK  ] $1"
-	    $run /bin/rm -f "$1"
-	elif [ -d "$1" ] ; then
-	    echo "  [DELETE DIRECTORY] $1"
-	    $run /bin/rm -rf "$1"
-	else
-	    echo "  [DELETE FILE     ] $1"
-	    $run /bin/rm -f "$1"
-	fi
-    else
-	stop=1
-	if [ -L "$1" ] ; then
-	    echo "Symlink already exists:   $1"
-	elif [ -d "$1" ] ; then
-	    echo "Directory already exists: $1"
-	else
-	    echo "File already exists:      $1"
-	fi
-    fi
-}
-
-# Create directory $1
-do_mkdir()
-{
-    echo "  [CREATE DIRECTORY] $1"
-	echo
-    $run /bin/mkdir -p "$1"
-}
-
-# Extract $1 to directory $2
-do_extract()
-{
-    echo "  [EXTRACT ARCHIVE ] $1"
-    echo "  [TO              ] $2"
-	echo
-    $run /bin/tar xf "$1" -C "$2"
-}
-
-
-do_set_git_credentials()
-{
-	echo "  [GIT CREDENTIALS]"
-
-    if ! git config --global user.name
-	then
-		$run read -p "Please enter the user name that should be used for git: " username
-		$run git config --global user.name "$username"
-	fi
-
-	if ! git config --global user.email
-	then
-		$run read -p "Please enter the email that should be used for git: " email
-		$run git config --global user.email "$email"
-	fi
-	
-}
-# Clone git from $1 to directory $2
-# Check out branch $3 commit $4
-do_clone_checkout()
-{
-    echo "  [CLONING GIT ] $1"
-    echo "  [TO          ] $2"
-    $run git clone "$1" "$2"
-	echo "  [CHECKING OUT] $3 $4"
-	echo
-	$run cd "$2"
-	existed_in_local=$(git branch --list $3)
-	if [ -z "$existed_in_local" ]; then
-		$run git checkout --track origin/$3
-	fi
-	$run git checkout "$4"
-	$run cd -
-}
-
-# Copy $1 to $2
-do_copy()
-{
-    echo "  [COPY PACKAGE    ] $1"
-    echo "  [TO              ] $2"
-	echo
-    $run /bin/cp -f "$1" "$2"
-}
-
-# Create symlink $1 to point to $2
-do_symlink()
-{
-    echo "  [CREATE SYMLINK  ] $1"
-    echo "  [TO POINT TO     ] $2"
-	echo
-    $run /bin/ln -s "$2" "$1"
-}
-
-
-# Download buildroot repostiories
-do_buildroot_download()
-{
-
-    echo "  [DOWNOAD MANIFEST] $BUILDROOT_MANIFEST"
-    echo "  [FROM            ] $BUILDROOT_DOWNLOAD_URL"
-	echo "  [TAG          ] $RELEASE"
-	echo
-
-
-	# Download Buildroot
-	# Download the repo tool that handles the download of several GIT repos
-	if [ ! -x ./repo ]
-	then
-		$run echo "Downloading repo tool"
-		$run curl curl https://storage.googleapis.com/git-repo-downloads/repo > repo
-		$run chmod a+x repo
-	fi
-
-	# Fakeinit repo so we can copy our local manifest
-	$run echo "Getting download information (repo init)"
-	$run ./repo init -u $BUILDROOT_DOWNLOAD_URL -b $BUILDROOT_BRANCH -m $BUILDROOT_MANIFEST
-	$run cp $WORKDIR/$BUILDROOT_MANIFEST .repo/manifests/
-
-	# Download the GIT repositories:
-	$run echo "Downloading all Buildroot packages (repo sync)"
-	$run ./repo sync -m $BUILDROOT_MANIFEST
-
-	# Create local branches so Yocto can find the commits
-	$run ./repo start $LINUX_FUS_BRANCH $LINUX_DIR
-	$run ./repo start $UBOOT_FUS_BRANCH $UBOOT_DIR
-
-	$run cd $LINUX_DIR && lpath="$(readlink -f ".git")" && rm -f ".git" && ln -sf $lpath ".git" && cd -
-	$run cd $UBOOT_DIR && lpath="$(readlink -f ".git")" && rm -f ".git" && ln -sf $lpath ".git" && cd -
-}
-
-# Update buildroot repostiories
-do_buildroot_update()
-{
-
-    echo "  [UPDATE MANIFEST] $BUILDROOT_MANIFEST"
-    echo "  [FROM            ] $BUILDROOT_DOWNLOAD_URL"
-	echo "  [TAG          ] $RELEASE"
-	echo
-
-	$run cp $WORKDIR/$BUILDROOT_MANIFEST .repo/manifests/
-
-	# Download the GIT repositories:
-	$run echo "Updating all Buildroot packages (repo sync)"
-	$run ./repo sync -m $BUILDROOT_MANIFEST
-}
+LINUX_FUS_BRANCH=$(parse_xml_value "project name=\"linux-fus\"" "upstream" "${BUILDROOT_MANIFEST}")
+UBOOT_FUS_BRANCH=$(parse_xml_value "project name=\"u-boot-fus\"" "upstream" "${BUILDROOT_MANIFEST}")
 
 # ----- Parse arguments -------------------------------------------------------
 
@@ -225,6 +46,10 @@ TARGET=
 
 while [ $# -gt 0 ] ; do
     case "${1,,}" in
+    --accept-eula)
+        HEADLESS="--headless"
+        shift
+        ;;
 	-r|--release)
 	    if [ -z "$2" ] ; then
 		echo
@@ -243,11 +68,39 @@ while [ $# -gt 0 ] ; do
 	    DL_DIR="$2"
 	    shift 2
 	    ;;
+	--docker)
+		shift
+		while [ $# -gt 0 ] ; do
+			case "${1,,}" in
+				cmd=*)
+					DOCKER_CMD=${1#*=}
+					shift
+					;;
+				params=*)
+					DOCKER_PARAMS=${1#*=}
+					shift
+					;;
+				*)
+					shift
+					;;
+			esac
+		done
+		do_docker
+		exit 0
+	    ;;
+	--build)
+		do_build
+		exit 0
+	    ;;
+	--cve-tracker)
+		do_cve_tracker
+		exit 0
+	    ;;
 	-h|--help)
 	    show_usage
 	    ;;
 	-f|--force)
-	    force=1
+	    force="true"
 	    shift
 	    ;;
 	-n|--dry-run)
@@ -261,7 +114,6 @@ while [ $# -gt 0 ] ; do
 	-v|--version)
 	    echo $VERSION
 		exit
-	    shift
 		;;
 	-*)
 	    echo
@@ -271,13 +123,14 @@ while [ $# -gt 0 ] ; do
 
 	*)
 	    TARGET="$1"
+	    echo "TARGET=$TARGET" > .env
 	    shift
 	    ;;
     esac
 done
 
-if [ -z $RELEASE ] ; then
-    RELEASE=$(dirname $0)
+if [ -z "$RELEASE" ] ; then
+    RELEASE=$(dirname "$0")
 fi
 
 echo
@@ -364,8 +217,8 @@ fi
 $run cd $BUILDROOT_DIR
 
 # Create downloads directory if it does not exist yet
-if [ ! -d $DL_DIR ] ; then
-		do_mkdir $DL_DIR
+if [ ! -d "$DL_DIR" ] ; then
+		do_mkdir "$DL_DIR"
 fi
 
 $run cd $WORKDIR
