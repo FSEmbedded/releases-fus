@@ -218,7 +218,7 @@ do_cve_tracker()
 		source .env
 	fi
 
-	local deploy_path="$TARGET/yocto-fus/build-${DISTRO}-${MACHINE}/tmp/deploy/"
+	local deploy_path="$TARGET/yocto-fus/build-${MACHINE}-${DISTRO}/tmp/deploy/"
 	local cve_tracker_dir="$TARGET/fs-cve-tracker"
 
 	if [ -z "$TARGET" ]; then
