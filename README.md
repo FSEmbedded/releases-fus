@@ -1,22 +1,18 @@
-# F&S i.MX6  Buildroot Release 2026.05 (fsimx6-B2026.05)
+# F&S i.MX6SX  Buildroot Release 2026.06 (fsimx6sx-B2026.05)
 
-This is a major release for F&S modules based on the i.MX8MM SoC,
+This is a major release for F&S modules based on the i.MX6SX SoC,
 based on the [NXP lf-6.6.52-2.2.2 release](https://www.nxp.com/docs/en/release-note/RN00210_LF6.6.52_2.2.2.pdf).
 
 **Supported Boards**
 
-- armStoneA9
-- armStoneA9r2
-- armStoneA9r3
-- armStoneA9r4
-- efusA9
-- efusA9r2
-- PicoMADA9
-- NetDCUA9
+- efusA9X
+- efusA9Xr2
+- PicoCoreMX6SX
+- PicoCOMA9X
 
 Please see the new revision of following file
 
-  [FSiMX8MM_FirstSteps_eng.pdf](https://www.fs-net.de/en)
+  [FSiMX6SX_FirstSteps_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/FSiMX6SX_FirstSteps_eng.pdf)
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
@@ -39,6 +35,7 @@ The release consists of the following files and directories:
 | sdcard/                 | Precompiled images (names as expected by install script)|
 | doc/                    | Manuals and documentation                               |
 | sbom/                   | SBOMs of release binaries in SPDX and CycloneDX format  |
+| dl/                     | Firmware packages provided locally to buildroot         |
 
 **Warning**
 The precompiled images are for testing and evaluation purposes only!
@@ -160,19 +157,17 @@ please check the respective git histories.
 
 - Fix several open CVEs
 
-### [linux-v6.6.129-2.2.2-fus1.3](https://github.com/FSEmbedded/linux-fus/tree/v6.6.129-2.2.2-fus1.2)
+### [linux-v6.6.129-2.2.2-fus1.4.1](https://github.com/FSEmbedded/linux-fus/tree/v6.6.129-2.2.2-fus1.4.1)
 
-- Update to version 6.6.129
-- Fix Linux CMA allocation
-- armstonea9/netdcua9: Change spi cs to gpio cs
+- Unify defconfigs of fsimx6, fsimx6l and fsimx6sx
+- Fix Power Managent warning regarding fsimx6sx Boards without GPU
+- Add Silex driver for Linux 6.6
 
-### [buildroot-2025.02.13-fus1.0](https://github.com/FSEmbedded/buildroot-fus/tree/buildroot-2025.02.13-fus1.0)
+### [buildroot-2025.02.13-fus1.1](https://github.com/FSEmbedded/buildroot-fus/tree/buildroot-2025.02.13-fus1.1)
 
-- Update to Buildroot LTS version 2025.02.13
-- Update NXP packages to lf-6.6.52-2.2.2
-- Switch to Buildroot provided Toolchain
-- Remove deprecated package ramspeed
-- Fix Linux version ID for SBOM generation
+- Improve fsimx6sx defconfigs
+- Improve imx-gstreamer recipes for Linux 6.6
+- Improve silex-wlanbt-fs package for Linux 6.6
 
 ### [linux-examples-fus-fus1.1](https://github.com/FSEmbedded/linux-examples-fus/tree/fus1.1)
 
@@ -186,7 +181,7 @@ please check the respective git histories.
 
 ### Documentation
 
-- [FSiMX8MM_FirstSteps_eng.pdf](https://www.fs-net.de/)
+- [FSiMX6SX_FirstSteps_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/FSiMX6SX_FirstSteps_eng.pdf)
 - [LinuxOnFSBoards_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/LinuxOnFSBoards_eng.pdf)
 
 Please download the hardware documentation directly from our website.

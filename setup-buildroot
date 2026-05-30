@@ -160,6 +160,8 @@ fi
 dl_packages=
 install_dl_packages=
 create_dl_link=1
+DL_REL_DIR="dl"
+DL_DIR="$TARGET/buildroot-fus/dl"
 if [ -z "$DL_DIR" ] ; then
     DL_DIR="$TARGET/$DL_DEF_DIR"
     create_dl_link=0
