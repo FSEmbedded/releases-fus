@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- armstonemx8mpr2-Y2025.12 -->
+<!-- fsimx6-Y2026.06 -->
 <manifest>
   <release
-    name="armstonemx8mpr2" arch="fsimx8mp" version="Y2025.12"
-    supportedBoards="armStoneMX8MPr2"/>
+    arch="fsimx6" version="Y2026.06"
+    supportedBoards="efusA9dl efusA9q efusA9r2dl efusA9r2q armStoneA9dl armStoneA9q armStoneA9r2dl armStoneA9r2q armStoneA9r3dl armStoneA9r3q armStoneA9r4dl armStoneA9r4q PicoMODA9dl PicoMODA9q netdcua9Adl netdcuA9q "/>
 
   <default revision="scarthgap" sync-j="4"/>
 
-  <doc-firststeps version="V1.8"/>
+  <doc-firststeps version="V4.4"/>
   <doc-linonfus version="V0.23"/>
   <docker version="fus-ubuntu-2022.04.3"/>
-  <nboot version="fsimx8mp-2026.05"/>
+  <nboot version="51"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
   <project name="docker-fus" fus-version="fus-ubuntu-2022.04.3" revision="96aba621b11d29453598aa16444c2ff9989cb501" upstream="main" path="docker-fus" remote="fus"/>
 
-  <project name="linux-fus" fus-version="v6.6.129-2.2.2-fus1.4" revision="fcd3f1ec91491252bde22f9f5c5357010e8d18ff" path="linux-fus"  upstream="master" remote="fus" >
+  <project name="linux-fus" fus-version="v6.6.129-2.2.2-fus1.3" revision="58013837ba00ecdc66e5325b01a09d63ad73718e" path="linux-fus"  upstream="master" remote="fus" >
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <project name="u-boot-fus" fus-version="v2024.04-fus1.8" revision="172f2ba024acfe7379657113c6c7b35ab33e20b2" upstream="uboot-fus-2021.04" path="u-boot-fus" remote="fus">
+  <project name="u-boot-fus" fus-version="v2021.04-fs1.4" revision="cf304af2cd6b3e36447e2fccf8996f2d7d29e4d8" upstream="uboot-fus-2021.04" path="u-boot-fus" remote="fus">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
   <project name="linux-examples-fus" fus-version="fus1.1"  revision="8109b49868d9b12a7d2c99d51b4ccb6211dd1575" upstream="master" path="linux-examples-fus" remote="fus"/>
 
-  <project name="meta-fus" fus-version="yocto-5.0.17-fus1.2" revision="c24685fdab3150d09340ae8dce0746487c699a1b" upstream="scarthgap" path="yocto-fus/sources/meta-fus" remote="fus">
+  <project name="meta-fus" fus-version="yocto-5.0.17-fus1.1" revision="8f31f7b49d0905b0439db9dcf6d4895abbf9a349" upstream="scarthgap" path="yocto-fus/sources/meta-fus" remote="fus">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
-
-  <project name="meta-fus-nboot" fus-version="fsimx8mp-2026.05" revision="6fd633721984a0803f63572b0c70951d6840c16f" upstream="scarthgap" path="yocto-fus/sources/meta-fus-nboot" remote="fus"/>
 
   <project name="fs-cve-tracker" fus-version="fus1.0"  revision="0d8c05a6d9dc07b378142607895fc36b257d7380" upstream="master" path="fs-cve-tracker" remote="fus"/>
 
