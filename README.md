@@ -1,19 +1,17 @@
-# F&S i.MX6  Yocto Release 2026.06 (fsimx6-Y2026.06)
+# F&S i.MX6SX  Yocto Release 2026.06 (fsimx6sx-Y2026.06)
 
-This is a major release for F&S modules based on the i.MX6 SoC,
+This is a major release for F&S modules based on the i.MX6SX SoC,
 and the [NXP lf-6.6.52-2.2.2 release](https://www.nxp.com/docs/en/release-note/RN00210_LF6.6.52_2.2.2.pdf).
 
 **Supported Boards**
 
-- armStoneA9, armStoneA9r3
-- armStoneA9r2, armStoneA9r4
-- efusA9, efusA9r2
-- PicoMODA9
-- NetDCUA9
+- efusA9X, efusA9r2X
+- PicoCoreMX6SX
+- PicoCOMA9X
 
 Please see the new revision of following file
 
-  [FSiMX6_FirstSteps_eng.pdf](https://www.fs-net.de/en)
+  [FSiMX6SX_FirstSteps_eng.pdf](https://www.fs-net.de/en)
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
@@ -47,12 +45,12 @@ Use the latest F&S Development Machine from the [F&S website](https://www.fs-net
 To build the example release binaries, run:
 
 ```bash
-git clone -b fsimx6-Y2026.06 https://github.com/FSEmbedded/releases-fus.git
+git clone -b fsimx6sx-Y2026.06 https://github.com/FSEmbedded/releases-fus.git
 cd releases-fus
 ./setup-yocto <build_dir>
 ./setup-yocto --docker <build_dir>
 cd yocto-fus
-DISTRO=fus-imx-wayland MACHINE=fsimx6 . fus-setup-release.sh
+DISTRO=fus-imx-wayland MACHINE=fsimx6sx . fus-setup-release.sh
 bitbake fus-image-std
 ```
 
@@ -60,17 +58,17 @@ bitbake fus-image-std
 
 Here are some highlights of this release.
 
-### 1. New Linux Kernel 6.6.129
+### 1. New Linux Kernel 6.6.142
 
-The Linux kernel is now based on 6.6.129, which offers several new bug and security fixes.
+The Linux kernel is now based on 6.6.142, which offers several new bug and security fixes.
 
 ### 2. Update U-Boot v2021.04-fs1.4
 
 Fix several open CVEs. See sbom/cyclonedx/vex-u-boot-v2021.04-fs1.4.json for details.
 
-### 3. New Yocto version 5.0.17 Scarthgap
+### 3. New Yocto version 5.0.18 Scarthgap
 
-Updating poky to Version 5.0.17 Scarthgap.
+Updating poky to Version 5.0.18 Scarthgap.
 Updating other layers to their latest commits.
 
 The meta-fus layer in now split into meta-fus-bsp and meta-fus-sdk. The meta-fus-bsp layer adds basic board support, while meta-fus-sdk adds additional features, which are note necessary to run the board.
@@ -95,7 +93,7 @@ Update the examples to the new linux version.
  1. Download manifest repository
 
     ```sh
-    git clone -b fsimx6-Y2026.06 https://github.com/FSEmbedded/releases-fus.git
+    git clone -b fsimx6sx-Y2026.06 https://github.com/FSEmbedded/releases-fus.git
     ```
 
  2. Prepare Yocto-Build environment
@@ -133,18 +131,7 @@ Update the examples to the new linux version.
  The actual packages versions are marked as annotated tags in the git history.
  The Name of the overall release (like fsimx93-Y2025.08) is still set as a light tag.
 
-### 7. Experimental Mainline Kernel support
-
-We have added a patchset to enable mainline kernel support for fsimx6 boards to the meta-fus layer.
-You can test it by adding the following line to your conf/local.conf file in your yocto build directory:
-```
-IMX_DEFAULT_BSP:forcevariable = "mainline"
-```
-Most of the peripheries are working.
-We are planning to enable the mainline kernel for older architectures per default.
-For further support please contact the F&S Forum.
-
-### 8. New CVE Tracker Tool fs-cve-tracker
+### 7. New CVE Tracker Tool fs-cve-tracker
 
  The F&S CVE Tracker Tool can help you to keep track of the current CVE status of your yocto image.
  It will launch a local version of [Dependency Track](https://dependencytrack.org) and upload the SBOM
@@ -167,7 +154,7 @@ Please note that this may take a while on first run.
 
 ## Known Issues
 
-- PCIe does not work correctly with some cards.
+- No Blutetooth support for Silex
 
 ## Changelog
 
@@ -179,13 +166,13 @@ please check the respective git histories.
 
 - Fix several open CVEs
 
-### [linux-v6.6.129-2.2.2-fus1.3](https://github.com/FSEmbedded/linux-fus/tree/v6.6.129-2.2.2-fus1.3)
+### [linux-v6.6.142-2.2.2-fus1.0](https://github.com/FSEmbedded/linux-fus/tree/v6.6.142-2.2.2-fus1.0)
 
-- Update to version 6.6.129
+- Update to version 6.6.142
 - Fix Linux CMA allocation for boards >= 2GB DRAM
-- armstonea9/netdcua9: Change spi cs to gpio cs
+- Update Silex Wlan driver to Kernel 6.6
 
-### [meta-fus-yocto-5.0.17-fus1.1](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.17-fus1.1)
+### [meta-fus-yocto-5.0.18-fus1.0](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.18-fus1.0)
 
 - Split meta-fus in meta-fus-bsp and meta-fus-sdk
 - Update layer to yocto scarthgap
@@ -202,11 +189,11 @@ please check the respective git histories.
 - Add chromium support with NXP hardware acceleration patches
 - Add OpenSSL Provider for SE050 security chip
 - Update fus-image-std packages
-- Update to Yocto 5.0.17
+- Update to Yocto 5.0.18
 - Add F&S Release Name to fus-image-std
 - Remove glmark2 from fus-image-std
 - Only create SBOM for runtime-packages for now
-
+- Add u-boot-fus explicitly to the CylconeDX SBOM
 
 ### [linux-examples-fus-fus1.1](https://github.com/FSEmbedded/linux-examples-fus/tree/fus1.1)
 
@@ -214,13 +201,13 @@ please check the respective git histories.
 - Migrate gpio.c from deprecated sysfs to libgpiod
 - Upgrade PWM control to Hz and percentage with polarity support
 
-### nbootimx6_51.bin (VN51)
+### nbootimx6sx_52 (VN52)
 
 (no changes)
 
 ### Documentation
 
-- [FSiMX6_FirstSteps_eng.pdf](https://www.fs-net.de/)
+- [FSiMX6SX_FirstSteps_eng.pdf](https://www.fs-net.de/)
 - [LinuxOnFSBoards_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/LinuxOnFSBoards_eng.pdf)
 
 Please download the hardware documentation directly from our website.
