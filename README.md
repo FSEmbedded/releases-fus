@@ -1,18 +1,19 @@
-# F&S i.MX6SX  Buildroot Release 2026.06 (fsimx6sx-B2026.05)
+# F&S i.MX6UL  Buildroot Release 2026.07 (fsimx6ul-B2026.07)
 
-This is a major release for F&S modules based on the i.MX6SX SoC,
+This is a major release for F&S modules based on the i.MX6UL SoC,
 based on the [NXP lf-6.6.52-2.2.2 release](https://www.nxp.com/docs/en/release-note/RN00210_LF6.6.52_2.2.2.pdf).
 
 **Supported Boards**
 
-- efusA9X
-- efusA9Xr2
-- PicoCoreMX6SX
-- PicoCOMA9X
+- PicoCOM1.2
+- PicoCOMA7
+- efusA7UL
+- PicoCoreMX6UL
+- PicoCoreMX6UL100
 
 Please see the new revision of following file
 
-  [FSiMX6SX_FirstSteps_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/FSiMX6SX_FirstSteps_eng.pdf)
+  [FSiMX6UL_FirstSteps_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/FSiMX6UL_FirstSteps_eng.pdf)
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
@@ -35,7 +36,6 @@ The release consists of the following files and directories:
 | sdcard/                 | Precompiled images (names as expected by install script)|
 | doc/                    | Manuals and documentation                               |
 | sbom/                   | SBOMs of release binaries in SPDX and CycloneDX format  |
-| dl/                     | Firmware packages provided locally to buildroot         |
 
 **Warning**
 The precompiled images are for testing and evaluation purposes only!
@@ -47,12 +47,12 @@ Use the latest F&S Development Machine from the [F&S website](https://www.fs-net
 To build the example release binaries, run:
 
 ```bash
-git clone -b fsimx6-B2026.05 https://github.com/FSEmbedded/releases-fus.git
+git clone -b fsimx6ul-B2026.07 https://github.com/FSEmbedded/releases-fus.git
 cd releases-fus
 ./setup-buildroot <build_dir>
 ./setup-buildroot --docker <build_dir>
 cd buildroot-fus
-make fsimx6_wayland_defconfig
+make fsimx6ul_wayland_defconfig
 make
 ```
 
@@ -60,11 +60,11 @@ make
 
 Here are some highlights of this release.
 
-### 1. New Linux Kernel 6.6.129
+### 1. New Linux Kernel 6.6.142
 
-The Linux kernel is now based on 6.6.129, which offers several new bug and security fixes.
+The Linux kernel is now based on 6.6.142, which offers several new bug and security fixes.
 
-### 2. New LTS Buildroot version 2025.02.13
+### 2. New LTS Buildroot version 2025.02.15
 
 Buildroot now has a 3-year LTS cycle starting with 2025.02 with a patch level upgrade aproximatly every month.
 
@@ -88,7 +88,7 @@ Update the examples to the new linux version.
  1. Download manifest repository
 
     ```sh
-    git clone -b fsimx6-B2026.05 https://github.com/FSEmbedded/releases-fus.git
+    git clone -b fsimx6ul-B2026.07 https://github.com/FSEmbedded/releases-fus.git
     ```
 
  2. Prepare Buildroot-Build environment
@@ -157,17 +157,20 @@ please check the respective git histories.
 
 - Fix several open CVEs
 
-### [linux-v6.6.129-2.2.2-fus1.4.1](https://github.com/FSEmbedded/linux-fus/tree/v6.6.129-2.2.2-fus1.4.1)
+### [linux-v6.6.142-2.2.2-fus1.1](https://github.com/FSEmbedded/linux-fus/tree/v6.6.142-2.2.2-fus1.1)
 
-- Unify defconfigs of fsimx6, fsimx6l and fsimx6sx
-- Fix Power Managent warning regarding fsimx6sx Boards without GPU
-- Add Silex driver for Linux 6.6
+- Add GPIO line names to the devicetrees
+- Fix reassignment of values in the defconfig
+- Fix fsimx6ul clocks
+- Fix LVDS converter on picocoremx6ul100
 
-### [buildroot-2025.02.13-fus1.1](https://github.com/FSEmbedded/buildroot-fus/tree/buildroot-2025.02.13-fus1.1)
+### [buildroot-2025.02.15-fus1.0](https://github.com/FSEmbedded/buildroot-fus/tree/buildroot-2025.02.13-fus1.1)
 
-- Improve fsimx6sx defconfigs
-- Improve imx-gstreamer recipes for Linux 6.6
-- Improve silex-wlanbt-fs package for Linux 6.6
+- Improve fsimx6ul defconfigs
+- Update to from buildroot-2025.02.13 to 2025.02.15
+- Improve silex recipes and kernel patching
+- Fix version detection for weston during configuration
+- Improve TSC2004 udev rule
 
 ### [linux-examples-fus-fus1.1](https://github.com/FSEmbedded/linux-examples-fus/tree/fus1.1)
 
@@ -175,17 +178,17 @@ please check the respective git histories.
 - Migrate gpio.c from deprecated sysfs to libgpiod
 - Upgrade PWM control to Hz and percentage with polarity support
 
-### nbootimx6_51.bin (VN51)
+### nbootimx6ul_53.bin (VN53)
 
-(no changes)
+- more boards supported
+- quick memtest
 
 ### Documentation
 
-- [FSiMX6SX_FirstSteps_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/FSiMX6SX_FirstSteps_eng.pdf)
+- [FSiMX6UL_FirstSteps_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/FSiMX6UL_FirstSteps_eng.pdf)
 - [LinuxOnFSBoards_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/LinuxOnFSBoards_eng.pdf)
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.
 
 For further support please contact us in the [F&S Forum](https://forum.fs-net.de/)
-
