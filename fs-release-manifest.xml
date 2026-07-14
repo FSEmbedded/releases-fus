@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- fsimx6sx-Y2026.06 -->
+<!-- fsimx6ul-Y2026.07 -->
 <manifest>
   <release
-    arch="fsimx6sx" version="Y2026.06"
+    arch="fsimx6ul" version="Y2026.07"
     supportedBoards=" "/>
 
   <default revision="scarthgap" sync-j="4"/>
 
-  <doc-firststeps version="V2.3"/>
+  <doc-firststeps version="V2.5"/>
   <doc-linonfus version="V0.23"/>
   <docker version="fus-ubuntu-2022.04.3"/>
-  <nboot version="52"/>
+  <nboot version="53"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
   <project name="docker-fus" fus-version="fus-ubuntu-2022.04.3" revision="96aba621b11d29453598aa16444c2ff9989cb501" upstream="main" path="docker-fus" remote="fus"/>
 
-  <project name="linux-fus" fus-version="v6.6.142-2.2.2-fus1.0" revision="98ab8a3f3a724545af9c63077695881765cdfd3e" path="linux-fus"  upstream="linux-fus-silex-6.6.x" remote="fus" >
+  <project name="linux-fus" fus-version="v6.6.142-2.2.2-fus1.1" revision="b30960239414632d8161564f705da13ca97f4c56" path="linux-fus"  upstream="linux-fus-silex-6.6.x" remote="fus" >
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
@@ -27,13 +27,14 @@
 
   <project name="linux-examples-fus" fus-version="fus1.1"  revision="8109b49868d9b12a7d2c99d51b4ccb6211dd1575" upstream="master" path="linux-examples-fus" remote="fus"/>
 
-  <project name="meta-fus" fus-version="yocto-5.0.18-fus1.0" revision="621a591eb4b99fa5ac54229e32532b3b0831e0ce" upstream="scarthgap" path="yocto-fus/sources/meta-fus" remote="fus">
+  <project name="meta-fus" fus-version="yocto-5.0.18-fus1.1" revision="4afb14b656122426b5017cc34d93c13edbfb12f1" upstream="scarthgap" path="yocto-fus/sources/meta-fus" remote="fus">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
-
-  <project name="meta-silex-fus" revision="b77f662a666d65da88cec30ce0c683497dd81044" upstream="scarthgap" path="yocto-fus/sources/meta-silex-fus" remote="fus"/>
-
+<!--
+  Uncomment for SILEX WLAN chip support
+  <project name="meta-silex-fus" revision="9e6b7784640fb118103da71399ef66245055af54" upstream="scarthgap" path="yocto-fus/sources/meta-silex-fus" remote="fus"/>
+-->
   <project name="fs-cve-tracker" fus-version="fus1.0"  revision="0d8c05a6d9dc07b378142607895fc36b257d7380" upstream="master" path="fs-cve-tracker" remote="fus"/>
 
   <remote name="yp"          fetch="https://git.yoctoproject.org"/>

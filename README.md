@@ -1,17 +1,19 @@
-# F&S i.MX6SX  Yocto Release 2026.06 (fsimx6sx-Y2026.06)
+# F&S i.MX6UL  Yocto Release 2026.07 (fsimx6ul-Y2026.07)
 
-This is a major release for F&S modules based on the i.MX6SX SoC,
+This is a major release for F&S modules based on the i.MX6UL SoC,
 and the [NXP lf-6.6.52-2.2.2 release](https://www.nxp.com/docs/en/release-note/RN00210_LF6.6.52_2.2.2.pdf).
 
 **Supported Boards**
 
-- efusA9X, efusA9r2X
-- PicoCoreMX6SX
-- PicoCOMA9X
+- PicoCOM1.2
+- PicoCOMA7
+- efusA7UL
+- PicoCoreMX6UL
+- PicoCoreMX6UL100
 
 Please see the new revision of following file
 
-  [FSiMX6SX_FirstSteps_eng.pdf](https://www.fs-net.de/en)
+  [FSiMX6UL_FirstSteps_eng.pdf](https://www.fs-net.de/en)
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
@@ -45,12 +47,12 @@ Use the latest F&S Development Machine from the [F&S website](https://www.fs-net
 To build the example release binaries, run:
 
 ```bash
-git clone -b fsimx6sx-Y2026.06 https://github.com/FSEmbedded/releases-fus.git
+git clone -b fsimx6ul-Y2026.07 https://github.com/FSEmbedded/releases-fus.git
 cd releases-fus
 ./setup-yocto <build_dir>
 ./setup-yocto --docker <build_dir>
 cd yocto-fus
-DISTRO=fus-imx-wayland MACHINE=fsimx6sx . fus-setup-release.sh
+DISTRO=fus-imx-wayland MACHINE=fsimx6ul . fus-setup-release.sh
 bitbake fus-image-std
 ```
 
@@ -93,7 +95,7 @@ Update the examples to the new linux version.
  1. Download manifest repository
 
     ```sh
-    git clone -b fsimx6sx-Y2026.06 https://github.com/FSEmbedded/releases-fus.git
+    git clone -b fsimx6ul-Y2026.07 https://github.com/FSEmbedded/releases-fus.git
     ```
 
  2. Prepare Yocto-Build environment
@@ -152,9 +154,21 @@ vulnerabilities scan to sort out as many false positives as possible.
 
 Please note that this may take a while on first run.
 
+### 8. Silex WLAN-Chip support
+
+The Silex-WLAN Chip is supported in this release, but not enabled by default.
+To add it to the build, uncomment the following lines in the fs-release-manifest.xml
+
+```xml
+<!--
+  Uncomment for SILEX WLAN chip support
+  <project name="meta-silex-fus" revision="9e6b7784640fb118103da71399ef66245055af54" upstream="scarthgap" path="yocto-fus/sources/meta-silex-fus" remote="fus"/>
+-->
+```
+
 ## Known Issues
 
-- No Blutetooth support for Silex
+- No Blutetooth support for Silex and NXP WLAN driver
 
 ## Changelog
 
@@ -166,13 +180,14 @@ please check the respective git histories.
 
 - Fix several open CVEs
 
-### [linux-v6.6.142-2.2.2-fus1.0](https://github.com/FSEmbedded/linux-fus/tree/v6.6.142-2.2.2-fus1.0)
+### [linux-v6.6.142-2.2.2-fus1.1](https://github.com/FSEmbedded/linux-fus/tree/v6.6.142-2.2.2-fus1.1)
 
 - Update to version 6.6.142
 - Fix Linux CMA allocation for boards >= 2GB DRAM
 - Update Silex Wlan driver to Kernel 6.6
+- Add GPIO line names to the devicetrees
 
-### [meta-fus-yocto-5.0.18-fus1.0](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.18-fus1.0)
+### [meta-fus-yocto-5.0.18-fus1.1](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.18-fus1.1)
 
 - Split meta-fus in meta-fus-bsp and meta-fus-sdk
 - Update layer to yocto scarthgap
@@ -194,6 +209,7 @@ please check the respective git histories.
 - Remove glmark2 from fus-image-std
 - Only create SBOM for runtime-packages for now
 - Add u-boot-fus explicitly to the CylconeDX SBOM
+- Use NXP wlan driver as default driver
 
 ### [linux-examples-fus-fus1.1](https://github.com/FSEmbedded/linux-examples-fus/tree/fus1.1)
 
@@ -201,13 +217,14 @@ please check the respective git histories.
 - Migrate gpio.c from deprecated sysfs to libgpiod
 - Upgrade PWM control to Hz and percentage with polarity support
 
-### nbootimx6sx_52 (VN52)
+### nbootimx6ul_53 (VN53)
 
-(no changes)
+- Support additional boards
+- Add quick memtest
 
 ### Documentation
 
-- [FSiMX6SX_FirstSteps_eng.pdf](https://www.fs-net.de/)
+- [FSiMX6UL_FirstSteps_eng.pdf](https://www.fs-net.de/)
 - [LinuxOnFSBoards_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/LinuxOnFSBoards_eng.pdf)
 
 Please download the hardware documentation directly from our website.
