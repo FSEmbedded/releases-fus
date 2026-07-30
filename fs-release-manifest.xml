@@ -2,28 +2,28 @@
 
 <manifest>
 
-  <release arch="fsimx6ul" version="B2026.07"/>
+  <release arch="fsimx8mm" version="B2026.07"/>
   <default sync-j="2"/>
 
-  <doc-firststeps version="V2.5"/>
+  <doc-firststeps version="V1.9"/>
   <doc-linonfus version="V0.24"/>
   <docker version="fus-ubuntu-2022.04.4"/>
-  <nboot version="53"/>
+  <nboot version="fsimx8mm-2026.03"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
   
   <project name="docker-fus" fus-version="fus-ubuntu-2022.04.4" revision="eb78668e3516f304dff58a54be0ca685682b434e" upstream="main" path="docker-fus" remote="fus"/>
 
   <project name="linux-fus" fus-version="v6.6.142-2.2.2-fus1.1" revision="b30960239414632d8161564f705da13ca97f4c56" upstream="master" path="linux-fus" remote="fus" >
-    <linkfile dest="linux-fsimx6ul" src="."/>
+    <linkfile dest="linux-fsimx8mm" src="."/>
   </project>
 
 
-  <project name="u-boot-fus" fus-version="v2021.04-fs1.4" revision="cf304af2cd6b3e36447e2fccf8996f2d7d29e4d8" upstream="uboot-fus-2021.04" path="u-boot-fus" remote="fus">
-    <linkfile dest="u-boot-fsimx6ul" src="."/>
+  <project name="u-boot-fus" fus-version="v2024.04-fus1.8" revision="172f2ba024acfe7379657113c6c7b35ab33e20b2" upstream="master" path="u-boot-fus" remote="fus">
+    <linkfile dest="u-boot-fsimx8mm" src="."/>
   </project>
 
-  <project name="buildroot-fus" fus-version="buildroot-2025.02.15-fus1.0" revision="409d5df2729fffa514cc1785abdff93a11ea3254" upstream="buildroot-fus-2025.02" path="buildroot-fus" remote="fus" />
+  <project name="buildroot-fus" fus-version="buildroot-2025.02.16-fus1.0" revision="88cea684d577749f484de1ae9e5713d3f50b4ea3" upstream="master" path="buildroot-fus" remote="fus" />
   			
   <project name="linux-examples-fus" fus-version="fus1.1"  revision="8109b49868d9b12a7d2c99d51b4ccb6211dd1575" upstream="master" path="linux-examples-fus" remote="fus"/>
 
