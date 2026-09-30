@@ -2,31 +2,31 @@
 
 <manifest>
 
-  <release arch="fsimx8mm" version="B2026.07"/>
+  <release arch="fsimx8mm" version="B2026.07.1"/>
   <default sync-j="2"/>
 
   <doc-firststeps version="V1.9"/>
   <doc-linonfus version="V0.24"/>
-  <docker version="fus-ubuntu-2022.04.4"/>
-  <nboot version="fsimx8mm-2026.03"/>
+  <docker version="fus-ubuntu-2022.04.5"/>
+  <nboot version="fsimx8mm-2026.08"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
   
-  <project name="docker-fus" fus-version="fus-ubuntu-2022.04.4" revision="eb78668e3516f304dff58a54be0ca685682b434e" upstream="main" path="docker-fus" remote="fus"/>
+  <project name="docker-fus" fus-version="fus-ubuntu-2022.04.5" revision="75a56d715b546f4df2b2a2483bd079342eac9060" upstream="main" path="docker-fus" remote="fus"/>
 
-  <project name="linux-fus" fus-version="v6.6.142-2.2.2-fus1.1" revision="b30960239414632d8161564f705da13ca97f4c56" upstream="master" path="linux-fus" remote="fus" >
+  <project name="linux-fus" fus-version="v6.6.147-2.2.2-fus1.0" revision="4f28516ba808cd34cee5705f2fe82d3dfe08092f" upstream="master" path="linux-fus" remote="fus" >
     <linkfile dest="linux-fsimx8mm" src="."/>
   </project>
 
 
-  <project name="u-boot-fus" fus-version="v2024.04-fus1.8" revision="172f2ba024acfe7379657113c6c7b35ab33e20b2" upstream="master" path="u-boot-fus" remote="fus">
+  <project name="u-boot-fus" fus-version="v2024.04-fus1.9" revision="9a68c5382508beedc1a0eaca446a61a62e5d3310" upstream="master" path="u-boot-fus" remote="fus">
     <linkfile dest="u-boot-fsimx8mm" src="."/>
   </project>
 
-  <project name="buildroot-fus" fus-version="buildroot-2025.02.16-fus1.0" revision="88cea684d577749f484de1ae9e5713d3f50b4ea3" upstream="master" path="buildroot-fus" remote="fus" />
+  <project name="buildroot-fus" fus-version="buildroot-2025.02.17-fus1.0" revision="d9a08012a1a2f9376c48473f80af118b46b9cb79" upstream="master" path="buildroot-fus" remote="fus" />
   			
   <project name="linux-examples-fus" fus-version="fus1.1"  revision="8109b49868d9b12a7d2c99d51b4ccb6211dd1575" upstream="master" path="linux-examples-fus" remote="fus"/>
 
-  <project name="fs-cve-tracker" fus-version="fus1.1"  revision="eb53a2fe9cc0acf875977f2afdd5926802d6164b" upstream="master" path="fs-cve-tracker" remote="fus"/>
+  <project name="fs-cve-tracker" fus-version="fus1.2"  revision="4aa2c68a07ca1dd40267855f479659c46b17657c" upstream="master" path="fs-cve-tracker" remote="fus"/>
 
 </manifest>

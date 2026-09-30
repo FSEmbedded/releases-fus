@@ -1,6 +1,6 @@
-# F&S i.MX8MM  Buildroot Release 2026.07 (fsimx8mm-Y2026.07)
+# F&S i.MX8MM  Buildroot Release 2026.07.1 (fsimx8mm-B2026.07.1)
 
-This is a major release for F&S modules based on the i.MX8MM SoC,
+This is a maintenance release for F&S modules based on the i.MX8MM SoC,
 based on the [NXP lf-6.6.52-2.2.2 release](https://www.nxp.com/docs/en/release-note/RN00210_LF6.6.52_2.2.2.pdf).
 
 **Supported Boards**
@@ -8,6 +8,7 @@ based on the [NXP lf-6.6.52-2.2.2 release](https://www.nxp.com/docs/en/release-n
 - PicoCoreMX8MM-DDR3L
 - PicoCoreMX8MM-LPDDR4
 - PicoCoreMX8MMr2-LPDDR4
+- PicoCoreMX8MMr4-LPDDR4
 - OSM-SF-MX8MM
 
 Please see the new revision of following file
@@ -18,7 +19,7 @@ for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
 hardware of the boards and the starter kits.
 
-Please note that Yocto releases use a 'B' for the version number. The
+Please note that Buildroot releases use a 'B' for the version number. The
 version counting is independent form other releases.
 
 ## Content
@@ -28,13 +29,13 @@ The release consists of the following files and directories:
 | File                    | Purpose                                                 |
 | ------------------------| --------------------------------------------------------|
 | README.md               | Release notes                                           |
-| setup-buildroot         | Script to download and install the Yocto release        |
-| helper-setup-buildroot  | Helper script for setup-yocto                           |
+| setup-buildroot         | Script to download and install the Buildroot release    |
+| helper-setup-buildroot  | Helper script for setup-buildroot                       |
 | fs-release-manifest.xml | Release Manifest, containing the used versions          |
 | binaries/               | Precompiled images (full names)                         |
 | sdcard/                 | Precompiled images (names as expected by install script)|
 | doc/                    | Manuals and documentation                               |
-| sbom/                   | SBOMs of release binaries in SPDX and CycloneDX format  |
+| sbom/                   | SBOMs of release binaries in CycloneDX format           |
 
 **Warning**
 The precompiled images are for testing and evaluation purposes only!
@@ -46,7 +47,7 @@ Use the latest F&S Development Machine from the [F&S website](https://www.fs-net
 To build the example release binaries, run:
 
 ```bash
-git clone -b fsimx8mm-B2026.07 https://github.com/FSEmbedded/releases-fus.git
+git clone -b fsimx8mm-B2026.07.1 https://github.com/FSEmbedded/releases-fus.git
 cd releases-fus
 ./setup-buildroot <build_dir>
 ./setup-buildroot --docker <build_dir>
@@ -59,9 +60,9 @@ make
 
 Here are some highlights of this release.
 
-### 1. New Linux Kernel 6.6.142
+### 1. New Linux Kernel 6.6.147
 
-The Linux kernel is now based on 6.6.142, which offers several new bug and security fixes.
+The Linux kernel is now based on 6.6.147, which offers several new bug and security fixes.
 
 ### 2. New bootloader U-Boot 2024.04
 
@@ -74,7 +75,7 @@ To update from older releases, please:
 2. Then reset the board to start the new U-Boot
 3. Then install NBoot.
 
-### 3. New Buildroot version 2025.02.16
+### 3. New Buildroot version 2025.02.17
 
 Buildroot now has a 3-year LTS cycle starting with 2025.02 with a patch level upgrade aproximatly every month.
 
@@ -84,8 +85,11 @@ Since the last release most packages have been updated to more current versions 
 
 Update the examples to the new linux version.
 
-### 3. Improve linux-examples-fus
-### 5. New Docker based building system
+### 5. Improve linux-examples-fus
+
+Update the examples to the new linux version.
+
+### 6. New Docker based building system
 
  The F&S releases now support Docker containers as default building machines.
  By using the Docker environment, the build process can be executed on any Linux host,
@@ -99,7 +103,7 @@ Update the examples to the new linux version.
  1. Download manifest repository
 
     ```sh
-    git clone -b fsimx8mm-2026.07 https://github.com/FSEmbedded/releases-fus.git
+    git clone -b fsimx8mm-2026.07.1 https://github.com/FSEmbedded/releases-fus.git
     ```
 
  2. Prepare Buildroot-Build environment
@@ -121,7 +125,7 @@ Update the examples to the new linux version.
      cd buildroot-fus/
     ```
 
-### 5. New Version naming for F&S Linux, U-Boot and buildroot-fus
+### 7. New Version naming for F&S Linux, U-Boot and buildroot-fus
 
  Linux, U-Boot and buildroot-fus now get their own version number to be more transparent and flexible.
  The Version numbers reflect the Version of the original package, if needed the NXP version and the
@@ -137,7 +141,7 @@ Update the examples to the new linux version.
  The actual packages versions are marked as annotated tags in the git history.
  The Name of the overall release (like fsimx93-Y2025.08) is still set as a light tag.
 
-### 6. New CVE Tracker Tool fs-cve-tracker
+### 8. New CVE Tracker Tool fs-cve-tracker
 
  The F&S CVE Tracker Tool can help you to keep track of the current CVE status of your buildroot image.
  It will launch a local version of [Dependency Track](https://dependencytrack.org) and upload the SBOM
@@ -169,42 +173,32 @@ The following list shows the most noticeable changes in this release in
 more detail since our last release for this platform. For a detailed description
 please check the respective git histories.
 
-### [u-boot-v2024.04-fus1.8](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.8)
+### [u-boot-v2024.04-fus1.9](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.9)
 
-- Update to U-Boot version 2024.04
-- Add OP-TEE Support per default
-- Add Secure-Boot support per default
-- Add option to group ATF/TEE with U-Boot image
-- Improve boot from device environment handling
+- Add PicoCoreMX8MMr4 support
 
-### [linux-v6.6.142-2.2.2-fus1.1](https://github.com/FSEmbedded/linux-fus/tree/v6.6.129-2.2.2-fus1.2)
+### [linux-v6.6.147-2.2.2-fus1.0](https://github.com/FSEmbedded/linux-fus/tree/v6.6.147-2.2.2-fus1.0)
 
-- Merge fsimx8mm/mp/mn_defconfigs into single fsimx8_defconfig
-- Update to version 6.6.129
-- Fix OSM8MM USB host
-- Fix fsimx8mm sdcard reset
-- Remove unneeded Pull-Ups and Pull-Downs
+- Add PicoCoreMX8MMr4 suport
+- Increase patch level of the kernel
 
-### [buildroot-2025.02.15-fus1.0](https://github.com/FSEmbedded/buildroot-fus/tree/buildroot-2025.02.16-fus1.0)
+### [buildroot-2025.02.17-fus1.0](https://github.com/FSEmbedded/buildroot-fus/tree/buildroot-2025.02.16-fus1.0)
 
-- Improve fsmx8mm defconfigs
-- Update ftom buildroot-2025.02.15 to buildroot-2025.02.16
-- Fix Weston version selection and improve weston setup for init.d
-- Add new boards and display devicetrees for fsimx8mm
+- Increase buildroot patch level
+- Add moal wlan driver to fsimx8mm defconfigs
+- Add IW612 WLAN/BT firmware to fsimx8mm_defconfigs
 
 ### [atf-v2.10-fus1.4](https://github.com/FSEmbedded/atf-fus/tree/v2.10-fus1.4)
 
-- Apply changes from lf-6.6.52-2.2.2
+- No changes
 
-### [nboot-2026.03](https://github.com/FSEmbedded/meta-fus-nboot/tree/fsimx8mm-2026.03)
+### [nboot-2026.08](https://github.com/FSEmbedded/meta-fus-nboot/tree/fsimx8mm-2026.03)
 
-- Update to U-Boot version 2024.04
+- Add PicoCoreMX8MMr4 support
 
 ### [linux-examples-fus-fus1.1](https://github.com/FSEmbedded/linux-examples-fus/tree/fus1.1)
 
-- Port ADC test tool to i.MX8MM using the recommended IIO framework
-- Migrate gpio.c from deprecated sysfs to libgpiod
-- Upgrade PWM control to Hz and percentage with polarity support
+- No changes
 
 ### Documentation
 
