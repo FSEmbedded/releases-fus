@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- fsimx93-Y2025.08.2 -->
+<!-- fsimx91-Y2026.10 -->
 <manifest>
   <release
-    arch="fsimx93" version="Y2025.08.2"
-    supportedBoards="PicoCoreMX93 efusMX93 OSM-SF-MX93 PicoCom93 NetDCU93"/>
+    arch="fsimx91" version="Y2026.10"
+    supportedBoards="PicoCoreMX91 OSM-SF-MX91"/>
 
   <default revision="scarthgap" sync-j="4"/>
 
-  <doc-firststeps version="V1.6"/>
+  <doc-firststeps version="V1.7"/>
   <doc-linonfus version="V0.24"/>
   <docker version="fus-ubuntu-2022.04.3"/>
-  <nboot version="fsimx93-Y2025.08.2"/>
+  <nboot version="fsimx91-Y2026.10"/>
 
   <remote fetch="https://github.com/FSEmbedded" name="fus"/>
 
   <project name="docker-fus" fus-version="fus-ubuntu-2022.04.3" revision="96aba621b11d29453598aa16444c2ff9989cb501" upstream="main" path="docker-fus" remote="fus"/>
 
-  <project name="linux-fus" fus-version="v6.6.147-2.2.2-fus1.0" revision="8a79f86a72d825cf28756349b6a23d1d9db383ef" path="linux-fus"  upstream="linux-fus-silex-6.6.x" remote="fus" >
+  <project name="linux-fus" fus-version="v6.6.147-2.2.2-fus1.1" revision="62bcc6f58d725e9dd0611ec540d748e91837159e" path="linux-fus"  upstream="linux-fus-silex-6.6.x" remote="fus" >
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <project name="u-boot-fus" fus-version="v2024.04-fus1.10" revision="759f5f818a3cca452a525af15ade766d4e31090d" upstream="uboot-fus-2024.04" path="u-boot-fus" remote="fus">
+  <project name="u-boot-fus" fus-version="v2024.04-fus1.11" revision="2ce727e42c5b266c727d590eb27c41e435bc4723" upstream="uboot-fus-2024.04" path="u-boot-fus" remote="fus">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
   <project name="linux-examples-fus" fus-version="fus1.1"  revision="8109b49868d9b12a7d2c99d51b4ccb6211dd1575" upstream="master" path="linux-examples-fus" remote="fus"/>
 
-  <project name="meta-fus" fus-version="yocto-5.0.19-fus1.1" revision="db5b08eb6172aa21d9622efd1c3a9cceb4cacb6f" upstream="scarthgap" path="yocto-fus/sources/meta-fus" remote="fus">
+  <project name="meta-fus" fus-version="yocto-5.0.20-fus1.0" revision="65798148a40f44842c673ce61c95b63200bfea9a" upstream="scarthgap-legacy" path="yocto-fus/sources/meta-fus" remote="fus">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>
 
-  <project name="meta-fus-nboot" fus-version="fsimx93-Y2025.08.2" revision="205cba4aea23bbe59bb9eff8eae9154eba2df93c" upstream="scarthgap" path="yocto-fus/sources/meta-fus-nboot" remote="fus"/>
+  <project name="meta-fus-nboot" fus-version="fsimx91-Y2026.10" revision="70c6fbc902d4e1f8793ce0af91310d8a5cece3ca" upstream="scarthgap" path="yocto-fus/sources/meta-fus-nboot" remote="fus"/>
 
-  <project name="meta-fus-updater" revision="e11d48cb12077f7f2d018ae7bd055a36e17ca758" upstream="scarthgap" path="yocto-fus/sources/meta-fus-updater" remote="fus" />
-  <project name="meta-fus-updater-azure" revision="4fe7ce4551c2200c0a70e1a6aa4a6a61aa376f20" upstream="scarthgap" path="yocto-fus/sources/meta-fus-updater-azure" remote="fus" />
+  <project name="meta-fus-updater" revision="40cb4c5a1a75c74ab5c2315fdd2df8b8dab331e7" upstream="scarthgap" path="yocto-fus/sources/meta-fus-updater" remote="fus" />
+  <project name="meta-fus-updater-azure" revision="ec73f51dff891d47caf1d2b101c7c6e521d6a9ff" upstream="scarthgap" path="yocto-fus/sources/meta-fus-updater-azure" remote="fus" />
 
   <project name="fs-cve-tracker" fus-version="fus1.0"  revision="0d8c05a6d9dc07b378142607895fc36b257d7380" upstream="master" path="fs-cve-tracker" remote="fus"/>
 
@@ -55,10 +55,10 @@
   <remote name="iris"        fetch="https://github.com/iris-GmbH"/>
 
 
-  <!-- poky yocto-5.0.19-->
-  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="bb98354685781296e3b3737e7762412100f359c2" upstream="scarthgap"/>
+  <!-- poky yocto-5.0.20-->
+  <project name="poky" remote="yp" path="yocto-fus/sources/poky" revision="64e69ed23703f6358ec431d3f5f1f8483f974cae" upstream="scarthgap"/>
   <!-- meta-openembedded scarthgap updated to HEAD-->
-  <project name="meta-openembedded" remote="oe" path="yocto-fus/sources/meta-openembedded" revision="bec755063a8b5da65df626f5749496aadaa4f4bb" upstream="scarthgap"/>
+  <project name="meta-openembedded" remote="oe" path="yocto-fus/sources/meta-openembedded" revision="0f00f8b9a21950640da8c5707343e5540133f86e" upstream="scarthgap"/>
   <!-- meta-clang scarthgap updated to HEAD-->
   <project name="meta-clang" remote="kraj" path="yocto-fus/sources/meta-clang" revision="cc29beb210ab94eacc53bbd67e287e4e33ede342" upstream="scarthgap"/>
   <!-- fsl-community-bsp-base scarthgap updated to HEAD-->
@@ -67,13 +67,13 @@
     <linkfile dest="yocto-fus/setup-environment" src="setup-environment"/>
   </project>
   <!-- meta-freescale scarthgap  updated to HEAD-->
-  <project name="meta-freescale" remote="community" path="yocto-fus/sources/meta-freescale" revision="4143744bc82508f00395a0ffe30e624b2341176a" upstream="scarthgap"/>
+  <project name="meta-freescale" remote="community" path="yocto-fus/sources/meta-freescale" revision="e82db4ef75d390cd9e4a06b8caf0f67668ddea94" upstream="scarthgap"/>
   <!-- meta-freescale-3rdparty scarthgap  updated to HEAD-->
   <project name="meta-freescale-3rdparty" remote="community" path="yocto-fus/sources/meta-freescale-3rdparty" revision="ce10c065119c2d4e359235c77aae7e0d843533ef" upstream="scarthgap"/>
   <!-- meta-freescale-distro scarthgap  updated to HEAD-->
-  <project name="meta-freescale-distro" remote="community" path="yocto-fus/sources/meta-freescale-distro" revision="b9d6a5d9931922558046d230c1f5f4ef6ee72345" upstream="scarthgap"/>
-  <!-- meta-arm scarthgap  updated to 5.0.19-->
-  <project name="meta-arm" remote="yp" path="yocto-fus/sources/meta-arm" revision="23b572c40ea6709ab3f8bd7abbb5a795fc3631c2" upstream="scarthgap"/>
+  <project name="meta-freescale-distro" remote="community" path="yocto-fus/sources/meta-freescale-distro" revision="2642b34e4c66ec1419e7f3a7a77a20b09e49e26b" upstream="scarthgap"/>
+  <!-- meta-arm scarthgap  updated to 5.0.20-->
+  <project name="meta-arm" remote="yp" path="yocto-fus/sources/meta-arm" revision="045eb74bd9abe7d9ccf365a2417e440ce83bcbb0" upstream="scarthgap"/>
   <!-- meta-qt6 scarthgap  updated to 6.10.3-->
   <project name="meta-qt6" remote="qt" path="yocto-fus/sources/meta-qt6" revision="364b0f0ccd2eafb251f0d1d22b68e60100b01dd2" upstream="6.10.3" />
   <!-- meta-browser scarthgap  updated to HEAD (Chromium 129.0.6668.100)-->
@@ -83,7 +83,7 @@
   <project name="meta-timesys" remote="timesys" path="yocto-fus/sources/meta-timesys" revision="35b2eb04641b94e31fb61cf3da4c482193d754b5" upstream="scarthgap"/>
   <!-- meta-virtualization scarthgap  updated to HEAD-->
   <project name="meta-virtualization" remote="yp" path="yocto-fus/sources/meta-virtualization" revision="f980aefbc8b3eeafb8d144e7fdac3c3b701a4fea" upstream="scarthgap"/>
-  <project name="meta-rauc" path="yocto-fus/sources/meta-rauc" remote="rauc" revision="a0f4a8b9986954239850b9d4256c003c91e6b931" upstream="scarthgap"/>
+  <project name="meta-rauc" path="yocto-fus/sources/meta-rauc" remote="rauc" revision="d63878f20eba7a85ecf53566e7a3377e78bb46ac" upstream="scarthgap"/>
   <project name="meta-cyclonedx" path="yocto-fus/sources/meta-cyclonedx" remote="iris" revision="63d3b3495b85467b396790a0072fd73703a0987c" upstream="scarthgap"/>
 
   <!-- NXP layers for reference -->

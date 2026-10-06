@@ -1,19 +1,16 @@
-# F&S i.MX93 Yocto Release 2025.08.2 (fsimx93-Y2025.08.2)
+# F&S i.MX91 Yocto Release 2026.10 (fsimx91-Y2026.10)
 
-This is a major release for F&S modules based on the i.MX93 SoC,
+This is a major release for F&S modules based on the i.MX91 SoC,
 and the [NXP lf-6.6.52-2.2.2 release](https://www.nxp.com/docs/en/release-note/RN00210_LF6.6.52_2.2.2.pdf).
 
 **Supported Boards**
 
-- PicoCoreMX93
-- efusMX93
-- OSM-SF-MX93
-- PicoCom93
-- NetDCU93
+- PicoCoreMX91
+- OSM-SF-MX91
 
 Please see the new revision of following file
 
-  [FSiMX93_Linux-First-Steps.pdf](https://www.fs-net.de/en)
+  [FSiMX91_Linux-First-Steps.pdf](https://www.fs-net.de/en)
 
 for a description of how everything is installed and used. This doc
 sub-directory also contains other documentation, for example about the
@@ -64,14 +61,10 @@ Here are some highlights of this release.
 
 The Linux kernel is now based on 6.6.147, which offers several new bug and security fixes.
 
-### 3. New Yocto version 5.0.19 Scarthgap
+### 3. New Yocto version 5.0.20 Scarthgap
 
-Updating poky to Version 5.0.19 Scarthgap.
+Updating poky to Version 5.0.20 Scarthgap.
 Updating other layers to their latest commits.
-
-The meta-fus layer is now split into meta-fus-bsp and meta-fus-sdk. The meta-fus-bsp layer adds basic board support, while meta-fus-sdk adds additional features, which are note necessary to run the board.
-
-The meta-fus layer is now based on meta-freescale and not meta-imx. meta-freescale offers better long time support and more stable releases, while meta-imx supports the newest features but is not as stable and suitable for production. The meta-imx layers are still downloaded for reference, but not included into the build. If you need features from them, please consider adding the changes to your own meta-layer.
 
 ### 4. Improve linux-examples-fus
 
@@ -160,45 +153,32 @@ The following list shows the most noticeable changes in this release in
 more detail since our last release for this platform. For a detailed description
 please check the respective git histories.
 
-### [u-boot-v2024.04-fs1.8](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fs1.8)
+### [u-boot-v2024.04-fs1.11](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.11)
+- add PCore91 support
+- add OSM91 support
 
-- Add support for NetDCU93
+### [linux-v6.6.147-2.2.2-fus1.2](https://github.com/FSEmbedded/linux-fus/tree/v6.6.147-2.2.2-fus1.2)
+- add PCore91 support
+- add OSM91 support
 
-### [linux-v6.6.147-2.2.2-fus1.1](https://github.com/FSEmbedded/linux-fus/tree/v6.6.147-2.2.2-fus1.1)
-
-- Update to version 6.6.147
-- Add support NetDCU93
-
-### [meta-fus-yocto-5.0.19-fus1.1](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.18-fus1.1)
-
-- Add additional test packages to the fus-image-sdt
-- Improve remote desktop support
-- Add OpenSSL Provider for SE050 security chip
-- Update fus-image-std packages
-- Update to Yocto 5.0.19
-- Add F&S Release Name to fus-image-std
-- Remove glmark2 from fus-image-std
-- Only create SBOM for runtime-packages for now
-- Add u-boot-fus explicitly to the CylconeDX SBOM
-- Use NXP wlan driver as default driver
+### [meta-fus-yocto-5.0.19-fus1.2](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.18-fus1.2)
+- add fsimx91 support
 
 ### [linux-examples-fus-fus1.1](https://github.com/FSEmbedded/linux-examples-fus/tree/fus1.1)
 
-- Port ADC test tool to i.MX93 using the recommended IIO framework
-- Migrate gpio.c from deprecated sysfs to libgpiod
-- Upgrade PWM control to Hz and percentage with polarity support
+- no changes
 
-### [nboot-2026.09](https://github.com/FSEmbedded/meta-fus-nboot/tree/nboot-fsimx93-2026.08)
-
-- Add support for NetDCU93
-- ELE-FW update to 2.0.5
+### [nboot-2026.10](https://github.com/FSEmbedded/meta-fus-nboot/tree/nboot-fsimx91-2026.10)
+- add PCore91 support
+- add OSM91 support
 
 ### Documentation
 
-- [FSiMX93_FirstSteps_eng.pdf](https://www.fs-net.de/)
+- [FSiMX91_FirstSteps_eng.pdf](https://www.fs-net.de/)
 - [LinuxOnFSBoards_eng.pdf](https://www.fs-net.de/assets/download/docu/common/en/LinuxOnFSBoards_eng.pdf)
 
 Please download the hardware documentation directly from our website.
 Then you always have the newest version.
 
 For further support please contact us in the [F&S Forum](https://forum.fs-net.de/)
+
