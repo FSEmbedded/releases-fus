@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- fsimx91-Y2026.10 -->
+<!-- fsimx91-Y2026.10.1 -->
 <manifest>
   <release
-    arch="fsimx91" version="Y2026.10"
+    arch="fsimx91" version="Y2026.10.1"
     supportedBoards="PicoCoreMX91 OSM-SF-MX91"/>
 
   <default revision="scarthgap" sync-j="4"/>
@@ -21,13 +21,13 @@
     <linkfile dest="yocto-fus/downloads/linux-fus" src="."/>
   </project>
 
-  <project name="u-boot-fus" fus-version="v2024.04-fus1.11" revision="2ce727e42c5b266c727d590eb27c41e435bc4723" upstream="uboot-fus-2024.04" path="u-boot-fus" remote="fus">
+  <project name="u-boot-fus" fus-version="v2024.04-fus1.11.1" revision="125f33498a14b8272de2652a28c9861987b9bdfc" upstream="uboot-fus-2024.04" path="u-boot-fus" remote="fus">
     <linkfile dest="yocto-fus/downloads/u-boot-fus" src="."/>
   </project>
 
   <project name="linux-examples-fus" fus-version="fus1.1"  revision="8109b49868d9b12a7d2c99d51b4ccb6211dd1575" upstream="master" path="linux-examples-fus" remote="fus"/>
 
-  <project name="meta-fus" fus-version="yocto-5.0.20-fus1.0" revision="65798148a40f44842c673ce61c95b63200bfea9a" upstream="scarthgap-legacy" path="yocto-fus/sources/meta-fus" remote="fus">
+  <project name="meta-fus" fus-version="yocto-5.0.20-fus1.0.1" revision="ec328d6cf7946eef5d1ad85be7d8676761b8af84" upstream="scarthgap-legacy" path="yocto-fus/sources/meta-fus" remote="fus">
     <linkfile dest="yocto-fus/fus-setup-release.sh" src="tools/fus-setup-release.sh"/>
     <linkfile dest="yocto-fus/yocto-f+s-utilities" src="tools/yocto-f+s-utilities"/>
   </project>

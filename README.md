@@ -153,15 +153,16 @@ The following list shows the most noticeable changes in this release in
 more detail since our last release for this platform. For a detailed description
 please check the respective git histories.
 
-### [u-boot-v2024.04-fs1.11](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.11)
+### [u-boot-v2024.04-fs1.11.1](https://github.com/FSEmbedded/u-boot-fus/tree/v2024.04-fus1.11.1)
 - add PCore91 support
 - add OSM91 support
+- hotfix for fsimage save on i.MX9 SoCs
 
 ### [linux-v6.6.147-2.2.2-fus1.2](https://github.com/FSEmbedded/linux-fus/tree/v6.6.147-2.2.2-fus1.2)
 - add PCore91 support
 - add OSM91 support
 
-### [meta-fus-yocto-5.0.19-fus1.2](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.18-fus1.2)
+### [meta-fus-yocto-5.0.20-fus1.0.1](https://github.com/FSEmbedded/meta-fus/tree/yocto-5.0.20-fus1.0.1)
 - add fsimx91 support
 
 ### [linux-examples-fus-fus1.1](https://github.com/FSEmbedded/linux-examples-fus/tree/fus1.1)
